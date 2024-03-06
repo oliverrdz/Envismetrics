@@ -17,7 +17,7 @@ function submitForm() {
     // var files = fileInput.files;
     var files = document.getElementById('fileInput').files;
     if (files.length === 0) {
-        document.getElementById('upload-message').innerText = 'Please upload file';
+        document.getElementById('upload-message').innerText = 'Please upload files';
     } else {
         // Proceed with file upload or other actions
         document.getElementById('upload-message').innerText = '';
