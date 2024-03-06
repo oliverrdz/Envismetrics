@@ -1,8 +1,8 @@
 ## Env
 
 ```
-python3 -m venv myenv
-source myenv/bin/activate
+python3 -m venv myenv2
+source myenv2/bin/activate
 
 pip install flask gunicorn pandas numpy scikit-learn scipy openpyxl matplotlib
 ```

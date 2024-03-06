@@ -39,14 +39,18 @@ function submitForm() {
 
                 $('#loadingModal').modal('hide');
 
-                var image1 = document.getElementById('img1');
-                image1.src = response.file1
+                if (response.status === true) {
+                    var image1 = document.getElementById('img1');
+                    image1.src = response.file1
 
-                var image2 = document.getElementById('img2');
-                image2.src = response.file2
+                    var image2 = document.getElementById('img2');
+                    image2.src = response.file2
 
-                document.getElementById('form_input').style.display = 'none';
-                document.getElementById('form_result').style.display = 'block';
+                    document.getElementById('form_input').style.display = 'none';
+                    document.getElementById('form_result').style.display = 'block';
+                } else {
+                    alert(response.message);
+                }
 
                 // alert('Files uploaded successfully');
             } else {

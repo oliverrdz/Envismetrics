@@ -32,6 +32,21 @@ def reorder(filename):
         # Handle files without RPM values
         return -1  # You can use any default value or treatment
 
+def extract_rpm(filename):
+    pattern = r'(?:^|_)(\d+rpm)\.'
+    match = re.search(pattern, filename)
+    if match:
+        return match.group(1)
+    else:
+        return None
+
+def check_files(files):
+    for f in files:
+        ext = f.split('.')[-1].lower()
+        if ext not in ['xlsx']:
+            return False
+    return True
+
 class HDV(object):
     def __init__(self, version, filepath):
 
@@ -49,21 +64,21 @@ class HDV(object):
         file_names = "HDV_G_DMAB_1mVs_%drpm.xlsx"
 
         files = sorted(files, key=reorder)
+        if not check_files(files):
+            return {
+                'status': False,
+                'message': 'One or more files are not allowed.'
+            }
 
-        for file in files:
-            print(file)
-
-        # plot figure modlue
-
-        # Create an empty DataFrame to store the data
-        # combined_data = pd.DataFrame()
-        # input your rpm ramge here
-        for i in range(200, 1000, 100):
+        for f in files:
             # input your file name here and switch rpm in to %d
-            file = os.path.join(self.filepath, file_names % i)
-            if os.path.exists(file) and file.endswith(".xlsx"):
-                print(file)
-                rpm = str(i) + "rpm"
+            file = os.path.join(self.filepath, f)
+            if os.path.exists(file) and f.endswith(".xlsx"):
+                print(f)
+                rpm = extract_rpm(f)
+                if rpm is None:
+                    continue
+                print(rpm)
                 data0 = pd.ExcelFile(file)
                 df = data0.parse('Sheet1')
                 E = df['WE(1).Potential (V)']
@@ -81,7 +96,7 @@ class HDV(object):
         # plt.show()
         to_file1 = os.path.join(self.savepath, "{}_1.png".format(self.version))
         plt.savefig(to_file1)
-
+        plt.close()
 
         # plot figure modlue with Gaussian filter
 
@@ -89,12 +104,15 @@ class HDV(object):
         combined_data = pd.DataFrame()
 
         # input your rpm ramge here
-        for i in range(200, 900, 100):
+        for f in files:
             # input your file name here and switch rpm in to %d
-            file = os.path.join(self.filepath, file_names % i)
-            if os.path.exists(file) and file.endswith(".xlsx"):
+            file = os.path.join(self.filepath, f)
+            if os.path.exists(file) and f.endswith(".xlsx"):
                 print(file)
-                rpm = str(i) + "rpm"
+                rpm = extract_rpm(f)
+                if rpm is None:
+                    continue
+                print(rpm)
                 data0 = pd.ExcelFile(file)
                 df = data0.parse('Sheet1')
                 E = df['Potential applied (V)']
@@ -115,21 +133,23 @@ class HDV(object):
         plt.ylabel('Current/A')
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0, 0))
         # plt.xlim(-1.0,0.5)
-        plt.ylim(-0.00006, 0.00008)
+        # plt.ylim(-0.00006, 0.00008)
         plt.legend()
         plt.grid()
         # plt.show()
         to_file2 = os.path.join(self.savepath, "{}_2.png".format(self.version))
         plt.savefig(to_file2)
-
+        plt.close()
         return {
+            'status': True,
+            'message': 'Success',
             'file1': to_file1,
             'file2': to_file2
         }
 
 
 if __name__ == '__main__':
-    hdv = HDV("static/data")
+    hdv = HDV('', "static/data")
     hdv.start()
 
 

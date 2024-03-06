@@ -14,7 +14,8 @@ $(document).on('change', '.file-input', function () {
 function submitForm() {
     var fileInput = document.querySelector('.file-input');
     var files = fileInput.files;
-    if (files.length === 0) {
+    var must_upload = false
+    if (files.length === 0 && must_upload === true) {
         document.getElementById('upload-message').innerText = 'Please upload file';
     } else {
         // Proceed with file upload or other actions

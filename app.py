@@ -22,7 +22,7 @@ logging.basicConfig(level=logging.INFO,
 
 
 UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'txt', 'xlsx'}
+ALLOWED_EXTENSIONS = {'csv', 'txt', 'xlsx'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -63,11 +63,7 @@ def upload_file():
 
     h = HDV(version=version, filepath=save_path)
     res = h.start()
-    return jsonify({
-        'message': 'Files uploaded successfully',
-        'file1': res['file1'],
-        'file2': res['file2'],
-    })
+    return jsonify(res)
 
 
 @app.route('/outputs/<filename>')
