@@ -43,26 +43,39 @@ def extract_rpm(filename):
 def check_files(files):
     for f in files:
         ext = f.split('.')[-1].lower()
-        if ext not in ['xlsx']:
+        if ext not in ['xlsx', 'txt']:
             return False
     return True
 
 class HDV(object):
     def __init__(self, version, filepath):
-
-        # folder_name = "10182023_HDV_D"
-        # filepath="C:\\Users\\Grant Xue\\OneDrive\\Desktop\\" + folder_name
         self.version = version
         self.filepath = filepath
         self.savepath = 'outputs'
-        # self.version = "version_" + datetime.now().strftime("%m%d_%H%M%S")
+
+    def read_data(self, files):
+        data = {}
+        for f in files:
+            # input your file name here and switch rpm in to %d
+            file = os.path.join(self.filepath, f)
+            if not os.path.isfile(file):
+                continue
+            print(f)
+            rpm = extract_rpm(f)
+            if rpm is None:
+                continue
+            print(rpm)
+            if f.endswith(".xlsx"):
+                data0 = pd.ExcelFile(file)
+                data[rpm] = data0.parse('Sheet1')
+            elif f.endswith(".txt"):
+                df = pd.read_csv(file, delimiter=';')
+                data[rpm] = df
+        print("data: ", len(data))
+        return data
 
     def start(self):
         files = os.listdir(self.filepath)
-
-        file_name = "HDV_G_DMAB_1mVs_200rpm.xlsx"
-        file_names = "HDV_G_DMAB_1mVs_%drpm.xlsx"
-
         files = sorted(files, key=reorder)
         if not check_files(files):
             return {
@@ -70,22 +83,13 @@ class HDV(object):
                 'message': 'One or more files are not allowed.'
             }
 
-        for f in files:
-            # input your file name here and switch rpm in to %d
-            file = os.path.join(self.filepath, f)
-            if os.path.exists(file) and f.endswith(".xlsx"):
-                print(f)
-                rpm = extract_rpm(f)
-                if rpm is None:
-                    continue
-                print(rpm)
-                data0 = pd.ExcelFile(file)
-                df = data0.parse('Sheet1')
-                E = df['WE(1).Potential (V)']
-                I = df['WE(1).Current (A)']
-                print("length of E:", len(E))
-                plt.scatter(E, I, label=rpm, s=1)
+        data = self.read_data(files)
 
+        for rpm, df in data.items():
+            E = df['WE(1).Potential (V)']
+            I = df['WE(1).Current (A)']
+            print("length of E:", len(E))
+            plt.scatter(E, I, label=rpm, s=1)
         plt.xlabel('Applied potential/V')
         plt.ylabel('Current/A')
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
@@ -103,31 +107,20 @@ class HDV(object):
         # Create an empty DataFrame to store the data
         combined_data = pd.DataFrame()
 
-        # input your rpm ramge here
-        for f in files:
-            # input your file name here and switch rpm in to %d
-            file = os.path.join(self.filepath, f)
-            if os.path.exists(file) and f.endswith(".xlsx"):
-                print(file)
-                rpm = extract_rpm(f)
-                if rpm is None:
-                    continue
-                print(rpm)
-                data0 = pd.ExcelFile(file)
-                df = data0.parse('Sheet1')
-                E = df['Potential applied (V)']
-                I = df['WE(1).Current (A)']
-                # Define the standard deviation (sigma) for the Gaussian filter
-                sigma = 10.0  # You can adjust this as needed
-                # Apply the Gaussian filter to the 'Current (A)'
-                smoothed_I = gaussian_filter(I, sigma=sigma)
-                print("length of E:", len(E))
-                plt.scatter(E, smoothed_I, label=rpm, s=1)
+        for rpm, df in data.items():
+            E = df['Potential applied (V)']
+            I = df['WE(1).Current (A)']
+            # Define the standard deviation (sigma) for the Gaussian filter
+            sigma = 10.0  # You can adjust this as needed
+            # Apply the Gaussian filter to the 'Current (A)'
+            smoothed_I = gaussian_filter(I, sigma=sigma)
+            print("length of E:", len(E))
+            plt.scatter(E, smoothed_I, label=rpm, s=1)
 
-                # Create a new DataFrame for the current RPM
-                rpm_data = pd.DataFrame({'Potential (V)' + rpm: E, 'Current (A)' + rpm: I})
-                # Concatenate the data for this RPM to the right of the combined_data DataFrame
-                combined_data = pd.concat([combined_data, rpm_data], axis=1)
+            # Create a new DataFrame for the current RPM
+            rpm_data = pd.DataFrame({'Potential (V)' + rpm: E, 'Current (A)' + rpm: I})
+            # Concatenate the data for this RPM to the right of the combined_data DataFrame
+            combined_data = pd.concat([combined_data, rpm_data], axis=1)
 
         plt.xlabel('Applied potential/V')
         plt.ylabel('Current/A')
