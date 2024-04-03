@@ -39,6 +39,11 @@ def index():
     notes = []
     return render_template('index.html', notes=notes)
 
+@app.route("/hyd_elec")
+def hyd_elec():
+    notes = []
+    return render_template('hyd_elec.html', notes=notes)
+
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
