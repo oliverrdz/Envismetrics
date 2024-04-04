@@ -8,6 +8,7 @@ import json
 import configparser
 from datetime import datetime
 from HDV import HDV
+from CV import CV
 
 app = Flask(__name__)
 
@@ -44,37 +45,98 @@ def hyd_elec():
     notes = []
     return render_template('hyd_elec.html', notes=notes)
 
+@app.route("/cv")
+def cv():
+    notes = []
+    return render_template('cv.html', notes=notes)
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    version = "version_" + datetime.now().strftime("%m%d_%H%M%S")
-    save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
-    if not os.path.exists(save_path):
-        os.makedirs(save_path, exist_ok=True)
 
-    if 'files[]' not in request.files:
-        return 'No file part'
+    try:
+        print(request.form)
+        module = request.form.get('module')
 
-    files = request.files.getlist('files[]')
+        print("module: " + module)
+    except Exception as e:
+        print(str(e))
+        module = "None"
 
-    for file in files:
-        if file.filename == '':
-            return 'No selected file'
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            to_file = os.path.join(save_path, filename)
-            file.save(to_file)
-            print("save to " + to_file)
+    if module == 'CV':
+        step = request.form.get('step')
+        if step == '1':
+            version = "version_" + datetime.now().strftime("%m%d_%H%M%S")
+            save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
+            if not os.path.exists(save_path):
+                os.makedirs(save_path, exist_ok=True)
 
-    h = HDV(version=version, filepath=save_path)
-    res = h.start()
-    return jsonify(res)
+            if 'files[]' not in request.files:
+                return 'No file part'
+
+            files = request.files.getlist('files[]')
+
+            for file in files:
+                if file.filename == '':
+                    return 'No selected file'
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    to_file = os.path.join(save_path, filename)
+                    file.save(to_file)
+                    print("save to " + to_file)
+
+            sigma = request.form.get('sigma')
+            print("sigma: " + str(sigma))
+            c = CV(version=version, filepath=save_path, sigma=float(sigma))
+            res = c.start1()
+            return res
+        elif step == '2':
+            version = request.form.get('version')
+            save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
+
+            sigma = request.form.get('sigma')
+            method = 'Max'
+            peak_range_top = request.form.get('peak_range_top')
+            peak_range_bottom = request.form.get('peak_range_bottom')
+            c = CV(version=version, filepath=save_path, sigma=float(sigma))
+            res = c.start2(method=method, peak_range_top=peak_range_top, peak_range_bottom=peak_range_bottom)
+            return res
+        else:
+            return {
+                'status': False,
+                'message': 'One or more files are not allowed.'
+            }
+    else:
+        version = "version_" + datetime.now().strftime("%m%d_%H%M%S")
+        save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
+        if not os.path.exists(save_path):
+            os.makedirs(save_path, exist_ok=True)
+
+        if 'files[]' not in request.files:
+            return 'No file part'
+
+        files = request.files.getlist('files[]')
+
+        for file in files:
+            if file.filename == '':
+                return 'No selected file'
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                to_file = os.path.join(save_path, filename)
+                file.save(to_file)
+                print("save to " + to_file)
+
+        h = HDV(version=version, filepath=save_path)
+        res = h.start()
+        return jsonify(res)
 
 
 @app.route('/outputs/<filename>')
 def uploaded_file(filename):
     return send_from_directory('outputs', filename)
 
+@app.route('/outputs/<version>/<filename>')
+def uploaded_file2(filename, version):
+    return send_from_directory('outputs/{}'.format(version), filename)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port=8080)

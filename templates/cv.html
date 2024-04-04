@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+
+{% include 'head.html' %}
+
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="check" viewBox="0 0 16 16">
+        <title>Check</title>
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+    </symbol>
+</svg>
+
+<div class="container py-3">
+
+    {% include 'navbar.html' %}
+
+    <main>
+
+        <div class="py-5">
+            <h3>Cyclic Voltammetry</h3>
+        </div>
+
+        <input type="hidden" id="version" name="version" value="">
+
+        <!-- Inputs -->
+        <div class="row g-5" id="form1">
+            <div class="col-md-5 col-lg-4 ">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span>Upload data files</span>
+                </h4>
+                <div class="file-drop-area">
+                    <span class="choose-file-button">Choose files</span>
+                    <span class="file-message">or drag and drop files here</span>
+                    <input class="file-input" type="file" id="fileInput" multiple>
+                </div>
+                <div id="upload-message" style="color: red"></div>
+
+                <br>
+                <p style="color: gray">The file names should be like: <code>?mVs_CV.csv</code><br>
+                    For example: <code>G_P_KOH40.0032gL_DMAB0.0475gL_20mVs_CV.csv</code></p>
+                <br>
+
+                <div class="needs-validation" novalidate="">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="input_sigma" class="form-label">Gaussian filter sigma</label>
+                            <input type="text" class="form-control" id="input_sigma" name="sigma" placeholder="10"
+                                   required="" value="10">
+                            <div class="invalid-feedback">
+                                This field is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <button type="button" class="btn btn-primary btn-md" ontouchstart="submitFormCV1()"
+                        onclick="submitFormCV1()">Submit
+                </button>
+            </div>
+            <br>
+            <br>
+        </div>
+
+
+        <!-- Results 1 -->
+        <div class="row g-5" id="form2" style="display: none">
+            <h4 class="mb-3">Results</h4>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img id="form2_img1" src="{{ url_for('static', filename='imgs/Picture1.png') }}"
+                             class="card-img rounded float-end" alt="...">
+                        <div class="card-body">
+                            <p class="card-text card-p">Hydrodynamic Voltammogram (original)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="needs-validation" novalidate="">
+                <div class="row col-6">
+
+
+                    <div class="col-12">
+                        <label for="form2_range1" class="form-label">Peak range (top):</label>
+                        <input type="text" class="form-control" id="form2_range1" name="form2_range1" placeholder="0"
+                               required="" value="(-1,-0.5),(0,0.2),(0.25,0.5)">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="form2_range2" class="form-label">Peak range (bottom):</label>
+                        <input type="text" class="form-control" id="form2_range2" name="form2_range2" placeholder="0"
+                               required="" value="(-0.9,-0.75),(0,0.125),(0.125,0.25)">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Which methods you want to use:</label>
+                        <select class="form-select" aria-label="Default select example" name="form2_method">
+                            <option selected value="max">Max</option>
+                            <option value="knee">Knee point</option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <button type="button" class="btn btn-primary btn-md" ontouchstart="submitFormCV2()"
+                        onclick="submitFormCV2()">Submit
+                </button>
+            </div>
+        </div>
+
+        <!-- Results 2 -->
+        <div class="row g-5" id="form3" style="display: none">
+            <h4 class="mb-3">Results</h4>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img id="form3_img1" src="{{ url_for('static', filename='imgs/Picture1.png') }}"
+                             class="card-img rounded float-end" alt="...">
+                        <div class="card-body">
+                            <p class="card-text card-p">Hydrodynamic Voltammogram (original)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="needs-validation" novalidate="">
+                <div class="row col-6">
+                    <a id="form3_link" href="#">Click here to download the result file.</a>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="col-md-7 col-lg-8">
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <a class="btn btn-success" href="/cv">Try again</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </main>
+
+    {% include 'footer.html' %}
+
+    <!-- Bootstrap Modal for Loading Message -->
+    <div class="modal" id="loadingModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

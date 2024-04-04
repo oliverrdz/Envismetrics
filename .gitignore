@@ -5,4 +5,5 @@ uploads/
 __pycache__
 *.ipynb
 .DS_Store
+data/
 
