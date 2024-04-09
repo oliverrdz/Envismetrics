@@ -57,12 +57,22 @@ class HDV(object):
     def read_data(self):
         with open(self.files_info, 'r') as f:
             info_list = json.loads(f.read())
-        print("info_list:", len(info_list))
-        data = {}
+
+        files = []
+        real_file_path = {}
         for info in info_list:
             # input your file name here and switch rpm in to %d
             f = info['filename']
             file = info['existed_filename']
+            if not os.path.isfile(file):
+                continue
+            files.append(f)
+            real_file_path[f] = file
+        files = sorted(files, key=reorder)
+
+        data = {}
+        for f in files:
+            file = real_file_path[f]
             if not os.path.isfile(file):
                 continue
             print(f)

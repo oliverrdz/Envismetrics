@@ -6,6 +6,7 @@ from scipy.ndimage import gaussian_filter
 from sklearn.linear_model import LinearRegression
 import math
 import re
+import json
 from config import *
 
 def extract_rpm(filename):
@@ -126,62 +127,84 @@ def filter_files(files):
 class CV(object):
     def __init__(self, version, files_info, sigma):
         self.version = version
-        self.filepath = files_info
+        self.files_info = files_info
         self.savepath = 'outputs/' + version
         if not os.path.exists(self.savepath):
             os.makedirs(self.savepath)
         self.sigma = sigma
 
-    def read_csv(self):
-        files = os.listdir(self.filepath)
-        files = sorted(files, key=reorder)
-        files = filter_files(files)
-        if not check_files(files):
-            return None
+    # def read_csv(self):
+    #     files = os.listdir(self.filepath)
+    #     files = sorted(files, key=reorder)
+    #     files = filter_files(files)
+    #     if not check_files(files):
+    #         return None
+    #
+    #     data = {}
+    #     for f in files:
+    #         if f.endswith(".csv"):
+    #             # input your file name here and switch rpm in to %d
+    #             file = os.path.join(self.filepath, f)
+    #             if not os.path.isfile(file):
+    #                 continue
+    #             print(f)
+    #             rpm = extract_mvs(f)
+    #             if rpm is None:
+    #                 continue
+    #             print(rpm)
+    #             df = pd.read_csv(file, delimiter=',', dtype={'Current range': str})
+    #             data[rpm] = df
+    #     print("data: ", len(data))
+    #     return data
 
-        data = {}
-        for f in files:
-            if f.endswith(".csv"):
-                # input your file name here and switch rpm in to %d
-                file = os.path.join(self.filepath, f)
-                if not os.path.isfile(file):
-                    continue
-                print(f)
-                rpm = extract_mvs(f)
-                if rpm is None:
-                    continue
-                print(rpm)
-                df = pd.read_csv(file, delimiter=',', dtype={'Current range': str})
-                data[rpm] = df
-        print("data: ", len(data))
-        return data
+    def read_data(self):
+        with open(self.files_info, 'r') as f:
+            info_list = json.loads(f.read())
 
-    def read_data(self, files):
-        data = {}
-        for f in files:
+        files = []
+        real_file_path = {}
+        for info in info_list:
             # input your file name here and switch rpm in to %d
-            file = os.path.join(self.filepath, f)
+            f = info['filename']
+            file = info['existed_filename']
             if not os.path.isfile(file):
                 continue
+            files.append(f)
+            real_file_path[f] = file
+        files = sorted(files, key=reorder)
+        print("len of files: ", len(files), self.files_info)
+
+        data = {}
+        for f in files:
+            file = real_file_path[f]
+            if not os.path.isfile(file):
+                continue
+
             print(f)
             rpm = extract_mvs(f)
             if rpm is None:
                 continue
             print(rpm)
-            if f.endswith(".xlsx"):
-                data0 = pd.ExcelFile(file)
-                data[rpm] = data0.parse('Sheet1')
-                data[rpm].to_csv("{}/{}".format(self.filepath, f.replace(".xlsx", ".csv")), index=False, sep=",")
-            elif f.endswith(".txt"):
-                df = pd.read_csv(file, delimiter='\t')
-                data[rpm] = df
-                data[rpm].to_csv("{}/{}".format(self.filepath, f.replace(".txt", ".csv")), index=False, sep=",")
+
+            if file.endswith(".xlsx"):
+                csv_file = file + ".csv"
+                if os.path.exists(csv_file):
+                    data[rpm] = pd.read_csv(csv_file, delimiter=',', dtype={'Current range': str})
+                else:
+                    data0 = pd.ExcelFile(file)
+                    data[rpm] = data0.parse('Sheet1')
+                    data[rpm].to_csv(csv_file, sep=',', index=False)
+                    print("saved csv file to {}".format(csv_file))
+            elif file.endswith(".txt"):
+                data[rpm] = pd.read_csv(file, delimiter=';', dtype={'Current range': str})
+            elif file.endswith(".csv"):
+                data[rpm] = pd.read_csv(csv_file, delimiter=',', dtype={'Current range': str})
 
         print("data: ", len(data))
         return data
 
     def start1(self):
-        data = self.read_csv()
+        data = self.read_data()
         if data is None:
             return {
                 'status': False,
@@ -244,7 +267,7 @@ class CV(object):
             Ef1.append({})
             DelE01.append({})
 
-        data = self.read_csv()
+        data = self.read_data()
         for pp, pr in enumerate(pr1):
             p1_start = pr1[pp][0]
             p1_end =   pr1[pp][1]

@@ -148,12 +148,13 @@ def upload_file():
         elif step == '2':
             version = request.form.get('version')
             save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
+            files_info = os.path.join(save_path, "fileinfo_{}.json".format(version))
 
             sigma = request.form.get('sigma')
             method = 'Max'
             peak_range_top = request.form.get('peak_range_top')
             peak_range_bottom = request.form.get('peak_range_bottom')
-            c = CV(version=version, filepath=save_path, sigma=float(sigma))
+            c = CV(version=version, files_info=files_info, sigma=float(sigma))
             res = c.start2(method=method, peak_range_top=peak_range_top, peak_range_bottom=peak_range_bottom)
             return res
         else:
