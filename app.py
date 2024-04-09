@@ -43,12 +43,12 @@ def index():
 @app.route("/hyd_elec")
 def hyd_elec():
     notes = []
-    return render_template('hyd_elec.html', notes=notes)
+    return render_template('m1_hyd_elec.html', notes=notes)
 
 @app.route("/cv")
 def cv():
     notes = []
-    return render_template('cv.html', notes=notes)
+    return render_template('m2_cv.html', notes=notes)
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
