@@ -6,7 +6,7 @@ from scipy.ndimage import gaussian_filter
 from sklearn.linear_model import LinearRegression
 import math
 import re
-
+from config import *
 
 def extract_rpm(filename):
     pattern = r'(?:^|_)(\d+rpm)\.'
@@ -27,7 +27,7 @@ def extract_mvs(filename):
 def check_files(files):
     for f in files:
         ext = f.split('.')[-1].lower()
-        if ext not in ['xlsx', 'txt', 'csv']:
+        if ext not in ALLOWED_EXTENSIONS: # ['xlsx', 'txt', 'csv']
             return False
     return True
 
@@ -119,14 +119,14 @@ def filter_files(files):
     res = []
     for f in files:
         ext = f.split('.')[-1].lower()
-        if ext in ['xlsx', 'txt', 'csv']:
+        if ext in ALLOWED_EXTENSIONS:
             res.append(f)
     return res
 
 class CV(object):
-    def __init__(self, version, filepath, sigma):
+    def __init__(self, version, files_info, sigma):
         self.version = version
-        self.filepath = filepath
+        self.filepath = files_info
         self.savepath = 'outputs/' + version
         if not os.path.exists(self.savepath):
             os.makedirs(self.savepath)

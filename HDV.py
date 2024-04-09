@@ -5,6 +5,7 @@ import os as os
 import matplotlib
 import matplotlib.pyplot as plt
 import math
+import json
 from sklearn.linear_model import LinearRegression
 from scipy.ndimage import gaussian_filter
 matplotlib.use('Agg')
@@ -48,16 +49,20 @@ def check_files(files):
     return True
 
 class HDV(object):
-    def __init__(self, version, filepath):
+    def __init__(self, version, files_info):
         self.version = version
-        self.filepath = filepath
+        self.files_info = files_info
         self.savepath = 'outputs'
 
-    def read_data(self, files):
+    def read_data(self):
+        with open(self.files_info, 'r') as f:
+            info_list = json.loads(f.read())
+        print("info_list:", len(info_list))
         data = {}
-        for f in files:
+        for info in info_list:
             # input your file name here and switch rpm in to %d
-            file = os.path.join(self.filepath, f)
+            f = info['filename']
+            file = info['existed_filename']
             if not os.path.isfile(file):
                 continue
             print(f)
@@ -65,25 +70,31 @@ class HDV(object):
             if rpm is None:
                 continue
             print(rpm)
-            if f.endswith(".xlsx"):
-                data0 = pd.ExcelFile(file)
-                data[rpm] = data0.parse('Sheet1')
-            elif f.endswith(".txt"):
+            if file.endswith(".xlsx"):
+                csv_file = file + ".csv"
+                if os.path.exists(csv_file):
+                    data[rpm] = pd.read_csv(csv_file, sep=',')
+                else:
+                    data0 = pd.ExcelFile(file)
+                    data[rpm] = data0.parse('Sheet1')
+                    data[rpm].to_csv(csv_file, sep=',', index=False)
+                    print("saved csv file to {}".format(csv_file))
+            elif file.endswith(".txt"):
                 df = pd.read_csv(file, delimiter=';')
                 data[rpm] = df
         print("data: ", len(data))
         return data
 
     def start(self):
-        files = os.listdir(self.filepath)
-        files = sorted(files, key=reorder)
-        if not check_files(files):
-            return {
-                'status': False,
-                'message': 'One or more files are not allowed.'
-            }
+        # files = os.listdir(self.filepath)
+        # files = sorted(files, key=reorder)
+        # if not check_files(files):
+        #     return {
+        #         'status': False,
+        #         'message': 'One or more files are not allowed.'
+        #     }
 
-        data = self.read_data(files)
+        data = self.read_data()
 
         for rpm, df in data.items():
             E = df['WE(1).Potential (V)']
