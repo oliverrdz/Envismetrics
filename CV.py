@@ -198,7 +198,7 @@ class CV(object):
             elif file.endswith(".txt"):
                 data[rpm] = pd.read_csv(file, delimiter=';', dtype={'Current range': str})
             elif file.endswith(".csv"):
-                data[rpm] = pd.read_csv(csv_file, delimiter=',', dtype={'Current range': str})
+                data[rpm] = pd.read_csv(file, delimiter=',', dtype={'Current range': str})
 
         print("data: ", len(data))
         return data
