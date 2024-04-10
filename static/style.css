@@ -23,6 +23,13 @@ html {
     border-radius: 0; /* 移除圆角 */
 }
 
+.mynavbar-btn {
+    --bs-btn-bg: #fff;
+    --bs-btn-border-color: #fff;
+    --bs-btn-hover-bg: #e9eaef;
+    --bs-btn-hover-border-color: #fff;
+}
+
 .card-deck .card {
   min-width: 220px;
 }
