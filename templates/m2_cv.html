@@ -18,8 +18,12 @@
 
     <main>
 
-        <div class="py-5  mt-lg-4">
-            <h3>Cyclic Voltammetry</h3>
+        <div class="py-5">
+            <h2 class="text-primary">Envismetrics</h2>
+            <p class="lead">A comprehensive toolbox for the interpretation of results across various electrochemical
+                techniques.</p>
+            <hr>
+            <h4>Cyclic Voltammetry Module</h4>
         </div>
 
         <input type="hidden" id="version" name="version" value="">
@@ -76,7 +80,16 @@
                         <img id="form2_img1" src="{{ url_for('static', filename='imgs/Picture1.png') }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
-                            <p class="card-text card-p">Hydrodynamic Voltammogram (original)</p>
+                            <p class="card-text card-p">Cyclic Voltammograms (original)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img id="form2_img2" src="{{ url_for('static', filename='imgs/Picture1.png') }}"
+                             class="card-img rounded float-end" alt="...">
+                        <div class="card-body">
+                            <p class="card-text card-p">Cyclic Voltammograms (filter sigma = <code id="form2_sigma"></code>)</p>
                         </div>
                     </div>
                 </div>

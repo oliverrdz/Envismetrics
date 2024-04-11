@@ -203,28 +203,25 @@ class CV(object):
         print("data: ", len(data))
         return data
 
-    def start1(self):
-        data = self.read_data()
-        if data is None:
-            return {
-                'status': False,
-                'message': 'One or more files are not allowed.'
-            }
-
+    def start1_figure(self, data, apply_sigma=False):
         for scan_rate, df0 in data.items():
-                # data0 = pd.ExcelFile(file)
+            # data0 = pd.ExcelFile(file)
             # df0 = data0.parse('Sheet1')
             df = df0[df0['Scan'] == 6]
             E = df['WE(1).Potential (V)']
             I = df['WE(1).Current (A)']
 
             # Define the standard deviation (sigma) for the Gaussian filter
-            sigma = self.sigma  # You can adjust this as needed
-            upperE, lowerE, upperI, lowerI = separater(E, I, min(E), max(E))
 
-            # Apply gaussian_filter with sigma=?
-            smoothed_upperI = gaussian_filter(upperI, sigma=sigma)
-            smoothed_lowerI = gaussian_filter(lowerI, sigma=sigma)
+            upperE, lowerE, upperI, lowerI = separater(E, I, min(E), max(E))
+            if apply_sigma:
+                # Apply gaussian_filter with sigma=?
+                sigma = self.sigma  # You can adjust this as needed
+                smoothed_upperI = gaussian_filter(upperI, sigma=sigma)
+                smoothed_lowerI = gaussian_filter(lowerI, sigma=sigma)
+            else:
+                smoothed_upperI = upperI
+                smoothed_lowerI = lowerI
 
             I = np.concatenate((smoothed_upperI, smoothed_lowerI))
             E = upperE + lowerE
@@ -239,15 +236,31 @@ class CV(object):
         plt.grid()
         # plt.show()
 
-        to_file1 = os.path.join(self.savepath, "form1.png")
+        if apply_sigma:
+            to_file1 = os.path.join(self.savepath, "form1_sigma{}.png".format(self.sigma))
+        else:
+            to_file1 = os.path.join(self.savepath, "form1_original.png")
         plt.savefig(to_file1)
         plt.close()
+        return to_file1
+
+    def start1(self):
+        data = self.read_data()
+        if data is None:
+            return {
+                'status': False,
+                'message': 'One or more files are not allowed.'
+            }
+
+        to_file1 = self.start1_figure(data, apply_sigma=False)
+        to_file2 = self.start1_figure(data, apply_sigma=True)
 
         return {
             'status': True,
             'version': self.version,
             'message': 'Success',
             'file1': to_file1,
+            'file2': to_file2,
         }
 
     def start2(self, method, peak_range_top, peak_range_bottom):

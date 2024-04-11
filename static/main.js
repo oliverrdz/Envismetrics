@@ -97,6 +97,11 @@ function submitFormCV1() {
                     var image1 = document.getElementById('form2_img1');
                     image1.src = response.file1
 
+                    var image2 = document.getElementById('form2_img2');
+                    image2.src = response.file2
+                    var sigma = document.getElementById('form2_sigma');
+                    sigma.textContent = input_sigma
+
                     var version = document.getElementById('version');
                     version.value = response.version
 
