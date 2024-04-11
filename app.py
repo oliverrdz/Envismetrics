@@ -1,5 +1,5 @@
 from werkzeug.utils import secure_filename
-from flask import Flask, render_template, send_from_directory, jsonify, request, redirect
+from flask import Flask, render_template, send_from_directory, jsonify, request, redirect, send_file
 import time
 import datetime
 import logging
@@ -186,6 +186,11 @@ def uploaded_file(filename):
 @app.route('/outputs/<version>/<filename>')
 def uploaded_file2(filename, version):
     return send_from_directory('outputs/{}'.format(version), filename)
+
+@app.route('/files/<filename>')
+def files(filename):
+    # return send_from_directory('data/example_files', filename)
+    return send_file('data/example_files/{}'.format(filename) , as_attachment=True)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port=8080)
