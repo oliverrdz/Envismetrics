@@ -9,6 +9,7 @@ import re
 import json
 from config import *
 
+
 def extract_rpm(filename):
     pattern = r'(?:^|_)(\d+rpm)\.'
     match = re.search(pattern, filename)
@@ -16,6 +17,7 @@ def extract_rpm(filename):
         return match.group(1)
     else:
         return None
+
 
 def extract_mvs(filename):
     pattern = r'(?:^|_)(\d+mVs)_CV\.'
@@ -25,10 +27,11 @@ def extract_mvs(filename):
     else:
         return None
 
+
 def check_files(files):
     for f in files:
         ext = f.split('.')[-1].lower()
-        if ext not in ALLOWED_EXTENSIONS: # ['xlsx', 'txt', 'csv']
+        if ext not in ALLOWED_EXTENSIONS:  # ['xlsx', 'txt', 'csv']
             return False
     return True
 
@@ -65,13 +68,14 @@ def find_y(x, y, xi):
             return y[i]
     return -1
 
+
 def extract_peak_range(str_peak_range):
     res = []
     arr = str_peak_range.strip().replace(" ", "").split('),(')
     for a in arr:
         start = a.split(",")[0].replace("(", "").replace(")", "").strip()
         end = a.split(",")[1].replace("(", "").replace(")", "").strip()
-        res.append( (float(start), float(end)) )
+        res.append((float(start), float(end)))
     # # 使用正则表达式匹配坐标
     # pattern = r'\((-?\d+(\.\d+)?),(-?\d+(\.\d+)?)\)'
     # matches = re.findall(pattern, str(str_peak_range))
@@ -116,6 +120,7 @@ def reorder(filename):
         # Handle files without RPM values
         return -1  # You can use any default value or treatment
 
+
 def filter_files(files):
     res = []
     for f in files:
@@ -123,6 +128,7 @@ def filter_files(files):
         if ext in ALLOWED_EXTENSIONS:
             res.append(f)
     return res
+
 
 class CV(object):
     def __init__(self, version, files_info, sigma):
@@ -132,6 +138,43 @@ class CV(object):
         if not os.path.exists(self.savepath):
             os.makedirs(self.savepath)
         self.sigma = sigma
+
+    @staticmethod
+    def demo_data():
+        return {
+            "CV": {
+                "form1": {
+                    "status": 'processing',
+                    "input": {
+                        "uploaded_files": [],
+                        "sigma": 10
+                    },
+                    "output": {
+                        "file1": "/static/imgs/Picture1.png",
+                        "file2": "/static/imgs/Picture1.png"
+                    },
+                    "display": "block"
+                },
+                "form2": {
+                    "status": 'processing',
+                    "input": {
+                        "peak_range_top": "((-1.0, -0.5),(0.0, 0.2))",
+                        "peak_range_bottom": "((-0.9, -0.75),(0.0, 0.125))",
+                        "method": "Max"
+                    },
+                    "output": {
+                        "file1": "/outputs/version_0415_180633/CV_results.csv",
+                        "img1":  "/static/imgs/Picture1.png"
+                    },
+                    "display": "none"
+                },
+                "form3": {
+                    "status": 'processing',
+                    "display": "none"
+                },
+                "processing_display": "none"
+            }
+        }
 
     # def read_csv(self):
     #     files = os.listdir(self.filepath)
@@ -245,6 +288,10 @@ class CV(object):
         return to_file1
 
     def start1(self):
+        """
+        input: form1
+        :return:
+        """
         data = self.read_data()
         if data is None:
             return {
@@ -255,12 +302,35 @@ class CV(object):
         to_file1 = self.start1_figure(data, apply_sigma=False)
         to_file2 = self.start1_figure(data, apply_sigma=True)
 
+        data_file = os.path.join('outputs', self.version, 'data.json')
+        if os.path.exists(data_file):
+            data = json.loads(open(data_file, 'r').read())
+        else:
+            data = {'version': self.version}
+
+        if 'CV' not in data.keys():
+            data['CV'] = {}
+
+        data['CV']['form1'] = {
+            'status': 'done',
+            'input': {
+                'uploaded_files': [],
+                'sigma': self.sigma
+            },
+            'output': {
+                'file1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
+                'file2': to_file2 if to_file1.startswith("/") else '/' + to_file2,
+            }
+        }
+        with open(data_file, 'w') as f:
+            f.write(json.dumps(data))
+            print("saved to: {}".format(data_file))
+
         return {
             'status': True,
             'version': self.version,
             'message': 'Success',
-            'file1': to_file1,
-            'file2': to_file2,
+            'data': data
         }
 
     def start2(self, method, peak_range_top, peak_range_bottom):
@@ -283,12 +353,11 @@ class CV(object):
         data = self.read_data()
         for pp, pr in enumerate(pr1):
             p1_start = pr1[pp][0]
-            p1_end =   pr1[pp][1]
+            p1_end = pr1[pp][1]
             p2_start = pr2[pp][0]
-            p2_end =   pr2[pp][1]
+            p2_end = pr2[pp][1]
             print("p1_start, p1_end:", p1_start, p1_end)
             print("p2_start, p2_end:", p2_start, p2_end)
-
 
             for jj, df0 in data.items():
                 j = int(jj.replace("mVs", ""))
@@ -376,17 +445,43 @@ class CV(object):
         to_file = "{}/CV_results.csv".format(self.savepath)
         df.to_csv(to_file, index=None, sep=",")
         print("saved to {}".format(to_file))
+
+        data_file = os.path.join('outputs', self.version, 'data.json')
+        if os.path.exists(data_file):
+            data = json.loads(open(data_file, 'r').read())
+        else:
+            data = {'version': self.version}
+
+        if 'CV' not in data.keys():
+            data['CV'] = {}
+
+        data['CV']['form2'] = {
+            'status': 'done',
+            'input': {
+                'peak_range_top': "({},{})".format(pr1[0], pr1[1]),
+                'peak_range_bottom': "({},{})".format(pr2[0], pr2[1]),
+                'method': method
+            },
+            'output': {
+                'file1': to_file if to_file.startswith("/") else '/' + to_file,
+                'img1': '/outputs/version_test_CV/form2.jpg',
+            }
+        }
+        with open(data_file, 'w') as f:
+            f.write(json.dumps(data))
+            print("saved to: {}".format(data_file))
+
         return {
             'status': True,
             'version': self.version,
             'message': 'Success',
-            'file1': to_file,
-            'img1': 'outputs/version_test_CV/form2.jpg',
+            'data': data
         }
+
 
 if __name__ == '__main__':
     c = CV("version_test_CV", "data/CV_csv", sigma=10.0)
     # print(c.start1())
     res = c.start2(method='Max', peak_range_top='(-1,-0.5),(0,0.2),(0.25,0.5)',
-             peak_range_bottom='(-0.9,-0.75),(0,0.125),(0.125,0.25)')
+                   peak_range_bottom='(-0.9,-0.75),(0,0.125),(0.125,0.25)')
     print(res)

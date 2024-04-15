@@ -1,5 +1,5 @@
 from werkzeug.utils import secure_filename
-from flask import Flask, render_template, send_from_directory, jsonify, request, redirect, send_file
+from flask import Flask, render_template, send_from_directory, jsonify, request, redirect, send_file, abort
 import time
 import datetime
 import logging
@@ -12,6 +12,8 @@ from CV import CV
 import hashlib
 import shutil
 from config import *
+import threading
+
 
 app = Flask(__name__)
 
@@ -36,19 +38,89 @@ def demo():
 
 @app.route("/")
 def index():
-    notes = []
-    return render_template('index.html', notes=notes)
+    data = {}
+    return render_template('index.html', data=data)
 
+# Menu 1
 @app.route("/hyd_elec")
 def hyd_elec():
     notes = []
     return render_template('m1_hyd_elec.html', notes=notes)
 
+# Menu 2
 @app.route("/cv")
 def cv():
-    notes = []
-    return render_template('m2_cv.html', notes=notes)
+    data = CV.demo_data()
+    data['version'] = ''
+    return render_template('m2_cv.html', data=data)
 
+@app.route("/cv/<version>")
+def cv2(version=None):
+    data = {
+        'version': version
+    }
+    module = 'CV'
+    step = int(request.args.get('step', '1'))
+    data_file = os.path.join('outputs', version, 'data.json')
+    if os.path.exists(data_file):
+        data = json.loads(open(data_file).read())
+        print('---')
+        print(data)
+
+        # 检查状态
+        kk = 'form{}'.format(step-1) # Step k 要用到 Form k-1 的结果。
+        if data[module][kk]['status'] == 'processing':
+            is_processing = True
+        else:
+            is_processing = False
+
+        # update_display
+        for i in range(1, 4):
+            k = 'form{}'.format(i)
+            if k not in data[module].keys():
+                data[module][k] = {}
+            if i == step and not is_processing:
+                data[module][k]['display'] = 'block'
+            else:
+                data[module][k]['display'] = 'none'
+
+        data[module]['processing_display'] = 'block' if is_processing else 'none'
+        data['version'] = version
+        data['step'] = step
+    else:
+        abort(404)
+    # print(json.dumps(data))
+
+    return render_template('m2_cv.html', data=data)
+
+@app.route("/check/<module>/<version>")
+def check(module, version):
+    step = int(request.args.get('step', '1'))
+    module = module.upper()
+
+    print("version", version)
+    print("module", module)
+    print("step", step)
+
+    data_file = os.path.join('outputs', version, 'data.json')
+    if not os.path.exists(data_file):
+        data = {'result': 'file not exists'}
+        return jsonify(data)
+
+    data = json.loads(open(data_file).read())
+
+    if module not in data.keys():
+        data = {'result': 'module not exists'}
+        return jsonify(data)
+
+    f = 'form{}'.format(step-1)
+    if data[module][f]['status'] == 'done':
+        data = {'result': 'done'}
+        return jsonify(data)
+
+
+    data = {'result': 'processing'}
+    return jsonify(data)
 
 def calculate_file_md5(file_path):
     """计算文件的 MD5 哈希值"""
@@ -134,6 +206,17 @@ def upload_file():
             if not os.path.exists(save_path):
                 os.makedirs(save_path, exist_ok=True)
 
+            data_path = os.path.join('outputs', version)
+            if not os.path.exists(data_path):
+                os.makedirs(data_path, exist_ok=True)
+            data_file = os.path.join(data_path, 'data.json')
+            if not os.path.exists(data_file):
+                data = CV.demo_data()
+                data['version'] = version
+
+                with open(data_file, 'w') as f:
+                    json.dump(data, f)
+
             if 'files[]' not in request.files:
                 return 'No file part'
 
@@ -142,9 +225,25 @@ def upload_file():
 
             sigma = request.form.get('sigma')
             print("sigma: " + str(sigma))
-            c = CV(version=version, files_info=files_info, sigma=float(sigma))
-            res = c.start1()
-            return res
+
+            user_input = {
+                'version': version,
+                'module': module,
+                'step': step,
+                'data': {
+                    'files_info': files_info,
+                    'sigma': float(sigma)
+                }
+            }
+            # 创建子线程，并启动后台任务
+            background_thread = threading.Thread(target=background_task, args=(user_input,))
+            background_thread.start()
+
+            return {
+                'status': True,
+                'message': 'Success, please wait.',
+                'version': version
+            }
         elif step == '2':
             version = request.form.get('version')
             save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
@@ -154,9 +253,28 @@ def upload_file():
             method = 'Max'
             peak_range_top = request.form.get('peak_range_top')
             peak_range_bottom = request.form.get('peak_range_bottom')
-            c = CV(version=version, files_info=files_info, sigma=float(sigma))
-            res = c.start2(method=method, peak_range_top=peak_range_top, peak_range_bottom=peak_range_bottom)
-            return res
+
+            user_input = {
+                'version': version,
+                'module': module,
+                'step': step,
+                'data': {
+                    'files_info': files_info,
+                    'sigma': float(sigma),
+                    'method': method,
+                    'peak_range_top': peak_range_top,
+                    'peak_range_bottom': peak_range_bottom
+                }
+            }
+            # 创建子线程，并启动后台任务
+            background_thread = threading.Thread(target=background_task, args=(user_input,))
+            background_thread.start()
+
+            return {
+                'status': True,
+                'message': 'Success, please wait.',
+                'version': version
+            }
         else:
             return {
                 'status': False,
@@ -191,6 +309,23 @@ def uploaded_file2(filename, version):
 def files(filename):
     # return send_from_directory('data/example_files', filename)
     return send_file('data/example_files/{}'.format(filename) , as_attachment=True)
+
+
+def background_task(param):
+    print("Background task started with parameter:", param)
+
+    if param['module'] == 'CV':
+        if param['step'] == '1':
+            d = param['data']
+            c = CV(version=param['version'], files_info=d['files_info'], sigma=d['sigma'])
+            c.start1()
+        elif param['step'] == '2':
+            d = param['data']
+            c = CV(version=param['version'], files_info=d['files_info'], sigma=d['sigma'])
+            c.start2(method=d['method'], peak_range_top=d['peak_range_top'], peak_range_bottom=d['peak_range_bottom'])
+
+    print("Background task completed")
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port=8080)
