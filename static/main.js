@@ -29,6 +29,7 @@ function submitForm() {
         for (var i = 0; i < files.length; i++) {
             formData.append('files[]', files[i]);
         }
+        formData.append('module', 'HDV');
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/upload', true);
@@ -40,14 +41,18 @@ function submitForm() {
                 $('#loadingModal').modal('hide');
 
                 if (response.status === true) {
-                    var image1 = document.getElementById('img1');
-                    image1.src = response.file1
+                    // var image1 = document.getElementById('img1');
+                    // image1.src = response.file1
+                    //
+                    // var image2 = document.getElementById('img2');
+                    // image2.src = response.file2
+                    //
+                    // document.getElementById('form_input').style.display = 'none';
+                    // document.getElementById('form_result').style.display = 'block';
 
-                    var image2 = document.getElementById('img2');
-                    image2.src = response.file2
-
-                    document.getElementById('form_input').style.display = 'none';
-                    document.getElementById('form_result').style.display = 'block';
+                    // 指定要跳转的 URL
+                    var targetURL = "/hyd_elec/" + response.version + '?step=2';
+                    window.location.href = targetURL;
                 } else {
                     alert(response.message);
                 }

@@ -13,7 +13,7 @@ import hashlib
 import shutil
 from config import *
 import threading
-
+import traceback
 
 app = Flask(__name__)
 
@@ -44,8 +44,49 @@ def index():
 # Menu 1
 @app.route("/hyd_elec")
 def hyd_elec():
-    notes = []
-    return render_template('m1_hyd_elec.html', notes=notes)
+    data = {}
+    data['version'] = ''
+    data['step'] = ''
+    return render_template('m1_hyd_elec.html', data=data)
+
+@app.route("/hyd_elec/<version>")
+def hyd_elec2(version=None):
+    data = {
+        'version': version
+    }
+    module = 'HDV'
+    step = int(request.args.get('step', '2'))
+    step = 2 if step < 2 else step
+    data_path = os.path.join('outputs', version)
+    if not os.path.exists(data_path):
+        abort(404)
+
+    data_file = os.path.join(data_path, 'data.json')
+
+    if os.path.exists(data_file):
+        try:
+            data = json.loads(open(data_file).read())
+            data = data[module]
+            print('---')
+            print(data)
+            # 检查状态
+            kk = 'form{}'.format(step - 1)  # Step k 要用到 Form k-1 的结果。
+            status = data[kk]['status']
+        except Exception as e:
+            traceback.print_exc()
+            data = {}
+            status = 'processing'
+    else:
+        traceback.print_exc()
+        data = {}
+        status = 'processing'
+
+    data['processing_display'] = 'none' if status == 'done' else 'block'
+    data['form1_processing_display'] = 'block' if status == 'done' else 'none'
+    data['version'] = version
+    data['step'] = step
+
+    return render_template('m1_hyd_elec_step2.html', data=data)
 
 # Menu 2
 @app.route("/cv")
@@ -75,7 +116,7 @@ def cv2(version=None):
             is_processing = False
 
         # update_display
-        for i in range(1, 4):
+        for i in [1, 2, 3]:
             k = 'form{}'.format(i)
             if k not in data[module].keys():
                 data[module][k] = {}
@@ -113,11 +154,19 @@ def check(module, version):
         data = {'result': 'module not exists'}
         return jsonify(data)
 
-    f = 'form{}'.format(step-1)
-    if data[module][f]['status'] == 'done':
-        data = {'result': 'done'}
-        return jsonify(data)
-
+    if module == 'CV':
+        f = 'form{}'.format(step-1)
+        if data[module][f]['status'] == 'done':
+            data = {'result': 'done'}
+            return jsonify(data)
+    elif module == 'HDV':
+        f = 'form1'
+        if f not in data[module].keys():
+            data = {'result': 'form1 not exists'}
+            return jsonify(data)
+        if data[module][f]['status'] == 'done':
+            data = {'result': 'done'}
+            return jsonify(data)
 
     data = {'result': 'processing'}
     return jsonify(data)
@@ -239,11 +288,11 @@ def upload_file():
             background_thread = threading.Thread(target=background_task, args=(user_input,))
             background_thread.start()
 
-            return {
+            return jsonify({
                 'status': True,
                 'message': 'Success, please wait.',
                 'version': version
-            }
+            })
         elif step == '2':
             version = request.form.get('version')
             save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
@@ -276,11 +325,12 @@ def upload_file():
                 'version': version
             }
         else:
-            return {
+            return jsonify({
                 'status': False,
                 'message': 'One or more files are not allowed.'
-            }
-    else:
+            })
+    elif module == 'HDV':
+        step = request.form.get('step', '1')
         version = "version_" + datetime.now().strftime("%m%d_%H%M%S")
         save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
         if not os.path.exists(save_path):
@@ -292,9 +342,24 @@ def upload_file():
         files = request.files.getlist('files[]')
         files_info = save_files(files, save_path, version)
 
-        h = HDV(version=version, files_info=files_info)
-        res = h.start()
-        return jsonify(res)
+        user_input = {
+            'version': version,
+            'module': module,
+            'step': step,
+            'data': {
+                'files_info': files_info,
+                'sigma': float(10)
+            }
+        }
+        # 创建子线程，并启动后台任务
+        background_thread = threading.Thread(target=background_task, args=(user_input,))
+        background_thread.start()
+
+        return jsonify({
+            'status': True,
+            'message': 'Success, please wait.',
+            'version': version
+        })
 
 
 @app.route('/outputs/<filename>')
@@ -323,6 +388,10 @@ def background_task(param):
             d = param['data']
             c = CV(version=param['version'], files_info=d['files_info'], sigma=d['sigma'])
             c.start2(method=d['method'], peak_range_top=d['peak_range_top'], peak_range_bottom=d['peak_range_bottom'])
+    elif param['module'] == 'HDV':
+        d = param['data']
+        h = HDV(version=param['version'], files_info=d['files_info'])
+        h.start()
 
     print("Background task completed")
 

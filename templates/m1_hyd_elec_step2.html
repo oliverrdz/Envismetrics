@@ -29,41 +29,25 @@
         <input type="hidden" id="version" name="version" value="{{data['version']}}">
         <input type="hidden" id="step" name="version" value="{{data['step']}}">
 
-
-        <!-- Inputs -->
-        <div class="row g-5" id="form_input">
+        <div class="row g-5" id="progress_bar" style="display: {{ data['processing_display'] }}">
             <div class="col-md-5 col-lg-4 ">
-                <h4 class="d-flex justify-content-between align-items-center mb-3">
-                    <span>Upload data files</span>
-                </h4>
-                <div class="file-drop-area">
-                    <span class="choose-file-button">Choose files</span>
-                    <span class="file-message">or drag and drop files here</span>
-                    <input class="file-input" type="file" id="fileInput" multiple>
+                <p>Please wait while we are processing...</p>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                         aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                    <br><br>
                 </div>
-                <div id="upload-message" style="color: red"></div>
-
-                <br>
-                <p style="color: gray">The file names should be like: <code>?rpm.xlsx</code> or
-                    <code>?rpm.txt</code><br><br>
-                    Click here to download the example file: <a href="/files/HDV_G_DMAB_5mVs_800rpm.txt">HDV_G_DMAB_5mVs_800rpm.txt</a></p>
-                <br>
-
-                <button type="button" class="btn btn-primary btn-md" ontouchstart="submitForm()"
-                        onclick="submitForm()">Submit
-                </button>
             </div>
-            <br>
-            <br>
         </div>
 
         <!-- Results -->
-        <div class="row g-5" id="form_result" style="display: none">
+        {% if data['processing_display'] == 'none' %}
+        <div class="row g-5" id="form_result" style="display: {{ data['form1_processing_display'] }}">
             <h4 class="mb-3">Results</h4>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="img1" src="{{ url_for('static', filename='imgs/Picture1.png') }}"
+                        <img id="img1" src="{{ data['form1']['output']['file1'] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
                             <p class="card-text card-p">Hydrodynamic Voltammogram (original)</p>
@@ -73,7 +57,7 @@
 
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="img2" src="{{ url_for('static', filename='imgs/Picture3a.png') }}"
+                        <img id="img2" src="{{ data['form1']['output']['file2'] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
                             <p class="card-text card-p">Hydrodynamic Voltammogram (Smoothed/Smoothing Level: sigma =
@@ -81,22 +65,17 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
-
             <br>
             <div class="col-md-7 col-lg-8">
                 <div class="form-group row">
                     <div class="col-sm-10">
-                        <!--                        <button type="button" class="btn btn-success" ontouchstart="tryAgain()" onclick="tryAgain()">Try-->
-                        <!--                            again-->
-                        <!--                        </button>-->
-                        <a class="btn btn-success" href="/">Try again</a>
+                        <a class="btn btn-success" href="/hyd_elec">Try again</a>
                     </div>
                 </div>
             </div>
         </div>
+        {% endif %}
     </main>
 
     {% include 'footer.html' %}
@@ -116,5 +95,46 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function checkAndCallAPI() {
+        // 获取 id 为 "processing_bar" 的元素
+        var processingBar = document.getElementById("progress_bar");
+
+
+        // 检查该元素的 display 属性是否为 "block"
+        if (processingBar.style.display === "block") {
+            // 如果是，则调用 API
+            callAPI();
+        }
+    }
+
+    function callAPI() {
+        // 模拟调用 API
+        setInterval(function () {
+            var version = document.getElementById("version").value;
+            var step = document.getElementById("step").value;
+            var URL = '/check/hdv/' + version + '?step=' + step
+            // 发送请求到你的 API
+            fetch(URL)
+                .then(response => response.json())
+                .then(data => {
+                    // 检查 API 返回结果是否为 "done"
+                    if (data.result === "done") {
+                        // 如果是，则刷新当前页面
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }, 1000); // 每隔一秒调用一次 API
+    }
+
+    // 在页面加载完成后启动检查和调用 API 的函数
+    window.onload = function () {
+        checkAndCallAPI();
+    };
+</script>
+
 </body>
 </html>

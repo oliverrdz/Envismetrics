@@ -53,6 +53,9 @@ class HDV(object):
         self.version = version
         self.files_info = files_info
         self.savepath = 'outputs'
+        self.datapath = os.path.join(self.savepath, self.version)
+        if not os.path.exists(self.datapath):
+            os.mkdir(self.datapath)
 
     def read_data(self):
         with open(self.files_info, 'r') as f:
@@ -119,7 +122,7 @@ class HDV(object):
         plt.legend()
         plt.grid()
         # plt.show()
-        to_file1 = os.path.join(self.savepath, "{}_1.png".format(self.version))
+        to_file1 = os.path.join(self.datapath, "{}_1.png".format(self.version))
         plt.savefig(to_file1)
         plt.close()
 
@@ -151,14 +154,38 @@ class HDV(object):
         plt.legend()
         plt.grid()
         # plt.show()
-        to_file2 = os.path.join(self.savepath, "{}_2.png".format(self.version))
+        to_file2 = os.path.join(self.datapath, "{}_2.png".format(self.version))
         plt.savefig(to_file2)
         plt.close()
+
+        data_file = os.path.join('outputs', self.version, 'data.json')
+        if os.path.exists(data_file):
+            data = json.loads(open(data_file, 'r').read())
+        else:
+            data = {'version': self.version}
+
+        if 'HDV' not in data.keys():
+            data['HDV'] = {}
+        data['HDV']['form1'] = {
+            'status': 'done',
+            'input': {
+                'sigma': 10,
+            },
+            'output': {
+                'file1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
+                'file2': to_file2 if to_file2.startswith("/") else '/' + to_file2,
+                # 'img1': '/outputs/version_test_CV/form2.jpg',
+            }
+        }
+        with open(data_file, 'w') as f:
+            f.write(json.dumps(data))
+            print("saved to: {}".format(data_file))
+
         return {
             'status': True,
+            'version': self.version,
             'message': 'Success',
-            'file1': to_file1,
-            'file2': to_file2
+            'data': data
         }
 
 
