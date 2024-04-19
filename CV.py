@@ -139,6 +139,7 @@ class CV(object):
             os.makedirs(self.savepath)
         self.sigma = sigma
 
+    """
     @staticmethod
     def demo_data():
         return {
@@ -175,30 +176,31 @@ class CV(object):
                 "processing_display": "none"
             }
         }
+    
+    def read_csv(self):
+        files = os.listdir(self.filepath)
+        files = sorted(files, key=reorder)
+        files = filter_files(files)
+        if not check_files(files):
+            return None
 
-    # def read_csv(self):
-    #     files = os.listdir(self.filepath)
-    #     files = sorted(files, key=reorder)
-    #     files = filter_files(files)
-    #     if not check_files(files):
-    #         return None
-    #
-    #     data = {}
-    #     for f in files:
-    #         if f.endswith(".csv"):
-    #             # input your file name here and switch rpm in to %d
-    #             file = os.path.join(self.filepath, f)
-    #             if not os.path.isfile(file):
-    #                 continue
-    #             print(f)
-    #             rpm = extract_mvs(f)
-    #             if rpm is None:
-    #                 continue
-    #             print(rpm)
-    #             df = pd.read_csv(file, delimiter=',', dtype={'Current range': str})
-    #             data[rpm] = df
-    #     print("data: ", len(data))
-    #     return data
+        data = {}
+        for f in files:
+            if f.endswith(".csv"):
+                # input your file name here and switch rpm in to %d
+                file = os.path.join(self.filepath, f)
+                if not os.path.isfile(file):
+                    continue
+                print(f)
+                rpm = extract_mvs(f)
+                if rpm is None:
+                    continue
+                print(rpm)
+                df = pd.read_csv(file, delimiter=',', dtype={'Current range': str})
+                data[rpm] = df
+        print("data: ", len(data))
+        return data
+    """
 
     def read_data(self):
         with open(self.files_info, 'r') as f:

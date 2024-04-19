@@ -44,10 +44,7 @@ def index():
 # Menu 1
 @app.route("/hyd_elec")
 def hyd_elec():
-    data = {}
-    data['version'] = ''
-    data['step'] = ''
-    return render_template('m1_hyd_elec.html', data=data)
+    return render_template('m1_hyd_elec.html')
 
 @app.route("/hyd_elec/<version>")
 def hyd_elec2(version=None):
@@ -91,9 +88,7 @@ def hyd_elec2(version=None):
 # Menu 2
 @app.route("/cv")
 def cv():
-    data = CV.demo_data()
-    data['version'] = ''
-    return render_template('m2_cv.html', data=data)
+    return render_template('m2_cv.html')
 
 @app.route("/cv/<version>")
 def cv2(version=None):
