@@ -101,38 +101,42 @@ def cv2(version=None):
         'version': version
     }
     module = 'CV'
-    step = int(request.args.get('step', '1'))
-    data_file = os.path.join('outputs', version, 'data.json')
-    if os.path.exists(data_file):
-        data = json.loads(open(data_file).read())
-        print('---')
-        print(data)
-
-        # 检查状态
-        kk = 'form{}'.format(step-1) # Step k 要用到 Form k-1 的结果。
-        if data[module][kk]['status'] == 'processing':
-            is_processing = True
-        else:
-            is_processing = False
-
-        # update_display
-        for i in [1, 2, 3]:
-            k = 'form{}'.format(i)
-            if k not in data[module].keys():
-                data[module][k] = {}
-            if i == step and not is_processing:
-                data[module][k]['display'] = 'block'
-            else:
-                data[module][k]['display'] = 'none'
-
-        data[module]['processing_display'] = 'block' if is_processing else 'none'
-        data['version'] = version
-        data['step'] = step
-    else:
+    step = int(request.args.get('step', '2'))
+    step = 2 if step < 2 else step
+    data_path = os.path.join('outputs', version)
+    if not os.path.exists(data_path):
         abort(404)
-    # print(json.dumps(data))
 
-    return render_template('m2_cv.html', data=data)
+    data_file = os.path.join(data_path, 'data.json')
+
+    if os.path.exists(data_file):
+        try:
+            data = json.loads(open(data_file).read())
+            data = data[module]
+            print('---')
+            print(data)
+            # 检查状态
+            kk = 'form{}'.format(step - 1)  # Step k 要用到 Form k-1 的结果。
+            status = data[kk]['status']
+        except Exception as e:
+            traceback.print_exc()
+            data = {}
+            status = 'processing'
+    else:
+        traceback.print_exc()
+        data = {}
+        status = 'processing'
+
+    data['status'] = status
+    data['processing_display'] = 'none' if status == 'done' else 'block'
+    data['version'] = version
+    data['step'] = step
+
+    if step == 2:
+        return render_template('m2_cv_step2.html', data=data)
+    elif step == 3:
+        return render_template('m2_cv_step3.html', data=data)
+    return render_template('m2_cv_step2.html', data=data)
 
 @app.route("/check/<module>/<version>")
 def check(module, version):
@@ -156,8 +160,12 @@ def check(module, version):
 
     if module == 'CV':
         f = 'form{}'.format(step-1)
-        if data[module][f]['status'] == 'done':
-            data = {'result': 'done'}
+        try:
+            if data[module][f]['status'] == 'done':
+                data = {'result': 'done'}
+                return jsonify(data)
+        except Exception as e:
+            data = {'result': str(e)}
             return jsonify(data)
     elif module == 'HDV':
         f = 'form1'
@@ -258,13 +266,13 @@ def upload_file():
             data_path = os.path.join('outputs', version)
             if not os.path.exists(data_path):
                 os.makedirs(data_path, exist_ok=True)
-            data_file = os.path.join(data_path, 'data.json')
-            if not os.path.exists(data_file):
-                data = CV.demo_data()
-                data['version'] = version
-
-                with open(data_file, 'w') as f:
-                    json.dump(data, f)
+            # data_file = os.path.join(data_path, 'data.json')
+            # if not os.path.exists(data_file):
+            #     data = CV.demo_data()
+            #     data['version'] = version
+            #
+            #     with open(data_file, 'w') as f:
+            #         json.dump(data, f)
 
             if 'files[]' not in request.files:
                 return 'No file part'

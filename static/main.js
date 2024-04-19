@@ -135,7 +135,7 @@ function submitFormCV1() {
 function submitFormCV2() {
     var formData = new FormData();
 
-    var input_sigma = document.getElementById("input_sigma").value;
+    var input_sigma = document.getElementById("sigma").value;
     var form2_range1 = document.getElementById("form2_range1").value;
     var form2_range2 = document.getElementById("form2_range2").value;
     var version = document.getElementById("version").value;
