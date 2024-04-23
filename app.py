@@ -93,7 +93,12 @@ def hyd_elec2(version=None):
     data['version'] = version
     data['step'] = step
 
-    return render_template('m1_hyd_elec_step2.html', data=data)
+    if step == 2:
+        return render_template('m1_hyd_elec_step2.html', data=data)
+    elif step == 3:
+        return render_template('m1_hyd_elec_step3.html', data=data)
+    else:
+        return render_template('m1_hyd_elec_step2.html', data=data)
 
 # Menu 2
 @app.route("/cv")

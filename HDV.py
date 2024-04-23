@@ -273,7 +273,9 @@ class HDV(BaseModule):
         to_file1 = os.path.join(self.datapath, "HDV_step2_1_p1.png")
         plt.savefig(to_file1)
 
-        return to_file1
+        to_file2 = os.path.join(self.datapath, "HDV_step2_1_Levich_plotshow_data.csv")
+        Levich_plotshow_data.to_csv(to_file2, sep=',', index=False)
+        return to_file1, to_file2
 
 
     def _step2_1_fig2(self, data, input_n=1, input_a = 1.0, input_v = 0.01, input_c = 0.000894454e-3 ):
@@ -292,7 +294,7 @@ class HDV(BaseModule):
         C = input_c  # in mol/cm3
 
         # Load data
-        Levich_plotshow_data = pd.DataFrame()
+        # Levich_plotshow_data = pd.DataFrame()
 
         data = self.read_data()
         E = None
@@ -380,7 +382,7 @@ class HDV(BaseModule):
     def step2_1(self, input_n=1, input_a = 1.0, input_v = 0.01, input_c = 0.000894454e-3):
         """ Step 2 """
         data = self.res_data
-        to_file1 = self._step2_1_fig1(data, int(input_n), float(input_a), float(input_v), float(input_c))
+        to_file1, excel_file = self._step2_1_fig1(data, int(input_n), float(input_a), float(input_v), float(input_c))
         to_file2 = self._step2_1_fig2(data, int(input_n), float(input_a), float(input_v), float(input_c))
 
         if 'HDV' not in data.keys():
@@ -397,6 +399,7 @@ class HDV(BaseModule):
             'output': {
                 'file1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
                 'file2': to_file2 if to_file2.startswith("/") else '/' + to_file2,
+                'excel_file': excel_file if excel_file.startswith("/") else '/' + excel_file,
                 # 'img1': '/outputs/version_test_CV/form2.jpg',
             }
         }

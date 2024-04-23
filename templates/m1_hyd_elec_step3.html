@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+
+{% include 'head.html' %}
+
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="check" viewBox="0 0 16 16">
+        <title>Check</title>
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+    </symbol>
+</svg>
+
+<div class="container py-3">
+
+    {% include 'navbar.html' %}
+
+    <main>
+
+        <div class="py-5">
+            <h2 class="text-primary">Envismetrics</h2>
+            <p class="lead">A comprehensive toolbox for the interpretation of results across various electrochemical
+                techniques.</p>
+            <hr>
+            <h4>Rotating Disk Electrode (RDE) Levich and Koutecky-Levich Analysis Module.</h4>
+        </div>
+
+        <input type="hidden" id="version" name="version" value="{{data['version']}}">
+        <input type="hidden" id="step" name="step" value="{{data['step']}}">
+
+        <div class="row g-5" id="progress_bar" style="display: {{ data['processing_display'] }}">
+            <div class="col-md-5 col-lg-4 ">
+                <p>Please wait while we are processing...</p>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                         aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                    <br><br>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        {% if data['processing_display'] == 'none' %}
+        <div class="row g-5" id="form_result">
+            <h4 class="mb-3">Results</h4>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img id="img1" src="{{ data['form2']['output']['file1'] }}"
+                             class="card-img rounded float-end" alt="...">
+                        <div class="card-body">
+                            <p class="card-text card-p">Levich plot</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img id="img2" src="{{ data['form2']['output']['file2'] }}"
+                             class="card-img rounded float-end" alt="...">
+                        <div class="card-body">
+                            <p class="card-text card-p">Levich analysis plot</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="needs-validation" novalidate="">
+                <div class="row col-6">
+                    <a id="form3_link" href="{{ data['form2']['output']['excel_file'] }}">Click here to download the result file.</a>
+                </div>
+            </div>
+
+
+
+            <br>
+
+            <div class="col-md-7 col-lg-8">
+                <div class="form-group row">
+                    <div class="col-sm-6">
+<!--                        <button type="button" class="btn btn-primary btn-md" ontouchstart="submitForm()"-->
+<!--                                onclick="submitForm()" style="min-width: 90px">Submit-->
+<!--                        </button>-->
+                        <a class="btn btn-success btn-md" href="/hyd_elec" style="min-width: 90px">Try again</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </main>
+
+    {% include 'footer.html' %}
+
+    <!-- Bootstrap Modal for Loading Message -->
+    <div class="modal" id="loadingModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function checkAndCallAPI() {
+        // 获取 id 为 "processing_bar" 的元素
+        var processingBar = document.getElementById("progress_bar");
+
+
+        // 检查该元素的 display 属性是否为 "block"
+        if (processingBar.style.display === "block") {
+            // 如果是，则调用 API
+            callAPI();
+        }
+    }
+
+    function callAPI() {
+        // 模拟调用 API
+        setInterval(function () {
+            var version = document.getElementById("version").value;
+            var step = document.getElementById("step").value;
+            var URL = '/check/hdv/' + version + '?step=' + step
+            // 发送请求到你的 API
+            fetch(URL)
+                .then(response => response.json())
+                .then(data => {
+                    // 检查 API 返回结果是否为 "done"
+                    if (data.result === "done") {
+                        // 如果是，则刷新当前页面
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }, 1000); // 每隔一秒调用一次 API
+    }
+
+    // 在页面加载完成后启动检查和调用 API 的函数
+    window.onload = function () {
+        checkAndCallAPI();
+    };
+
+
+    function submitForm() {
+        var formData = new FormData();
+
+        var version = document.getElementById("version").value;
+        formData.append('module', 'hdv');
+        formData.append('step', '3');
+        formData.append('version', version);
+
+        var params = ['input_C', 'input_A', 'input_V', 'input_N'];
+        for (var i = 0; i < params.length; i++) {
+            var value = document.getElementById(params[i]).value;
+            formData.append(params[i], value);
+        }
+
+        // 获取<select>标签元素
+        var methodElement = document.getElementById("method");
+        var methodIndex = methodElement.selectedIndex;
+        var method = methodElement.options[methodIndex].value;
+        formData.append('method', method);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload', true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                console.log(response);
+
+                if (response.status === true) {
+                    var targetURL = "/hyd_elec/" + response.version + '?step=3';
+                    window.location.href = targetURL;
+                } else {
+                    alert(response.message);
+                }
+                // alert('Files uploaded successfully');
+            } else {
+                alert('Error uploading files');
+            }
+        };
+        xhr.send(formData);
+    }
+</script>
+
+</body>
+</html>
