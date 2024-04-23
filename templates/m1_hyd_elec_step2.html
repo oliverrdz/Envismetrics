@@ -66,11 +66,67 @@
                     </div>
                 </div>
             </div>
+
+            <div class="needs-validation" novalidate="">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <label for="input_C" class="form-label">Concentration of the material in the solution ? (C -
+                            mol/cm3)</label>
+                        <input type="text" class="form-control" id="input_C" name="sigma" placeholder="0.000894454e-3"
+                               required="" value="0.000000894454">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <label for="input_A" class="form-label">Electrode area ? (A - cm2)</label>
+                        <input type="text" class="form-control" id="input_A" name="sigma" placeholder="0.15"
+                               required="" value="0.15">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <label for="input_V" class="form-label">Kinematic viscosity of the solution ? (ν -
+                            cm2/s)</label>
+                        <input type="text" class="form-control" id="input_V" name="sigma" placeholder="0.01"
+                               required="" value="0.01">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <label for="input_N" class="form-label">Number of electron transfer ? (n)</label>
+                        <input type="text" class="form-control" id="input_N" name="sigma" placeholder="1"
+                               required="" value="1">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <label class="form-label">Which methods you want to use:</label>
+                        <select class="form-select" aria-label="Default select example" name="method" id="method">
+                            <option selected value="1">Levich plot and levich analysis</option>
+                            <option value="2">Koutecky-Levich plot and levich analysis</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
             <br>
+
             <div class="col-md-7 col-lg-8">
                 <div class="form-group row">
-                    <div class="col-sm-10">
-                        <a class="btn btn-success" href="/hyd_elec">Try again</a>
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-primary btn-md" ontouchstart="submitForm()"
+                                onclick="submitForm()" style="min-width: 90px">Submit
+                        </button>
+                        <a class="btn btn-success btn-md" href="/hyd_elec" style="min-width: 90px">Try again</a>
                     </div>
                 </div>
             </div>
@@ -134,6 +190,48 @@
     window.onload = function () {
         checkAndCallAPI();
     };
+
+
+    function submitForm() {
+        var formData = new FormData();
+
+        var version = document.getElementById("version").value;
+        formData.append('module', 'hdv');
+        formData.append('step', '2');
+        formData.append('version', version);
+
+        var params = ['input_C', 'input_A', 'input_V', 'input_N'];
+        for (var i = 0; i < params.length; i++) {
+            var value = document.getElementById(params[i]).value;
+            formData.append(params[i], value);
+        }
+
+        // 获取<select>标签元素
+        var methodElement = document.getElementById("method");
+        var methodIndex = methodElement.selectedIndex;
+        var method = methodElement.options[methodIndex].value;
+        formData.append('method', method);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload', true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                console.log(response);
+
+                if (response.status === true) {
+                    var targetURL = "/hyd_elec/" + response.version + '?step=3';
+                    window.location.href = targetURL;
+                } else {
+                    alert(response.message);
+                }
+                // alert('Files uploaded successfully');
+            } else {
+                alert('Error uploading files');
+            }
+        };
+        xhr.send(formData);
+    }
 </script>
 
 </body>
