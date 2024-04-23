@@ -70,6 +70,7 @@ def hyd_elec2(version=None):
         abort(404)
     data_file = os.path.join(data_path, 'data.json')
 
+    method = int(request.args.get('method', '-1'))
     if os.path.exists(data_file):
         try:
             data = json.loads(open(data_file).read())
@@ -77,8 +78,14 @@ def hyd_elec2(version=None):
             print('---')
             print(data)
             # 检查状态
-            kk = 'form{}'.format(step - 1)  # Step k 要用到 Form k-1 的结果。
-            status = data[kk]['status']
+            if step == 2:
+                f = 'form1'
+            elif step == 3:
+                f = 'form2_{}'.format(method)
+            else:
+                f = 'form1'
+
+            status = data[f]['status']
         except Exception as e:
             traceback.print_exc()
             data = {}
@@ -88,6 +95,7 @@ def hyd_elec2(version=None):
         data = {}
         status = 'processing'
 
+    data['method'] = method
     data['processing_display'] = 'none' if status == 'done' else 'block'
     data['form1_processing_display'] = 'block' if status == 'done' else 'none'
     data['version'] = version
@@ -178,7 +186,15 @@ def check(module, version):
             data = {'result': str(e)}
             return jsonify(data)
     elif module.upper() == 'HDV':
-        f = 'form{}'.format(step - 1)
+        if step == 2:
+            f = 'form1'
+        elif step == 3:
+            method = int(request.args.get('method', '1'))
+            f = 'form2_{}'.format(method)
+        else:
+            data = {'result': 'step not exists'}
+            return jsonify(data)
+
         try:
             if data[module][f]['status'] == 'done':
                 data = {'result': 'done'}
@@ -186,6 +202,7 @@ def check(module, version):
         except Exception as e:
             data = {'result': str(e)}
             return jsonify(data)
+
 
     data = {'result': 'processing'}
     return jsonify(data)

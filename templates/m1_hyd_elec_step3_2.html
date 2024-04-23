@@ -1,0 +1,45 @@
+<div class="row g-5" id="form_result">
+    <h4 class="mb-3">Results</h4>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="col">
+            <div class="card shadow-sm">
+                <img id="img1" src="{{ data['form2_2']['output']['file1'] }}"
+                     class="card-img rounded float-end" alt="...">
+                <div class="card-body">
+                    <p class="card-text card-p">Koutecky-Levich plot</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card shadow-sm">
+                <img id="img2" src="{{ data['form2_2']['output']['file2'] }}"
+                     class="card-img rounded float-end" alt="...">
+                <div class="card-body">
+                    <p class="card-text card-p">Koutecky-Levich analysis plot</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="needs-validation" novalidate="">
+        <div class="row col-6">
+            <a id="form3_link" href="{{ data['form2_2']['output']['excel_file'] }}">Click here to download the result
+                file.</a>
+        </div>
+    </div>
+
+
+    <br>
+
+    <div class="col-md-7 col-lg-8">
+        <div class="form-group row">
+            <div class="col-sm-6">
+                <!--                        <button type="button" class="btn btn-primary btn-md" ontouchstart="submitForm()"-->
+                <!--                                onclick="submitForm()" style="min-width: 90px">Submit-->
+                <!--                        </button>-->
+                <a class="btn btn-success btn-md" href="/hyd_elec" style="min-width: 90px">Try again</a>
+            </div>
+        </div>
+    </div>
+</div>

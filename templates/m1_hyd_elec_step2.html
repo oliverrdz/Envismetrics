@@ -108,7 +108,7 @@
                     </div>
 
                     <div class="col-6">
-                        <label class="form-label">Which methods you want to use:</label>
+                        <label class="form-label">Which method you want to use:</label>
                         <select class="form-select" aria-label="Default select example" name="method" id="method">
                             <option selected value="1">Levich plot and levich analysis</option>
                             <option value="2">Koutecky-Levich plot and levich analysis</option>
@@ -220,7 +220,7 @@
                 console.log(response);
 
                 if (response.status === true) {
-                    var targetURL = "/hyd_elec/" + response.version + '?step=3';
+                    var targetURL = "/hyd_elec/" + response.version + '?step=3&method=' + method;
                     window.location.href = targetURL;
                 } else {
                     alert(response.message);
