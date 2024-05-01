@@ -380,13 +380,15 @@ def upload_file():
             files = request.files.getlist('files[]')
             files_info = save_files(files, save_path, version)
 
+            sigma = float(request.form.get('sigma', 10))
+
             user_input = {
                 'version': version,
                 'module': module,
                 'step': step,
                 'data': {
                     'files_info': files_info,
-                    'sigma': float(10)
+                    'sigma': sigma
                 }
             }
             # 创建子线程，并启动后台任务
@@ -459,8 +461,10 @@ def background_task(param):
     elif param['module'].upper() == 'HDV':
         if param['step'] == '1':
             d = param['data']
+            print("=======")
+            print(d)
             h = HDV(version=param['version'])
-            h.step1()
+            h.step1(sigma=d['sigma'])
         elif param['step'] == '2':
             d = param['data']
             h = HDV(version=param['version'])

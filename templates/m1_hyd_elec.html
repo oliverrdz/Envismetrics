@@ -42,7 +42,24 @@
                 <br>
                 <p style="color: gray">The file names should be like: <code>?rpm.xlsx</code> or
                     <code>?rpm.txt</code><br><br>
-                    Click here to download the example file: <a href="/files/HDV_G_DMAB_5mVs_800rpm.txt">HDV_G_DMAB_5mVs_800rpm.txt</a></p>
+                    Click here to download the example file: <a href="/files/HDV_G_DMAB_5mVs_800rpm.txt">HDV_G_DMAB_5mVs_800rpm.txt</a>
+                </p>
+                <br>
+
+                <div class="needs-validation" novalidate="">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label for="input_sigma" class="form-label">Smoothed/Smoothing Level (sigma):</label>
+                            <input type="text" class="form-control" id="input_sigma"
+                                   placeholder="10"
+                                   required="" value="10">
+                            <div class="invalid-feedback">
+                                This field is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <br>
 
                 <button type="button" class="btn btn-primary btn-md" ontouchstart="submitForm()"

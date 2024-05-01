@@ -96,7 +96,7 @@ class HDV(BaseModule):
         return data
 
 
-    def step1(self):
+    def step1(self, sigma=10):
         data = self.read_data()
 
         for rpm, df in data.items():
@@ -122,7 +122,6 @@ class HDV(BaseModule):
         combined_data = pd.DataFrame()
 
         # Define the standard deviation (sigma) for the Gaussian filter
-        sigma = 10
 
         for rpm, df in data.items():
             E = df['Potential applied (V)']
@@ -156,7 +155,7 @@ class HDV(BaseModule):
         data['HDV']['form1'] = {
             'status': 'done',
             'input': {
-                'sigma': 10,
+                'sigma': sigma,
             },
             'output': {
                 'file1': to_file1 if to_file1.startswith("/") else '/' + to_file1,

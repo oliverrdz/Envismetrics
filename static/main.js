@@ -31,6 +31,9 @@ function submitForm() {
         }
         formData.append('module', 'HDV');
 
+        var input_sigma = document.getElementById("input_sigma").value;
+        formData.append('sigma', input_sigma);
+
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/upload', true);
         xhr.onload = function () {
