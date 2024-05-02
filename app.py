@@ -185,11 +185,7 @@ def step_methods2(version=None):
             print('---')
             print(data)
             # 检查状态
-            if step == 2:
-                f = 'form1'
-            else:
-                f = 'form1'
-
+            f = 'form{}'.format(step - 1)
             status = data[f]['status']
         except Exception as e:
             traceback.print_exc()
@@ -207,6 +203,8 @@ def step_methods2(version=None):
 
     if step == 2:
         return render_template('m3_step_methods_step2.html', data=data)
+    elif step == 3:
+        return render_template('m3_step_methods_step3.html', data=data)
     else:
         return render_template('m3_step_methods_step2.html', data=data)
 
@@ -333,6 +331,10 @@ def save_files(files, save_path, version):
         f.write(json.dumps(info))
     return to_file_info
 
+
+"""
+这里是所有表单提交的入口
+"""
 @app.route('/upload', methods=['POST'])
 def upload_file():
     version = None
@@ -538,21 +540,17 @@ def upload_file():
             save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
             files_info = os.path.join(save_path, "fileinfo_{}.json".format(version))
 
-            sigma = request.form.get('sigma')
-            method = 'Max'
-            peak_range_top = request.form.get('peak_range_top')
-            peak_range_bottom = request.form.get('peak_range_bottom')
-
             user_input = {
                 'version': version,
                 'module': module,
                 'step': step,
                 'data': {
                     'files_info': files_info,
-                    'sigma': float(sigma),
-                    'method': method,
-                    'peak_range_top': peak_range_top,
-                    'peak_range_bottom': peak_range_bottom
+                    'interval': int(request.form.get('input_interval', 5)),
+                    'n': int(request.form.get('input_n', 1)),
+                    'a': float(request.form.get('input_a', 0.07068583470577035)),
+                    'c': float(request.form.get('input_c', 0.000966e-3)),
+                    'x_range': request.form.get('input_range', ''),
                 }
             }
             # 创建子线程，并启动后台任务
@@ -625,7 +623,7 @@ def background_task(param):
         elif param['step'] == '2':
             d = param['data']
             h = CA(version=param['version'])
-            pass
+            h.step2(d['interval'], d['n'], d['a'], d['c'], d['x_range'])
 
     print("Background task completed")
 
