@@ -56,8 +56,7 @@ class BaseModule(object):
 
     def read_data(self):
         """
-        TODO 尚未完成
-        :return:
+
         """
         with open(self.files_info, 'r') as f:
             info_list = json.loads(f.read())

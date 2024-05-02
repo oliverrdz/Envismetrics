@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+
+{% include 'head.html' %}
+
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="check" viewBox="0 0 16 16">
+        <title>Check</title>
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+    </symbol>
+</svg>
+
+<div class="container py-3">
+
+    {% include 'navbar.html' %}
+
+    <main>
+
+        <div class="py-5">
+            <h2 class="text-primary">Envismetrics</h2>
+            <p class="lead">A comprehensive toolbox for the interpretation of results across various electrochemical
+                techniques.</p>
+            <hr>
+            <h4>Step techniques - Chronoamperometry Module</h4>
+        </div>
+
+        <!-- Inputs -->
+        <div class="row g-5" id="form_input">
+            <div class="col-md-5 col-lg-4 ">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span>Upload data files</span>
+                </h4>
+                <div class="file-drop-area">
+                    <span class="choose-file-button">Choose files</span>
+                    <span class="file-message">or drag and drop files here</span>
+                    <input class="file-input" type="file" id="fileInput" multiple>
+                </div>
+                <div id="upload-message" style="color: red"></div>
+
+                <br>
+                <p style="color: gray">The file names should be like: <code>?rpm.xlsx</code> or
+                    <code>?rpm.txt</code><br><br>
+                    Click here to download the example file: <a href="/files/HDV_G_DMAB_5mVs_800rpm.txt">HDV_G_DMAB_5mVs_800rpm.txt</a>
+                </p>
+                <br>
+
+                <!--                <div class="needs-validation" novalidate="">-->
+                <!--                    <div class="row g-3">-->
+                <!--                        <div class="col-6">-->
+                <!--                            <label for="input_sigma" class="form-label">Smoothed/Smoothing Level (sigma):</label>-->
+                <!--                            <input type="text" class="form-control" id="input_sigma"-->
+                <!--                                   placeholder="10"-->
+                <!--                                   required="" value="10">-->
+                <!--                            <div class="invalid-feedback">-->
+                <!--                                This field is required.-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+
+                <br>
+
+                <button type="button" class="btn btn-primary btn-md" ontouchstart="submitFormCA()"
+                        onclick="submitFormCA()">Submit
+                </button>
+            </div>
+            <br>
+            <br>
+        </div>
+
+        <!-- Results -->
+        <div class="row g-5" id="form_result" style="display: none">
+            <h4 class="mb-3">Results</h4>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img id="img1" src="{{ url_for('static', filename='imgs/Picture1.png') }}"
+                             class="card-img rounded float-end" alt="...">
+                        <div class="card-body">
+                            <p class="card-text card-p">Hydrodynamic Voltammogram (original)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img id="img2" src="{{ url_for('static', filename='imgs/Picture3a.png') }}"
+                             class="card-img rounded float-end" alt="...">
+                        <div class="card-body">
+                            <p class="card-text card-p">Hydrodynamic Voltammogram (Smoothed/Smoothing Level: sigma =
+                                <code>10.0</code> )</p>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <br>
+            <div class="col-md-7 col-lg-8">
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <!--                        <button type="button" class="btn btn-success" ontouchstart="tryAgain()" onclick="tryAgain()">Try-->
+                        <!--                            again-->
+                        <!--                        </button>-->
+                        <a class="btn btn-success" href="/">Try again</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {% include 'footer.html' %}
+
+    <!-- Bootstrap Modal for Loading Message -->
+    <div class="modal" id="loadingModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+
+    function submitFormCA() {
+        // var fileInput = document.querySelector('.file-input');
+        // var files = fileInput.files;
+        var files = document.getElementById('fileInput').files;
+        if (files.length === 0) {
+            document.getElementById('upload-message').innerText = 'Please upload files';
+        } else {
+            // Proceed with file upload or other actions
+            document.getElementById('upload-message').innerText = '';
+
+            $('#loadingModal').modal('show');
+
+            var formData = new FormData();
+
+            for (var i = 0; i < files.length; i++) {
+                formData.append('files[]', files[i]);
+            }
+            formData.append('module', 'CA');
+
+            // var input_sigma = document.getElementById("input_sigma").value;
+            // formData.append('sigma', input_sigma);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/upload', true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    console.log(response);
+
+                    $('#loadingModal').modal('hide');
+
+                    if (response.status === true) {
+                        // 指定要跳转的 URL
+                        var targetURL = "/step_methods/" + response.version + '?step=2';
+                        window.location.href = targetURL;
+                    } else {
+                        alert(response.message);
+                    }
+                    // alert('Files uploaded successfully');
+                } else {
+                    alert('Error uploading files');
+                }
+            };
+            xhr.send(formData);
+        }
+    }
+</script>
+</body>
+</html>
