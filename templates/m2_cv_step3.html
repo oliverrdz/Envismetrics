@@ -44,24 +44,37 @@
         {% if data['status'] == 'done' %}
         <!-- Results 2 -->
         <div class="row g-5" id="form3">
-<!--            <h4 class="mb-3">Results ({{ data['version'] }})</h4>-->
-            <h5>Function 3: Randles–Ševčík Analysis.</h5>
+            <!--            <h4 class="mb-3">Results ({{ data['version'] }})</h4>-->
+            <h5>Function 2: Peak searching.</h5>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
                     <div class="card shadow-sm">
                         <img id="form3_img1" src="{{ data['form2']['output']['img1'] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
-                            <p class="card-text card-p">Hydrodynamic Voltammogram (original)</p>
+                            <p class="card-text card-p"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img id="form3_img2" src="{{ data['form2']['output']['img2'] }}"
+                             class="card-img rounded float-end" alt="...">
+                        <div class="card-body">
+                            <p class="card-text card-p"></p>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <div class="row col-6 mt-3">
+                <a id="form3_link" href="{{ data['form2']['output']['file1'] }}">Click here to download the result
+                    file.</a>
+            </div>
+
             <div class="needs-validation" novalidate="">
-                <div class="row col-6">
-                    <a id="form3_link" href="{{ data['form2']['output']['file1'] }}">Click here to download the result file.</a>
-                </div>
+                <h5>Function 3: Randles–Ševčík Analysis.</h5>
+
             </div>
 
             <br>
@@ -97,44 +110,44 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-function checkAndCallAPI() {
-    // 获取 id 为 "processing_bar" 的元素
-    var processingBar = document.getElementById("progress_bar");
+    function checkAndCallAPI() {
+        // 获取 id 为 "processing_bar" 的元素
+        var processingBar = document.getElementById("progress_bar");
 
 
-    // 检查该元素的 display 属性是否为 "block"
-    if (processingBar.style.display === "block") {
-        // 如果是，则调用 API
-        callAPI();
+        // 检查该元素的 display 属性是否为 "block"
+        if (processingBar.style.display === "block") {
+            // 如果是，则调用 API
+            callAPI();
+        }
     }
-}
 
-function callAPI() {
-    // 模拟调用 API
-    setInterval(function() {
-        var version = document.getElementById("version").value;
-        var step = document.getElementById("step").value;
-        var URL = '/check/cv/' + version + '?step=' + step
-        // 发送请求到你的 API
-        fetch(URL)
-            .then(response => response.json())
-            .then(data => {
-                // 检查 API 返回结果是否为 "done"
-                if (data.result === "done") {
-                    // 如果是，则刷新当前页面
-                    location.reload();
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }, 1000); // 每隔一秒调用一次 API
-}
+    function callAPI() {
+        // 模拟调用 API
+        setInterval(function () {
+            var version = document.getElementById("version").value;
+            var step = document.getElementById("step").value;
+            var URL = '/check/cv/' + version + '?step=' + step
+            // 发送请求到你的 API
+            fetch(URL)
+                .then(response => response.json())
+                .then(data => {
+                    // 检查 API 返回结果是否为 "done"
+                    if (data.result === "done") {
+                        // 如果是，则刷新当前页面
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }, 1000); // 每隔一秒调用一次 API
+    }
 
-// 在页面加载完成后启动检查和调用 API 的函数
-window.onload = function() {
-    checkAndCallAPI();
-};
+    // 在页面加载完成后启动检查和调用 API 的函数
+    window.onload = function () {
+        checkAndCallAPI();
+    };
 
 </script>
 

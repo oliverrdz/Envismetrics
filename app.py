@@ -595,11 +595,11 @@ def background_task(param):
     if param['module'].upper() == 'CV':
         if param['step'] == '1':
             d = param['data']
-            c = CV(version=param['version'], files_info=d['files_info'], sigma=d['sigma'])
+            c = CV(version=param['version'], files_info=d['files_info'])
             c.start1(sigma=d['sigma'])
         elif param['step'] == '2':
             d = param['data']
-            c = CV(version=param['version'], files_info=d['files_info'], sigma=d['sigma'])
+            c = CV(version=param['version'], files_info=d['files_info'])
             c.start2(method=d['method'], peak_range_top=d['peak_range_top'], peak_range_bottom=d['peak_range_bottom'])
     elif param['module'].upper() == 'HDV':
         if param['step'] == '1':

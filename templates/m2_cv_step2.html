@@ -17,7 +17,6 @@
     {% include 'navbar.html' %}
 
     <main>
-
         <div class="py-5">
             <h2 class="text-primary">Envismetrics</h2>
             <p class="lead">A comprehensive toolbox for the interpretation of results across various electrochemical
@@ -44,7 +43,7 @@
         {% if data['status'] == 'done' %}
         <!-- Results 1 -->
         <div class="row g-5" id="form2">
-            <h5>Function 2: Peak searching.</h5>
+            <h5>Function 1: Plot the figure and apply the Gaussian filter to have a smoothed figure.</h5>
             <!--            <h4 class="mb-3">Results ({{data['version'] }})</h4>-->
             <input type="hidden" id="sigma" name="sigma" value="{{data['form1']['input']['sigma']}}">
 
@@ -70,10 +69,10 @@
                 </div>
             </div>
 
+
             <div class="needs-validation" novalidate="">
+                <h5>Function 2: Peak searching.</h5>
                 <div class="row col-6">
-
-
                     <div class="col-12">
                         <label for="form2_range1" class="form-label">Peak range (top):</label>
                         <input type="text" class="form-control" id="form2_range1" name="form2_range1" placeholder="0"
