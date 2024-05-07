@@ -131,7 +131,7 @@ def filter_files(files):
 
 
 class CV(object):
-    def __init__(self, version, files_info, sigma):
+    def __init__(self, version, files_info):
         self.version = version
         self.files_info = files_info
         self.savepath = 'outputs/' + version
@@ -248,7 +248,7 @@ class CV(object):
         print("data: ", len(data))
         return data
 
-    def start1_figure(self, data, apply_sigma=False):
+    def start1_figure(self, data, apply_sigma=False, sigma=10):
         for scan_rate, df0 in data.items():
             # data0 = pd.ExcelFile(file)
             # df0 = data0.parse('Sheet1')
@@ -261,7 +261,6 @@ class CV(object):
             upperE, lowerE, upperI, lowerI = separater(E, I, min(E), max(E))
             if apply_sigma:
                 # Apply gaussian_filter with sigma=?
-                sigma = self.sigma  # You can adjust this as needed
                 smoothed_upperI = gaussian_filter(upperI, sigma=sigma)
                 smoothed_lowerI = gaussian_filter(lowerI, sigma=sigma)
             else:
@@ -278,7 +277,7 @@ class CV(object):
         plt.ylabel('Current/A')
         # plt.ylim(-2e-5,2e-5)
         plt.legend()
-        plt.grid()
+        # plt.grid()
         # plt.show()
 
         if apply_sigma:
@@ -289,7 +288,7 @@ class CV(object):
         plt.close()
         return to_file1
 
-    def start1(self):
+    def start1(self, sigma = 10):
         """
         input: form1
         :return:
@@ -301,8 +300,8 @@ class CV(object):
                 'message': 'One or more files are not allowed.'
             }
 
-        to_file1 = self.start1_figure(data, apply_sigma=False)
-        to_file2 = self.start1_figure(data, apply_sigma=True)
+        to_file1 = self.start1_figure(data, apply_sigma=False, sigma=sigma)
+        to_file2 = self.start1_figure(data, apply_sigma=True, sigma=sigma)
 
         data_file = os.path.join('outputs', self.version, 'data.json')
         if os.path.exists(data_file):

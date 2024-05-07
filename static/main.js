@@ -135,52 +135,6 @@ function submitFormCV1() {
 
 
 
-function submitFormCV2() {
-    var formData = new FormData();
-
-    var input_sigma = document.getElementById("sigma").value;
-    var form2_range1 = document.getElementById("form2_range1").value;
-    var form2_range2 = document.getElementById("form2_range2").value;
-    var version = document.getElementById("version").value;
-    formData.append('module', 'CV');
-    formData.append('step', '2');
-    formData.append('sigma', input_sigma);
-    formData.append('version', version);
-
-    formData.append('peak_range_top', form2_range1);
-    formData.append('peak_range_bottom', form2_range2);
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/upload', true);
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);
-            console.log(response);
-
-            $('#loadingModal').modal('hide');
-
-            if (response.status === true) {
-                // var image1 = document.getElementById('form3_img1');
-                // image1.src = response.img1
-                //
-                // var form3_link = document.getElementById('form3_link');
-                // form3_link.href = response.file1
-                //
-                // document.getElementById('form1').style.display = 'none';
-                // document.getElementById('form2').style.display = 'none';
-                // document.getElementById('form3').style.display = 'block';
-                var targetURL = "/cv/" + response.version + '?step=3';
-                window.location.href = targetURL;
-            } else {
-                alert(response.message);
-            }
-            // alert('Files uploaded successfully');
-        } else {
-            alert('Error uploading files');
-        }
-    };
-    xhr.send(formData);
-}
 
 function tryAgain() {
 

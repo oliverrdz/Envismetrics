@@ -30,7 +30,6 @@
         <input type="hidden" id="step" name="step" value="{{data['step']}}">
 
 
-
         <div class="row g-5" id="progress_bar" style="display: {{ data['processing_display'] }}">
             <div class="col-md-5 col-lg-4 ">
                 <p>Please wait while we are processing...</p>
@@ -45,7 +44,8 @@
         {% if data['status'] == 'done' %}
         <!-- Results 1 -->
         <div class="row g-5" id="form2">
-            <h4 class="mb-3">Results ({{data['version'] }})</h4>
+            <h5>Function 2: Peak searching.</h5>
+            <!--            <h4 class="mb-3">Results ({{data['version'] }})</h4>-->
             <input type="hidden" id="sigma" name="sigma" value="{{data['form1']['input']['sigma']}}">
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -64,7 +64,7 @@
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
                             <p class="card-text card-p">Cyclic Voltammograms (filter sigma = <code
-                                    id="form2_sigma"></code>)</p>
+                                    id="form2_sigma">{{data['form1']['input']['sigma']}}</code>)</p>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                     </div>
                     <div class="col-6">
                         <label class="form-label">Which method you want to use:</label>
-                        <select class="form-select" aria-label="Default select example" name="form2_method">
+                        <select class="form-select" aria-label="Default select example" name="form2_method" id="method">
                             <option selected value="max">Max</option>
                             <option value="knee">Knee point</option>
                         </select>
@@ -127,44 +127,100 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-function checkAndCallAPI() {
-    // 获取 id 为 "processing_bar" 的元素
-    var processingBar = document.getElementById("progress_bar");
+    function checkAndCallAPI() {
+        // 获取 id 为 "processing_bar" 的元素
+        var processingBar = document.getElementById("progress_bar");
 
 
-    // 检查该元素的 display 属性是否为 "block"
-    if (processingBar.style.display === "block") {
-        // 如果是，则调用 API
-        callAPI();
+        // 检查该元素的 display 属性是否为 "block"
+        if (processingBar.style.display === "block") {
+            // 如果是，则调用 API
+            callAPI();
+        }
     }
-}
 
-function callAPI() {
-    // 模拟调用 API
-    setInterval(function() {
+    function callAPI() {
+        // 模拟调用 API
+        setInterval(function () {
+            var version = document.getElementById("version").value;
+            var step = document.getElementById("step").value;
+            var URL = '/check/cv/' + version + '?step=' + step
+            // 发送请求到你的 API
+            fetch(URL)
+                .then(response => response.json())
+                .then(data => {
+                    // 检查 API 返回结果是否为 "done"
+                    if (data.result === "done") {
+                        // 如果是，则刷新当前页面
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }, 1000); // 每隔一秒调用一次 API
+    }
+
+    // 在页面加载完成后启动检查和调用 API 的函数
+    window.onload = function () {
+        checkAndCallAPI();
+    };
+
+
+    function submitFormCV2() {
+        var formData = new FormData();
+
+        var input_sigma = document.getElementById("sigma").value;
+        var form2_range1 = document.getElementById("form2_range1").value;
+        var form2_range2 = document.getElementById("form2_range2").value;
         var version = document.getElementById("version").value;
-        var step = document.getElementById("step").value;
-        var URL = '/check/cv/' + version + '?step=' + step
-        // 发送请求到你的 API
-        fetch(URL)
-            .then(response => response.json())
-            .then(data => {
-                // 检查 API 返回结果是否为 "done"
-                if (data.result === "done") {
-                    // 如果是，则刷新当前页面
-                    location.reload();
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }, 1000); // 每隔一秒调用一次 API
-}
 
-// 在页面加载完成后启动检查和调用 API 的函数
-window.onload = function() {
-    checkAndCallAPI();
-};
+        // 获取<select>标签元素
+        var methodElement = document.getElementById("method");
+        var methodIndex = methodElement.selectedIndex;
+        var method = methodElement.options[methodIndex].value;
+        formData.append('method', method);
+
+
+        formData.append('module', 'CV');
+        formData.append('step', '2');
+        formData.append('sigma', input_sigma);
+        formData.append('version', version);
+
+        formData.append('peak_range_top', form2_range1);
+        formData.append('peak_range_bottom', form2_range2);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload', true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                console.log(response);
+
+                $('#loadingModal').modal('hide');
+
+                if (response.status === true) {
+                    // var image1 = document.getElementById('form3_img1');
+                    // image1.src = response.img1
+                    //
+                    // var form3_link = document.getElementById('form3_link');
+                    // form3_link.href = response.file1
+                    //
+                    // document.getElementById('form1').style.display = 'none';
+                    // document.getElementById('form2').style.display = 'none';
+                    // document.getElementById('form3').style.display = 'block';
+                    var targetURL = "/cv/" + response.version + '?step=3';
+                    window.location.href = targetURL;
+                } else {
+                    alert(response.message);
+                }
+                // alert('Files uploaded successfully');
+            } else {
+                alert('Error uploading files');
+            }
+        };
+        xhr.send(formData);
+    }
 
 </script>
 

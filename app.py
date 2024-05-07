@@ -397,10 +397,10 @@ def upload_file():
         elif step == '2':
             version = request.form.get('version')
             save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
-            files_info = os.path.join(save_path, "fileinfo_{}.json".format(version))
+            files_info = os.path.join(save_path, "fileinfo.json".format(version))
 
             sigma = request.form.get('sigma')
-            method = 'Max'
+            method = request.form.get('method', 'max')
             peak_range_top = request.form.get('peak_range_top')
             peak_range_bottom = request.form.get('peak_range_bottom')
 
@@ -596,7 +596,7 @@ def background_task(param):
         if param['step'] == '1':
             d = param['data']
             c = CV(version=param['version'], files_info=d['files_info'], sigma=d['sigma'])
-            c.start1()
+            c.start1(sigma=d['sigma'])
         elif param['step'] == '2':
             d = param['data']
             c = CV(version=param['version'], files_info=d['files_info'], sigma=d['sigma'])
