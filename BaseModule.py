@@ -2,6 +2,7 @@ import os
 import json
 import re
 import pandas as pd
+import pickle
 
 def reorder(filename):
     match = re.search(r'(\d+)rpm', filename)
@@ -100,3 +101,19 @@ class BaseModule(object):
             })
         print("data: ", len(data))
         return data
+
+    def pkl_save(self, data, filename):
+        full_filename = os.path.join(self.datapath, filename)
+        # 存储变量到文件
+        with open(full_filename, 'wb') as f:
+            pickle.dump(data, f)
+            print("saved to: {}".format(full_filename))
+
+    def pkl_load(self, filename):
+        full_filename = os.path.join(self.datapath, filename)
+        # 从文件读取变量
+        if not os.path.exists(full_filename):
+            return None
+        with open(full_filename, 'rb') as f:
+            loaded_data = pickle.load(f)
+        return loaded_data

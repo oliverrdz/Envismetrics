@@ -27,7 +27,7 @@
         </div>
 
         <input type="hidden" id="version" name="version" value="{{data['version']}}">
-        <input type="hidden" id="step" name="version" value="{{data['step']}}">
+        <input type="hidden" id="func" name="version" value="{{data['func']}}">
 
 
         <div class="row g-5" id="progress_bar" style="display: {{ data['processing_display'] }}">
@@ -42,15 +42,17 @@
         </div>
 
         {% if data['status'] == 'done' %}
-        <!-- Results 2 -->
+        <!-- Results 4 -->
         <div class="row g-5" id="form3">
             <!--            <h4 class="mb-3">Results ({{ data['version'] }})</h4>-->
-            <h5>Function 2: Peak searching</h5>
+            <h5>Function 4: Rate constant calculation</h5>
 
+            {% for row in data['form4']['output']['files'] %}
+            <h6 class="">Interval {{ loop.index - 1 }}: </h6>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="form3_img1" src="{{ data['form2']['output']['img1'] }}"
+                        <img id="img1" src="{{ row['img1'] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
                             <p class="card-text card-p"></p>
@@ -59,48 +61,25 @@
                 </div>
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="form3_img2" src="{{ data['form2']['output']['img2'] }}"
+                        <img id="img2" src="{{ row['img2'] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
-                            <p class="card-text card-p"></p>
+                            <p class="card-text card-p">Slope: {{ row['slope'] }}</p>
                         </div>
                     </div>
                 </div>
             </div>
+            {% endfor %}
 
-            <div class="row col-6 mt-3">
-                <a id="form3_link" href="{{ data['form2']['output']['file1'] }}">Click here to download the result
-                    file.</a>
-            </div>
 
-            <div class="needs-validation" novalidate="">
-                <h5>Function 4: Rate constant calculation</h5>
-                <div class="row col-6">
-                    <div class="col-12">
-                        <label for="input_n" class="form-label">n, the number of electrons transferred in
-                            reaction</label>
-                        <input type="text" class="form-control" id="input_n" placeholder="0"
-                               required="" value="1">
-                        <div class="invalid-feedback">
-                            This field is required.
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <label for="input_a" class="form-label">α, is charge transfer coefficient</label>
-                        <input type="text" class="form-control" id="input_a" placeholder="0.5"
-                               required="" value="0.5">
-                        <div class="invalid-feedback">
-                            This field is required.
-                        </div>
+            <br>
+            <div class="col-md-7 col-lg-8">
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <a class="btn btn-success btn-md" href="/hyd_elec" style="min-width: 90px">Try again</a>
                     </div>
                 </div>
-                <br>
-                <button type="button" class="btn btn-primary btn-md" ontouchstart="submitFormCV4()"
-                        onclick="submitFormCV4()">Submit
-                </button>
             </div>
-
-
         </div>
         {% endif %}
 
@@ -141,8 +120,7 @@
         // 模拟调用 API
         setInterval(function () {
             var version = document.getElementById("version").value;
-            var step = document.getElementById("step").value;
-            var URL = '/check/cv/' + version + '?step=' + step
+            var URL = '/check/cv/' + version + '?func=4';
             // 发送请求到你的 API
             fetch(URL)
                 .then(response => response.json())
@@ -164,44 +142,6 @@
         checkAndCallAPI();
     };
 
-    function submitFormCV4() {
-        var formData = new FormData();
-
-        var version = document.getElementById("version").value;
-
-        var params = ['input_n', 'input_a'];
-        for (var i = 0; i < params.length; i++) {
-            var value = document.getElementById(params[i]).value;
-            formData.append(params[i], value);
-        }
-
-        formData.append('module', 'CV');
-        formData.append('func', '4');
-        formData.append('version', version);
-
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/upload', true);
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                console.log(response);
-
-                $('#loadingModal').modal('hide');
-
-                if (response.status === true) {
-                    var targetURL = "/cv/results/" + response.version + '?func=4';
-                    window.location.href = targetURL;
-                } else {
-                    alert(response.message);
-                }
-                // alert('Files uploaded successfully');
-            } else {
-                alert('Error uploading files');
-            }
-        };
-        xhr.send(formData);
-    }
 
 </script>
 

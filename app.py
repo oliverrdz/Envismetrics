@@ -3,7 +3,11 @@
 
 1. 使用 JS 背后提交数据。
 2. 提交之后展跳转到结果页面，每秒检查一次是否执行完毕。
+    /<module>/<version>?step=xx
+    /check?module=xx&version=xx&step=xx
 3. 后台执行任务，任务完成后会生成结果文件。
+    /upload?module=xx&version=xx&step=xx
+    background_task()
 4. 前台检查执行完毕后，刷新页面，显示结果。
 
 """
@@ -165,6 +169,52 @@ def cv2(version=None):
             return render_template('m2_cv_step3.html', data=data)
     return render_template('m2_cv_step2.html', data=data)
 
+@app.route("/cv/results/<version>")
+def cv_res(version=None):
+    data = {
+        'version': version
+    }
+    module = 'CV'
+    func = int(request.args.get('func', '0'))
+
+    data_path = os.path.join('outputs', version)
+    if not os.path.exists(data_path):
+        abort(404)
+
+    data_file = os.path.join(data_path, 'data.json')
+
+    if os.path.exists(data_file):
+        try:
+            data = json.loads(open(data_file).read())
+            data = data[module]
+            print('---')
+            print(data)
+            # 检查状态
+            kk = 'form{}'.format(func)  # Step k 要用到 Form k-1 的结果。
+            status = data[kk]['status']
+        except Exception as e:
+            traceback.print_exc()
+            data = {}
+            status = 'processing'
+    else:
+        traceback.print_exc()
+        data = {}
+        status = 'processing'
+
+    data['status'] = status
+    data['func'] = func
+    data['processing_display'] = 'none' if status == 'done' else 'block'
+    data['version'] = version
+
+    if func == 3:
+        abort(404)
+    elif func == 4:
+        return render_template('m2_cv_step3_func4_res.html', data=data)
+    elif func == 5:
+        abort(404)
+    else:
+        abort(404)
+
 
 # Menu 3
 @app.route("/step_methods")
@@ -237,7 +287,12 @@ def check(module, version):
         return jsonify(data)
 
     if module.upper() == 'CV':
-        f = 'form{}'.format(step-1)
+        func = int(request.args.get('func', '0'))
+        if func > 0:
+            f = 'form{}'.format(func)
+        else:
+            f = 'form{}'.format(step-1)
+
         try:
             if data[module][f]['status'] == 'done':
                 data = {'result': 'done'}
@@ -357,87 +412,122 @@ def upload_file():
         module = "None"
 
     if module.upper() == 'CV':
-        step = request.form.get('step')
-        if step == '1':
-            version = "version_" + datetime.now().strftime("%m%d_%H%M%S")
-            save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
-            if not os.path.exists(save_path):
-                os.makedirs(save_path, exist_ok=True)
+        step = request.form.get('step', '0')
+        func = int(request.form.get('func', '0'))
+        if func > 0:
+            if func == 4:
+                version = request.form.get('version')
+                save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
+                files_info = os.path.join(save_path, "fileinfo.json".format(version))
 
-            data_path = os.path.join('outputs', version)
-            if not os.path.exists(data_path):
-                os.makedirs(data_path, exist_ok=True)
-            # data_file = os.path.join(data_path, 'data.json')
-            # if not os.path.exists(data_file):
-            #     data = CV.demo_data()
-            #     data['version'] = version
-            #
-            #     with open(data_file, 'w') as f:
-            #         json.dump(data, f)
-
-            if 'files[]' not in request.files:
-                return 'No file part'
-
-            files = request.files.getlist('files[]')
-            files_info = save_files(files, save_path, version)
-
-            sigma = request.form.get('sigma')
-            print("sigma: " + str(sigma))
-
-            user_input = {
-                'version': version,
-                'module': module,
-                'step': step,
-                'data': {
-                    'files_info': files_info,
-                    'sigma': float(sigma)
+                user_input = {
+                    'version': version,
+                    'module': module,
+                    'step': step,
+                    'func': func,
+                    'data': {
+                        'files_info': files_info,
+                        'n': int(request.form.get('input_n', 1)),
+                        'a': float(request.form.get('input_a', 1)),
+                        'v': float(request.form.get('input_v', 1)),
+                        'p': float(request.form.get('input_p', 1))
+                    }
                 }
-            }
-            # 创建子线程，并启动后台任务
-            background_thread = threading.Thread(target=background_task, args=(user_input,))
-            background_thread.start()
+                # 创建子线程，并启动后台任务
+                background_thread = threading.Thread(target=background_task, args=(user_input,))
+                background_thread.start()
 
-            return jsonify({
-                'status': True,
-                'message': 'Success, please wait.',
-                'version': version
-            })
-        elif step == '2':
-            version = request.form.get('version')
-            save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
-            files_info = os.path.join(save_path, "fileinfo.json".format(version))
-
-            sigma = request.form.get('sigma')
-            method = request.form.get('method', 'max')
-            peak_range_top = request.form.get('peak_range_top')
-            peak_range_bottom = request.form.get('peak_range_bottom')
-
-            user_input = {
-                'version': version,
-                'module': module,
-                'step': step,
-                'data': {
-                    'files_info': files_info,
-                    'sigma': float(sigma),
-                    'method': method,
-                    'peak_range_top': peak_range_top,
-                    'peak_range_bottom': peak_range_bottom
+                return {
+                    'status': True,
+                    'message': 'Success, please wait.',
+                    'version': version
                 }
-            }
-            # 创建子线程，并启动后台任务
-            background_thread = threading.Thread(target=background_task, args=(user_input,))
-            background_thread.start()
-
-            return {
-                'status': True,
-                'message': 'Success, please wait.',
-                'version': version
-            }
+            else:
+                return jsonify({
+                    'status': False,
+                    'message': 'One or more files are not allowed.'
+                })
         else:
-            return jsonify({
-                'status': False,
-                'message': 'One or more files are not allowed.'
-            })
+            if step == '1':
+                version = "version_" + datetime.now().strftime("%m%d_%H%M%S")
+                save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
+                if not os.path.exists(save_path):
+                    os.makedirs(save_path, exist_ok=True)
+
+                data_path = os.path.join('outputs', version)
+                if not os.path.exists(data_path):
+                    os.makedirs(data_path, exist_ok=True)
+                # data_file = os.path.join(data_path, 'data.json')
+                # if not os.path.exists(data_file):
+                #     data = CV.demo_data()
+                #     data['version'] = version
+                #
+                #     with open(data_file, 'w') as f:
+                #         json.dump(data, f)
+
+                if 'files[]' not in request.files:
+                    return 'No file part'
+
+                files = request.files.getlist('files[]')
+                files_info = save_files(files, save_path, version)
+
+                sigma = request.form.get('sigma')
+                print("sigma: " + str(sigma))
+
+                user_input = {
+                    'version': version,
+                    'module': module,
+                    'step': step,
+                    'data': {
+                        'files_info': files_info,
+                        'sigma': float(sigma)
+                    }
+                }
+                # 创建子线程，并启动后台任务
+                background_thread = threading.Thread(target=background_task, args=(user_input,))
+                background_thread.start()
+
+                return jsonify({
+                    'status': True,
+                    'message': 'Success, please wait.',
+                    'version': version
+                })
+            elif step == '2':
+                version = request.form.get('version')
+                save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
+                files_info = os.path.join(save_path, "fileinfo.json".format(version))
+
+                sigma = request.form.get('sigma')
+                method = request.form.get('method', 'max')
+                peak_range_top = request.form.get('peak_range_top')
+                peak_range_bottom = request.form.get('peak_range_bottom')
+
+                user_input = {
+                    'version': version,
+                    'module': module,
+                    'step': step,
+                    'data': {
+                        'files_info': files_info,
+                        'sigma': float(sigma),
+                        'method': method,
+                        'peak_range_top': peak_range_top,
+                        'peak_range_bottom': peak_range_bottom
+                    }
+                }
+                # 创建子线程，并启动后台任务
+                background_thread = threading.Thread(target=background_task, args=(user_input,))
+                background_thread.start()
+
+                return {
+                    'status': True,
+                    'message': 'Success, please wait.',
+                    'version': version
+                }
+            else:
+                return jsonify({
+                    'status': False,
+                    'message': 'One or more files are not allowed.'
+                })
     elif module.upper() == 'HDV':
         step = request.form.get('step', '1')
         if step == '1':
@@ -601,14 +691,20 @@ def background_task(param):
     print("Background task started with parameter:", param)
 
     if param['module'].upper() == 'CV':
-        if param['step'] == '1':
-            d = param['data']
-            c = CV(version=param['version'], files_info=d['files_info'])
-            c.start1(sigma=d['sigma'])
-        elif param['step'] == '2':
-            d = param['data']
-            c = CV(version=param['version'], files_info=d['files_info'])
-            c.start2(method=d['method'], peak_range_top=d['peak_range_top'], peak_range_bottom=d['peak_range_bottom'])
+        if 'func' in param.keys() and param['func'] > 0:
+            if param['func'] == 4:
+                d = param['data']
+                c = CV(version=param['version'], files_info=d['files_info'])
+                c.start4(d['n'], d['a'])
+        else:
+            if param['step'] == '1':
+                d = param['data']
+                c = CV(version=param['version'], files_info=d['files_info'])
+                c.start1(sigma=d['sigma'])
+            elif param['step'] == '2':
+                d = param['data']
+                c = CV(version=param['version'], files_info=d['files_info'])
+                c.start2(method=d['method'], peak_range_top=d['peak_range_top'], peak_range_bottom=d['peak_range_bottom'])
     elif param['module'].upper() == 'HDV':
         if param['step'] == '1':
             d = param['data']

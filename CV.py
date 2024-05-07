@@ -10,6 +10,7 @@ import json
 from config import *
 from BaseModule import BaseModule
 
+
 def extract_rpm(filename):
     pattern = r'(?:^|_)(\d+rpm)\.'
     match = re.search(pattern, filename)
@@ -406,7 +407,7 @@ class CV(BaseModule):
             # plt.grid()
             # plt.show()
 
-        return (Ea1, Ia1, Ec1, Ic1, DelE01, Scan_Rate1)
+        return (Ef1, DelE01, Ea1, Ec1, Ia1, Ic1, Ic1, Scan_Rate1)
 
     def start2_figure1(self, data, Ea_res, sigma=10, pr1=None, pr2=None):
         df0 = None
@@ -426,7 +427,7 @@ class CV(BaseModule):
         apply_gaussian_filter = True  # Set to True to apply the filter, False to not apply the filter
 
         if apply_gaussian_filter == True:
-            # Apply gaussian_filter with sigma
+            # Apply gauplt.savefig(img_path)ssian_filter with sigma
             smoothed_upperI = gaussian_filter(upperI, sigma=sigma)
             smoothed_lowerI = gaussian_filter(lowerI, sigma=sigma)
         else:
@@ -436,7 +437,7 @@ class CV(BaseModule):
 
         plt.scatter(upperU, smoothed_upperI, s=1, c='#1f77b4')
         plt.scatter(lowerU, smoothed_lowerI, s=1, c='#ff7f0e')
-        for pp, (Ea1, Ia1, Ec1, Ic1, DelE01, Scan_Rate1) in enumerate(Ea_res):
+        for pp, (Ef1, DelE01, Ea1, Ec1, Ia1, Ic1, Ic1, Scan_Rate1) in enumerate(Ea_res):
             top_x1, top_y1 = find_max(upperU, smoothed_upperI, -1, -0.5)
             bottom_x1, bottom_y1 = find_min(lowerU, smoothed_lowerI, -0.9, -0.75)
             p1_start = pr1[pp][0]
@@ -483,7 +484,7 @@ class CV(BaseModule):
             #         print("length of E:",len(E))
             plt.scatter(E, I, label=scan_rate + 'mV', s=1)
 
-        for pp, (Ea1, Ia1, Ec1, Ic1, DelE01, Scan_Rate1) in enumerate(Ea_res):
+        for pp, (Ef1, DelE01, Ea1, Ec1, Ia1, Ic1, Ic1, Scan_Rate1) in enumerate(Ea_res):
             # print("===", pp, Ea1, Ia1, Ec1, Ic1)
             plt.scatter(Ea1, Ia1, s=10, c='r')
             plt.scatter(Ec1, Ic1, s=10, c='r')
@@ -600,6 +601,15 @@ class CV(BaseModule):
         img1 = self.start2_figure1(data, Ea_res, sigma, pr1, pr2)
         img2 = self.start2_figure2(data, Ea_res, sigma, pr1, pr2)
 
+        # Save tmp results
+        tmp_res_filename = "form2_res.pkl"
+        tmp_res = {
+            'Ea_res': Ea_res,
+            'pr1': pr1,
+            'pr2': pr2,
+        }
+        self.pkl_save(tmp_res, tmp_res_filename)
+
         to_data = []
         for pp in range(len(pr1)):
             for mvs in Ef1[pp].keys():
@@ -632,6 +642,106 @@ class CV(BaseModule):
                 'file1': to_file if to_file.startswith("/") else '/' + to_file,
                 'img1': img1 if img1.startswith("/") else '/' + img1,
                 'img2': img2 if img2.startswith("/") else '/' + img2,
+            }
+        }
+        self.save_result_data(data)
+
+        return {
+            'status': True,
+            'version': self.version,
+            'message': 'Success',
+            'data': data
+        }
+
+
+    def start4(self, n, a):
+        form2_res = self.pkl_load("form2_res.pkl")
+
+        F = 96485.3321  # Faraday's constant in C/mol
+        R = 8.3145  # Gas constant in J/(mol*K)
+
+        # input value
+        # a = 0.5
+        # n = 1
+
+        Ea_res = form2_res['Ea_res']
+
+        DD = [2.5e-6, 3.5e-5, 3e-4]
+
+        res = []
+        for pp, (Ef1, DelE01, Ea1, Ec1, Ia1, Ic1, Ic1, Scan_Rate1) in enumerate(Ea_res):
+
+            try:
+                D1 = DD[pp]
+            except Exception as e:
+                D1 = 2.5e-6
+
+            DelE01 = DelE01[:36]
+            Scan_Rate1 = Scan_Rate1[:36]
+
+            DelE01_mV = np.array(DelE01) * 1000
+            print(DelE01_mV)
+            T = 298.15  # 25 degrees Celsius in Kelvin
+            fai = [2.18 * ((a / math.pi) ** 0.5) * math.exp(-((a ** 2 * F) / (R * T)) * n * DelE) for DelE in DelE01]
+
+            plt.scatter(DelE01_mV, fai, s=5)
+            plt.xlabel('$\Delta E_p$ (mV)')
+            plt.ylabel('$\Psi$')
+            img_path1 = os.path.join(self.datapath, "CV_form4_interval{}_p1.png".format(pp))
+            plt.savefig(img_path1)
+            # plt.grid()
+            # plt.show()
+            plt.close()
+
+            # Calculate the term [πDnF/RT]-1/2
+            term = ((math.pi * D1 * n * F) / (R * T)) ** (-1 / 2)
+
+            # Calculate x-axis values
+            Scan_Rate_V = [rate / 1000 for rate in Scan_Rate1]
+            x_axis = [term * (vi ** (-1 / 2)) for vi in Scan_Rate_V]
+
+            # Plot fai against the term multiplied by v^(-1/2)
+            plt.scatter(x_axis, fai, s=1)
+            plt.xlabel('$[πDnνF/RT]^{-1/2}$' + str(term) + '$v^{-1/2}$')
+            plt.ylabel('$\Psi$')
+            # plt.grid()
+
+            # Perform linear regression
+            slope, intercept = np.polyfit(x_axis, fai, 1)
+
+            # Add linear regression line to the plot
+            plt.plot(x_axis, slope * np.array(x_axis) + intercept, color='red')
+            # Display the equation of the linear regression line on the plot
+            equation = f"$y = {slope:.4f}x + {intercept:.4f}$"
+            plt.text(0.1, 0.9, equation, transform=plt.gca().transAxes)
+
+            # Display the slope
+            print("Slope:", slope)
+
+            # plt.show()
+            img_path2 = os.path.join(self.datapath, "CV_form4_interval{}_p2.png".format(pp))
+            plt.savefig(img_path2)
+            plt.close()
+
+            res.append({
+                'img1': img_path1 if img_path1.startswith("/") else '/' + img_path1,
+                'img2': img_path2 if img_path2.startswith("/") else '/' + img_path2,
+                'slope': slope,
+            })
+
+        data = self.res_data
+
+        if 'CV' not in data.keys():
+            data['CV'] = {}
+
+        data['CV']['form4'] = {
+            'status': 'done',
+            'input': {
+                'n': n,
+                'a': a,
+            },
+            'output': {
+                'files': res
             }
         }
         self.save_result_data(data)
