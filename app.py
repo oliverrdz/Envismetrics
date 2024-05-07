@@ -154,7 +154,15 @@ def cv2(version=None):
     if step == 2:
         return render_template('m2_cv_step2.html', data=data)
     elif step == 3:
-        return render_template('m2_cv_step3.html', data=data)
+        func = int(request.args.get('func', '-1'))
+        if func == 3:
+            return render_template('m2_cv_step3_func3.html', data=data)
+        elif func == 4:
+            return render_template('m2_cv_step3_func4.html', data=data)
+        elif func == 5:
+            return render_template('m2_cv_step3_func5.html', data=data)
+        else:
+            return render_template('m2_cv_step3.html', data=data)
     return render_template('m2_cv_step2.html', data=data)
 
 
