@@ -77,7 +77,8 @@
                 <div class="form-group row">
                     <div class="col-sm-10">
                         <a class="btn btn-light" href="#">Function 3: Randles–Ševčík Analysis</a>
-                        <a class="btn btn-light" href="/cv/{{data['version']}}?step={{data['step']}}&func=4">Function 4: Rate constant calculation</a>
+                        <a class="btn btn-light" href="/cv/{{data['version']}}?step={{data['step']}}&func=4">Function 4:
+                            Rate constant calculation</a>
                         <a class="btn btn-light" href="#">Function 5: Tafel analysis module</a>
                     </div>
                 </div>
@@ -88,7 +89,10 @@
             <div class="col-md-7 col-lg-8">
                 <div class="form-group row">
                     <div class="col-sm-10">
-                        <a class="btn btn-success" href="/cv">Try again</a>
+                        <button type="button" class="btn btn-danger btn-md" ontouchstart="goBack()"
+                                onclick="goBack()" style="min-width: 90px">Go back
+                        </button>
+                        <a class="btn btn-success btn-md" href="/cv" style="min-width: 90px">Start over</a>
                     </div>
                 </div>
             </div>

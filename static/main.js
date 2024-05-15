@@ -142,3 +142,7 @@ function tryAgain() {
     document.getElementById('form_input').style.display = '';
     document.getElementById('form_result').style.display = 'none';
 }
+
+function goBack() {
+    window.history.back();
+}
