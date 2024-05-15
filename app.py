@@ -564,24 +564,12 @@ def upload_file():
             })
         elif step == '2':
             version = request.form.get('version')
-
-            input_C = request.form.get('input_C')
-            input_A = request.form.get('input_A')
-            input_V = request.form.get('input_V')
-            input_N = request.form.get('input_N')
-            method = request.form.get('method', '1')
-
+            all_params = request.form.to_dict()
             user_input = {
                 'version': version,
                 'module': module,
                 'step': step,
-                'data': {
-                    'input_C': input_C,
-                    'input_A': input_A,
-                    'input_V': input_V,
-                    'input_N': input_N,
-                    'method': method,
-                }
+                'data': all_params
             }
             # 创建子线程，并启动后台任务
             background_thread = threading.Thread(target=background_task, args=(user_input,))
@@ -716,9 +704,9 @@ def background_task(param):
             d = param['data']
             h = HDV(version=param['version'])
             if d['method'] == '1':
-                h.step2_1(input_c=d['input_N'], input_n=d['input_N'], input_a=d['input_A'], input_v=d['input_V'])
+                h.step2_1(d)
             else:
-                h.step2_2(input_c=d['input_N'], input_n=d['input_N'], input_a=d['input_A'], input_v=d['input_V'])
+                h.step2_2(d)
     elif param['module'].upper() == 'CA':
         if param['step'] == '1':
             d = param['data']

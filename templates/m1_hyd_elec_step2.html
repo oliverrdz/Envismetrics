@@ -67,6 +67,7 @@
                 </div>
             </div>
 
+            <h4>Continue to the Levich and Koutecky-Levich analysis</h4>
             <div class="needs-validation" novalidate="">
                 <div class="row g-3">
                     <div class="col-6">
@@ -107,12 +108,46 @@
                         </div>
                     </div>
 
+                </div>
+
+                <div class="row g-3 mb-3 mt-3">
                     <div class="col-6">
                         <label class="form-label">Which method you want to use:</label>
                         <select class="form-select" aria-label="Default select example" name="method" id="method">
                             <option selected value="1">Levich plot and levich analysis</option>
                             <option value="2">Koutecky-Levich plot and levich analysis</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-6">
+                        <label for="input_range" class="form-label">Range eg (-1,1) V</label>
+                        <input type="text" class="form-control" id="input_range" placeholder="(-1,1)"
+                               required="" value="(-1,1)">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <label for="input_n_points" class="form-label">Number of potential to show</label>
+                        <input type="text" class="form-control" id="input_n_points" placeholder="1"
+                               required="" value="1">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="col-6">
+                        <label for="input_interval" class="form-label">Potential step</label>
+                        <input type="text" class="form-control" id="input_interval" placeholder="100"
+                               required="" value="100">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -203,7 +238,7 @@
         formData.append('step', '2');
         formData.append('version', version);
 
-        var params = ['input_C', 'input_A', 'input_V', 'input_N'];
+        var params = ['input_C', 'input_A', 'input_V', 'input_N', 'input_range', 'input_n_points', 'input_interval'];
         for (var i = 0; i < params.length; i++) {
             var value = document.getElementById(params[i]).value;
             formData.append(params[i], value);

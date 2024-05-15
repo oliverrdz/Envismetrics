@@ -172,11 +172,19 @@ class HDV(BaseModule):
             'data': data
         }
 
-    def _step2_1_fig1(self, data, input_n=1, input_a = 1.0, input_v = 0.01, input_c = 0.000894454e-3 ):
+    def _step2_1_fig1(self, data, all_params ):
+        input_n = int(all_params['input_N'])
+        input_a = float(all_params['input_A'])
+        input_v = float(all_params['input_V'])
+        input_c = float(all_params['input_C'])
+
+        input_range = all_params['input_range'].replace("(", "").replace(")", "").split(",")
+        n_points = int(all_params['input_n_points'])  # Number of points to select
+        interval = int(all_params['input_interval'])
+
         # Define constants and parameters_These are setting parameter
-        start_value = -1.0  # Starting value of the range for potential
-        end_value = 0.25  # Ending value of the range for potential
-        n_points = 9  # Number of points to select
+        start_value = float(input_range[0])  # Starting value of the range for potential
+        end_value = float(input_range[1])  # Ending value of the range for potential
 
         # These are calculation parameter
         n = input_n
@@ -278,11 +286,19 @@ class HDV(BaseModule):
         return to_file1, to_file2
 
 
-    def _step2_1_fig2(self, data, input_n=1, input_a = 1.0, input_v = 0.01, input_c = 0.000894454e-3 ):
+    def _step2_1_fig2(self, data, all_params):
+        input_n = int(all_params['input_N'])
+        input_a = float(all_params['input_A'])
+        input_v = float(all_params['input_V'])
+        input_c = float(all_params['input_C'])
+
+        input_range = all_params['input_range'].replace("(", "").replace(")", "").split(",")
+        n_points = int(all_params['input_n_points'])  # Number of points to select
+        interval = int(all_params['input_interval'])
+
         # Define constants and parameters_These are setting parameter
-        start_value = -1.0  # Starting value of the range for potential
-        end_value = 0.5  # Ending value of the range for potential
-        interval = 100  # potential going to select every ?
+        start_value = float(input_range[0])  # Starting value of the range for potential
+        end_value = float(input_range[1])  # Ending value of the range for potential
 
         # These are calculation parameter
         n = input_n
@@ -380,23 +396,17 @@ class HDV(BaseModule):
 
         return to_file1
 
-    def step2_1(self, input_n=1, input_a = 1.0, input_v = 0.01, input_c = 0.000894454e-3):
-        """ Step 2 """
+    def step2_1(self, all_params):
+        """ Step 2 Levich Analysis Moudle V2 """
         data = self.res_data
-        to_file1, excel_file = self._step2_1_fig1(data, int(input_n), float(input_a), float(input_v), float(input_c))
-        to_file2 = self._step2_1_fig2(data, int(input_n), float(input_a), float(input_v), float(input_c))
+        to_file1, excel_file = self._step2_1_fig1(data, all_params)
+        to_file2 = self._step2_1_fig2(data, all_params)
 
         if 'HDV' not in data.keys():
             data['HDV'] = {}
         data['HDV']['form2_1'] = {
             'status': 'done',
-            'input': {
-                'C': input_c,
-                'A': input_a,
-                'V': input_v,
-                'N': input_n,
-                'method': 1,
-            },
+            'input': all_params,
             'output': {
                 'file1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
                 'file2': to_file2 if to_file2.startswith("/") else '/' + to_file2,
@@ -406,11 +416,19 @@ class HDV(BaseModule):
         }
         self.save_result_data(data)
 
-    def _step2_2_fig1(self, data, input_n=1, input_a = 1.0, input_v = 0.01, input_c = 0.000894454e-3 ):
+    def _step2_2_fig1(self, data, all_params):
+        input_n = int(all_params['input_N'])
+        input_a = float(all_params['input_A'])
+        input_v = float(all_params['input_V'])
+        input_c = float(all_params['input_C'])
+
+        input_range = all_params['input_range'].replace("(","").replace(")", "").split(",")
+        n_points = int(all_params['input_n_points']) # Number of points to select
+        interval = int(all_params['input_interval'])
+
         # Define constants and parameters_These are setting parameter
-        start_value = -0.75  # Starting value of the range for potential
-        end_value = 0.5  # Ending value of the range for potential
-        n_points = 9  # Number of points to select
+        start_value = float(input_range[0]) # Starting value of the range for potential
+        end_value = float(input_range[1])  # Ending value of the range for potential
 
         # These are calculation parameter
         n = input_n
@@ -523,11 +541,20 @@ class HDV(BaseModule):
         table.to_csv(to_file2, sep=',', index=False)
         return to_file1, to_file2
 
-    def _step2_2_fig2(self, data, input_n=1, input_a = 1.0, input_v = 0.01, input_c = 0.000894454e-3 ):
+    def _step2_2_fig2(self, data, all_params):
+        input_n = int(all_params['input_N'])
+        input_a = float(all_params['input_A'])
+        input_v = float(all_params['input_V'])
+        input_c = float(all_params['input_C'])
+
+        input_range = all_params['input_range'].replace("(", "").replace(")", "").split(",")
+        n_points = int(all_params['input_n_points'])  # Number of points to select
+        interval = int(all_params['input_interval'])
+
         # Define constants and parameters_These are setting parameter
-        start_value = -0.75  # Starting value of the range for potential
-        end_value = 0.5  # Ending value of the range for potential
-        n_points = 9  # Number of points to select
+        start_value = float(input_range[0])  # Starting value of the range for potential
+        end_value = float(input_range[1])  # Ending value of the range for potential
+
 
         # These are calculation parameter
         n = input_n
@@ -563,7 +590,6 @@ class HDV(BaseModule):
         except Exception as e:
             sigma = 10.0
 
-        interval = 100
         for j in range(0, len(E_selected), interval):
             potential = E_selected.iloc[j]
 
@@ -626,23 +652,18 @@ class HDV(BaseModule):
 
         return to_file1
 
-    def step2_2(self, input_n=1, input_a=1.0, input_v=0.01, input_c=0.000894454e-3):
-        """ Step 2 """
+    def step2_2(self, all_params):
+        """ Step 2 Koutecky-Levich Analysis Moudle """
+
         data = self.res_data
-        to_file1, excel_file = self._step2_2_fig1(data, int(input_n), float(input_a), float(input_v), float(input_c))
-        to_file2 = self._step2_2_fig2(data, int(input_n), float(input_a), float(input_v), float(input_c))
+        to_file1, excel_file = self._step2_2_fig1(data, all_params)
+        to_file2 = self._step2_2_fig2(data, all_params)
 
         if 'HDV' not in data.keys():
             data['HDV'] = {}
         data['HDV']['form2_2'] = {
             'status': 'done',
-            'input': {
-                'C': input_c,
-                'A': input_a,
-                'V': input_v,
-                'N': input_n,
-                'method': 2,
-            },
+            'input': all_params,
             'output': {
                 'file1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
                 'file2': to_file2 if to_file2.startswith("/") else '/' + to_file2,
