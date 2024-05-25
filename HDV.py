@@ -205,8 +205,15 @@ class HDV(BaseModule):
             break
 
         # Calculate the corresponding indices within the range
-        start_index = E[E >= start_value].idxmin()
-        end_index = E[E <= end_value].idxmax()
+        if E.iloc[0] < E.iloc[-1]:  # Ascending order
+            start_index = E[E >= start_value].idxmin()
+            end_index = E[E <= end_value].idxmax()
+            print("E in Ascending order")
+        else:  # Descending order
+            start_index = E[E <= end_value].idxmax()
+            end_index = E[E >= start_value].idxmin()
+            print("E in Descending order")
+        print("start_index:", start_index, "end_index:", end_index)
         points_number = np.linspace(start_index, end_index, n_points, dtype=int)
         E_selected = E.iloc[points_number]
         Levich_slope = []
@@ -319,8 +326,15 @@ class HDV(BaseModule):
             break
 
         # Calculate the corresponding indices within the range
-        start_index = E[E >= start_value].idxmin()
-        end_index = E[E <= end_value].idxmax()
+        if E.iloc[0] < E.iloc[-1]:  # Ascending order
+            start_index = E[E >= start_value].idxmin()
+            end_index = E[E <= end_value].idxmax()
+            print("E in Ascending order")
+        else:  # Descending order
+            start_index = E[E <= end_value].idxmax()
+            end_index = E[E >= start_value].idxmin()
+            print("E in Descending order")
+        print("start_index:", start_index, "end_index:", end_index)
         E_selected = E.iloc[start_index:end_index + 1]
         print('Number of Selected Potential:', len(E_selected))
         Levich_slope = []
@@ -449,8 +463,19 @@ class HDV(BaseModule):
             break
 
         # Calculate the corresponding indices within the range
-        start_index = E[E >= start_value].idxmin()
-        end_index = E[E <= end_value].idxmax()
+        # start_index = E[E >= start_value].idxmin()
+        # end_index = E[E <= end_value].idxmax()
+        if E.iloc[0] < E.iloc[-1]:  # Ascending order
+            start_index = E[E >= start_value].idxmin()
+            end_index = E[E <= end_value].idxmax()
+            print("E in Ascending order")
+        else:  # Descending order
+            start_index = E[E <= end_value].idxmax()
+            end_index = E[E >= start_value].idxmin()
+            print("E in Descending order")
+        print("start_index:", start_index, "end_index:", end_index)
+
+
         points_number = np.linspace(start_index, end_index, n_points, dtype=int)
         E_selected = E.iloc[points_number]
         Koutecky_Levich_slope = []
@@ -575,8 +600,15 @@ class HDV(BaseModule):
             break
 
         # Calculate the corresponding indices within the range
-        start_index = E[E >= start_value].idxmin()
-        end_index = E[E <= end_value].idxmax()
+        if E.iloc[0] < E.iloc[-1]:  # Ascending order
+            start_index = E[E >= start_value].idxmin()
+            end_index = E[E <= end_value].idxmax()
+            print("E in Ascending order")
+        else:  # Descending order
+            start_index = E[E <= end_value].idxmax()
+            end_index = E[E >= start_value].idxmin()
+            print("E in Descending order")
+        print("start_index:", start_index, "end_index:", end_index)
         E_selected = E.iloc[start_index:end_index + 1]
         print('Number of Selected Potential:', len(E_selected))
 
