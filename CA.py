@@ -118,6 +118,9 @@ class CA(BaseModule):
         # C0 = 0.000966e-3  # in (mol/cm3)
         C0 = c
 
+        range_start, range_end = x_range.replace("[", "").replace("]", "").split(',')
+        range_start = float(range_start)
+        range_end = float(range_end)
 
         slope_set = []
         D_set = []
@@ -153,6 +156,10 @@ class CA(BaseModule):
 
             Bt = Bt[2:]
             I = I[2:]
+
+            regression_mask = (Bt >= range_start) & (Bt <= range_end)
+            Bt = Bt[regression_mask]
+            I = I[regression_mask]
 
             # Perform linear regression Bt vs I
             slope, intercept = np.polyfit(Bt, I, 1)
@@ -198,7 +205,7 @@ class CA(BaseModule):
         # Assign the new column names to the DataFrame
         table.columns = new_column_names
         to_file_csv = os.path.join(self.datapath, "CA_form2.csv")
-        table.to_csv(to_file_csv, index=False, sep=',')
+        table.to_csv(to_file_csv, index=True, sep=',')
         print("saved to: {}".format(to_file_csv))
 
         data = self.res_data
