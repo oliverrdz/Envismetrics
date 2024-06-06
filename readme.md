@@ -67,9 +67,25 @@ pip install flask gunicorn pandas numpy scikit-learn scipy openpyxl matplotlib
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Envismetrics is an online tool that requires no download or installation. The software updates automatically whenever new modules are released, ensuring you always have access to the latest features.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+1. Access the Software
+	- Visit Envismetrics Online.
+2. Select the Module
+	- Choose the module that corresponds to your experiment from the list of available options.
+3. Upload Your Data
+	- Select or drag and drop your data files from a folder into the designated area. The software supports various file formats such as XLSX, TXT, and CSV.
+4. Input Parameters
+	- Enter your desired figure settings and initial experimental parameters. This ensures that the analysis is tailored to your specific needs.
+5. Submit for Analysis
+	- Press the "Submit" button to start the analysis. The software will process your data and generate the results based on the selected module and input parameters.
+6. Review and Adjust Parameters
+	- If you need to edit any parameters from the previous page, press the "Go Back" button to make the necessary adjustments.
+7. Analyze New Data
+	- If you want to analyze a new set of data, press the "Try Again" button to restart the process.
+
+By following these simple steps, you can efficiently utilize Envismetrics for your electrochemical kinetic analysis, ensuring accurate and reproducible results.
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -78,35 +94,49 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+### Hydrodynamic Voltammetry (HDV) Module
+
+1. Data Import, Plotting, and Gaussian Filtering
+    - Data Import: Supports importing data from various potentiostats and file formats.
+    - Plotting: Visualizes the imported data sorted by RPM (rotations per minute).
+    - Gaussian Filtering: Applies a Gaussian filter to smooth the plotted data.
+2. Levich and Koutecky-Levich Analysis
+	- Levich Plot and Analysis:
+		- Generates Levich plots directly from the data.
+		- Calculates the diffusion coefficient from the slope of the plot.
+	- Koutecky-Levich Plot and Analysis:
+		- Produces Koutecky-Levich plots.
+		- Performs linear regression to analyze the diffusion coefficient at various potentials.
+
+### Cyclic Voltammetry (CV) Module
+
+1. Plotting and Gaussian Filtering
+	- Plotting: Visualizes cyclic voltammetry data sorted by rate constant value.
+	- Gaussian Filtering: Applies a Gaussian filter to smooth the data, with user-defined sigma values.
+2. Peak Searching
+	- Identifies peak points within specific ranges using various methods (max/min, knee/elbow detection).
+	- Records peak information for use in subsequent analyses.
+3. Randles–Ševčík Analysis
+	- Calculates the diffusion coefficient from peak current and scan rate.
+4. Rate Constant Calculation
+	- Calculates the rate constant using peak separation
+5. Tafel Analysis Module
+    - Determines anodic and cathodic transfer coefficients.
+    - Implements mass-transport corrected methods for enhanced accuracy.
+
+### Step Techniques Module
+
+1. CA Module
+   - Plotting: Generates plots of applied potential vs. time and corresponding current vs. time.
+   - Gaussian Filtering: Smooths data for clearer visualization, with adjustable sigma values.
+   - Cottrell Equation Plot: Utilizes the Cottrell equation to calculate the diffusion coefficient.
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
