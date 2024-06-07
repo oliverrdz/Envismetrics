@@ -21,10 +21,9 @@
 
 ### Built With
 
-
-* [Bootstrap][Bootstrap-url]
-* [JQuery][JQuery-url]
 * [Flask][Flask-url]
+* [JQuery][JQuery-url]
+* [Bootstrap][Bootstrap-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
