@@ -63,6 +63,16 @@ pip install flask gunicorn pandas numpy scikit-learn scipy openpyxl matplotlib
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+## Statement of Need
+
+In terms of data handling, typical electrochemical kinetic analysis solutions have relied on instrument-specific proprietary software provided with potentiostats, homemade scripts for specific data, or manual processing in Excel. Compared with the proprietary tools available from potentiostat manufacturers, these often lack the flexibility, cross-platform support, and comprehensive functionality that Envismetrics offers. Compared with homegrown solutions and packages, Envismetrics provides a more general function that saves time and eliminates the need to re-edit code when changing potentiostats or experimental methods in kinetic analysis. Users can rely on Envismetrics to streamline their workflow and enhance efficiency.
+
+Envismetrics provides an open-source, cross-platform (Windows, MacOS, and Linux) online software focused on electrochemical kinetic analysis. No installation or updates are required, making it convenient and always up-to-date. Envismetrics offers a full toolbox for processing raw voltammogram data, extracting parameters, and generating publication-ready figures. The analysis can be applied to any scan, cycle, or range of voltammogram data. At any stage of the analysis, users can export the results for further use or to create new figures. Whether users are professional researchers seeking to save time or individuals lacking basic knowledge of the relevant equations, Envismetrics encourages reproducible, easy-to-use, and transparent analysis.
+
+Envismetrics not only facilitates data collection and analysis from electrochemical experiments but also provides educational resources to help users understand the terminology and concepts they encounter. This dual approach ensures that both seasoned researchers and newcomers can effectively utilize the software.
+
+Envismetrics is dedicated to continuous improvement and innovation. Future plans include incorporating widely used kinetic electrochemical analysis methods and expanding support for additional data formats from various potentiostat brands. The software's modular design enables the seamless integration of new features and methods, ensuring Envismetrics remains a leading tool in electrochemical analysis.
+
 
 <!-- USAGE EXAMPLES -->
 ## Usage
