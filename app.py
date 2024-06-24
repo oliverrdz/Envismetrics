@@ -470,18 +470,17 @@ def upload_file():
 
                 files = request.files.getlist('files[]')
                 files_info = save_files(files, save_path, version)
+                all_params = request.form.to_dict()
+                all_params['files_info'] = files_info
 
-                sigma = request.form.get('sigma')
-                print("sigma: " + str(sigma))
+                # sigma = request.form.get('sigma')
+                # print("sigma: " + str(sigma))
 
                 user_input = {
                     'version': version,
                     'module': module,
                     'step': step,
-                    'data': {
-                        'files_info': files_info,
-                        'sigma': float(sigma)
-                    }
+                    'data': all_params
                 }
                 # 创建子线程，并启动后台任务
                 background_thread = threading.Thread(target=background_task, args=(user_input,))
@@ -686,9 +685,9 @@ def background_task(param):
                 c.start4(d['n'], d['a'])
         else:
             if param['step'] == '1':
-                d = param['data']
-                c = CV(version=param['version'], files_info=d['files_info'])
-                c.start1(sigma=d['sigma'])
+                all_params = param['data']
+                c = CV(version=param['version'], files_info=all_params['files_info'])
+                c.start1(all_params)
             elif param['step'] == '2':
                 d = param['data']
                 c = CV(version=param['version'], files_info=d['files_info'])

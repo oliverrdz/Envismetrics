@@ -50,7 +50,7 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="form2_img1" src="{{ data['form1']['output']['file1'] }}"
+                        <img id="form2_img3" src="{{ data['form1']['output']['file3'] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
                             <p class="card-text card-p">Cyclic Voltammograms (original)</p>
@@ -59,10 +59,21 @@
                 </div>
                 <div class="col">
                     <div class="card shadow-sm">
+                        <img id="form2_img1" src="{{ data['form1']['output']['file1'] }}"
+                             class="card-img rounded float-end" alt="...">
+                        <div class="card-body">
+                            <p class="card-text card-p">Cyclic Voltammograms (cycle = <code
+                                    id="form2_cycle">{{data['form1']['input']['cycle']}}</code>)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card shadow-sm">
                         <img id="form2_img2" src="{{ data['form1']['output']['file2'] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
-                            <p class="card-text card-p">Cyclic Voltammograms (filter sigma = <code
+                            <p class="card-text card-p">Cyclic Voltammograms (cycle = <code>{{data['form1']['input']['cycle']}}</code>, filter sigma = <code
                                     id="form2_sigma">{{data['form1']['input']['sigma']}}</code>)</p>
                         </div>
                     </div>

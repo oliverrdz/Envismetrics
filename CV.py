@@ -250,11 +250,15 @@ class CV(BaseModule):
         print("data: ", len(data))
         return data
 
-    def start1_figure(self, data, apply_sigma=False, sigma=10):
+    def start1_figure(self, data, apply_sigma=False, all_params = {}):
+        cycle = int( all_params['cycle'] )
+        sigma = float( all_params['sigma'] )
+
+        # WIth cycle
         for scan_rate, df0 in data.items():
             # data0 = pd.ExcelFile(file)
             # df0 = data0.parse('Sheet1')
-            df = df0[df0['Scan'] == 6]
+            df = df0[df0['Scan'] == cycle]
             E = df['WE(1).Potential (V)']
             I = df['WE(1).Current (A)']
 
@@ -288,13 +292,30 @@ class CV(BaseModule):
             to_file1 = os.path.join(self.savepath, "form1_original.png")
         plt.savefig(to_file1)
         plt.close()
-        return to_file1
 
-    def start1(self, sigma = 10):
+        # No cycle
+        for scan_rate, df0 in data.items():
+            # data0 = pd.ExcelFile(file)
+            # df0 = data0.parse('Sheet1')
+            df = df0
+            E = df['WE(1).Potential (V)']
+            I = df['WE(1).Current (A)']
+            plt.scatter(E, I, label=scan_rate + 'mV', s=1)
+        plt.xlabel('Applied potential/V')
+        plt.ylabel('Current/A')
+        plt.legend()
+        to_file3 = os.path.join(self.savepath, "form1_cycle.png")
+        plt.savefig(to_file3)
+        plt.close()
+        return to_file1, to_file3
+
+    def start1(self, all_params):
         """
         input: form1
         :return:
         """
+        sigma = float(all_params['sigma'])
+
         data = self.read_data()
         if data is None:
             return {
@@ -302,8 +323,8 @@ class CV(BaseModule):
                 'message': 'One or more files are not allowed.'
             }
 
-        to_file1 = self.start1_figure(data, apply_sigma=False, sigma=sigma)
-        to_file2 = self.start1_figure(data, apply_sigma=True, sigma=sigma)
+        to_file1, to_file3 = self.start1_figure(data, apply_sigma=False, all_params=all_params)
+        to_file2, _ = self.start1_figure(data, apply_sigma=True, all_params=all_params)
 
         data_file = os.path.join('outputs', self.version, 'data.json')
         if os.path.exists(data_file):
@@ -314,15 +335,14 @@ class CV(BaseModule):
         if 'CV' not in data.keys():
             data['CV'] = {}
 
+        all_params['uploaded_files'] = []
         data['CV']['form1'] = {
             'status': 'done',
-            'input': {
-                'uploaded_files': [],
-                'sigma': sigma
-            },
+            'input': all_params,
             'output': {
                 'file1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
-                'file2': to_file2 if to_file1.startswith("/") else '/' + to_file2,
+                'file2': to_file2 if to_file2.startswith("/") else '/' + to_file2,
+                'file3': to_file3 if to_file3.startswith("/") else '/' + to_file3,
             }
         }
         with open(data_file, 'w') as f:

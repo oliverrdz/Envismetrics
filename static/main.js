@@ -88,8 +88,10 @@ function submitFormCV1() {
         }
 
         var input_sigma = document.getElementById("input_sigma").value;
+        var input_cycle = document.getElementById("input_cycle").value;
         formData.append('module', 'CV');
         formData.append('sigma', input_sigma);
+        formData.append('cycle', input_cycle);
         formData.append('step', '1');
 
         var xhr = new XMLHttpRequest();
