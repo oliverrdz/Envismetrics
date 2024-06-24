@@ -519,11 +519,17 @@ class CV(BaseModule):
         plt.close()
         return img_path
 
-    def start2(self, method, peak_range_top, peak_range_bottom):
+    def start2(self, all_params):
+        method = all_params['method']
+        peak_range_top = all_params['peak_range_top']
+        peak_range_bottom = all_params['peak_range_bottom']
+        example_scan_rate = all_params['example_scan_rate'] # default 20
+        example_cycle  = all_params['example_cycle '] # default 9
+
 
         Ef1 = []
         DelE01 = []
-        sigma = self.res_data['CV']['form1']['input']['sigma']
+        sigma = float(self.res_data['CV']['form1']['input']['sigma'])
 
         pr1 = extract_peak_range(peak_range_top)
         pr2 = extract_peak_range(peak_range_bottom)
