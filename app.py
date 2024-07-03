@@ -496,22 +496,14 @@ def upload_file():
                 save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
                 files_info = os.path.join(save_path, "fileinfo.json".format(version))
 
-                sigma = request.form.get('sigma')
-                method = request.form.get('method', 'max')
-                peak_range_top = request.form.get('peak_range_top')
-                peak_range_bottom = request.form.get('peak_range_bottom')
+                all_params = request.form.to_dict()
+                all_params['files_info'] = files_info
 
                 user_input = {
                     'version': version,
                     'module': module,
                     'step': step,
-                    'data': {
-                        'files_info': files_info,
-                        'sigma': float(sigma),
-                        'method': method,
-                        'peak_range_top': peak_range_top,
-                        'peak_range_bottom': peak_range_bottom
-                    }
+                    'data': all_params
                 }
                 # 创建子线程，并启动后台任务
                 background_thread = threading.Thread(target=background_task, args=(user_input,))
