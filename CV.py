@@ -869,12 +869,11 @@ class CV(BaseModule):
 
         # Save tmp results
         tmp_res_filename = "form2_res.pkl"
-        # tmp_res = {
-        #     'Ea_res': Ea_res,
-        #     'pr1': pr1,
-        #     'pr2': pr2,
-        # }
-        # self.pkl_save(tmp_res, tmp_res_filename)
+        tmp_res = {
+            'peak_range_ox': peak_range_ox,
+            'peak_info': peak_info,
+        }
+        self.pkl_save(tmp_res, tmp_res_filename)
 
 
         data = self.res_data
@@ -900,6 +899,96 @@ class CV(BaseModule):
             'data': data
         }
 
+    def start3(self, all_params):
+        form2_res = self.pkl_load("form2_res.pkl")
+        peak_range_ox = form2_res['peak_range_ox']
+        peak_info = form2_res['peak_info']
+
+        # input calculate parameter
+        # n = 1  # number of electron transfer
+        # C = 2e-6  # initial concertration in mol/cm3
+        # T = 298.15  # temperature in K
+        n = int(all_params['n'])
+        C = float(all_params['c'])
+        T = float(all_params['t'])
+        print(all_params)
+
+        # Diameter in cm
+        electrode_dia = 0.30  # electorde diameter in cm
+        A_Real = np.pi * (electrode_dia / 2) ** 2
+        print('Electrode Surface Area:', A_Real)
+
+
+        # constant number don't change
+        F = 96485.33212
+        R = 8.314462618
+
+        # Randles–Ševčík plot sprt scan_rate vs Ipeak
+        D_cal = []
+        D_ox = []
+        D_re = []
+        plt.figure()
+        for i in range(len(peak_range_ox)):
+            scan_rate_05 = ((np.array(peak_info[f'Scan_Rate{i}'])) / 1000) ** 0.5
+            scan_rate = np.array(peak_info[f'Scan_Rate{i}']) / 1000
+
+            La = LinearRegression().fit(np.array(scan_rate_05).reshape(-1, 1),
+                                        np.array(peak_info[f'Ia{i}']).reshape(-1, 1))
+            Ia = La.intercept_[0]
+            Sa = La.coef_[0][0]
+
+            Lc = LinearRegression().fit(np.array(scan_rate_05).reshape(-1, 1),
+                                        np.array(peak_info[f'Ic{i}']).reshape(-1, 1))
+            Ic = Lc.intercept_[0]
+            Sc = Lc.coef_[0][0]
+
+            #     Ia_sim = 0.4463 * (n * F * C * A_Real * ((n * F * scan_rate * D[i]) / (R * T)) ** 0.5) + Ia
+            #     Ic_sim = -0.4463 * (n * F * C * A_Real * ((n * F * scan_rate * D[i]) / (R * T)) ** 0.5) + Ic
+
+            sim_x = np.linspace(min(scan_rate_05), max(scan_rate_05), 100)
+            sim_ya = Sa * sim_x + Ia
+            sim_yc = Sc * sim_x + Ic
+
+            D_cala = (Sa / (0.446 * n * F * C * A_Real * ((n * F) / (R * T)) ** 0.5)) ** 2
+            D_calc = (Sc / (0.446 * n * F * C * A_Real * ((n * F) / (R * T)) ** 0.5)) ** 2
+
+            D_cal.append((D_cala, D_calc))
+            D_ox.append(D_cala)
+            D_re.append(D_calc)
+
+            darker_color = make_color_darker(colors[i], 0.5)
+            plt.scatter(scan_rate_05, peak_info[f'Ia{i}'], label=f'Exp-Ox{i + 1}', s=2, color=colors[i])
+            #     plt.scatter(scan_rate_05,Ia_sim,label=f'Sim-Ox{i+1}',s=10, marker='^', color = darker_color)
+
+            plt.plot(sim_x, sim_yc, color='red')
+            plt.xlabel('Scanning Rate ν^1/2')
+            plt.ylabel('Current Peak/A')
+            plt.legend()
+
+        to_file1 = os.path.join(self.datapath, "CV_step3_p1.png")
+        plt.savefig(to_file1)
+        plt.close()
+
+        data = self.res_data
+
+        if 'CV' not in data.keys():
+            data['CV'] = {}
+
+        data['CV']['form3'] = {
+            'status': 'done',
+            'input': all_params,
+            'output': {
+                'img1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
+            }
+        }
+        self.save_result_data(data)
+
+        return {
+            'status': True,
+            'version': self.version,
+            'message': 'Success',
+            'data': data
+        }
 
     def start4(self, n, a):
         form2_res = self.pkl_load("form2_res.pkl")

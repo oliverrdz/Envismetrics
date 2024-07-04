@@ -207,7 +207,7 @@ def cv_res(version=None):
     data['version'] = version
 
     if func == 3:
-        abort(404)
+        return render_template('m2_cv_step3_func3_res.html', data=data)
     elif func == 4:
         return render_template('m2_cv_step3_func4_res.html', data=data)
     elif func == 5:
@@ -491,7 +491,7 @@ def upload_file():
                     'message': 'Success, please wait.',
                     'version': version
                 })
-            elif step == '2':
+            else:
                 version = request.form.get('version')
                 save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
                 files_info = os.path.join(save_path, "fileinfo.json".format(version))
@@ -514,11 +514,11 @@ def upload_file():
                     'message': 'Success, please wait.',
                     'version': version
                 }
-            else:
-                return jsonify({
-                    'status': False,
-                    'message': 'One or more files are not allowed.'
-                })
+            # else:
+            #     return jsonify({
+            #         'status': False,
+            #         'message': 'One or more files are not allowed.'
+            #     })
     elif module.upper() == 'HDV':
         step = request.form.get('step', '1')
         if step == '1':
@@ -684,6 +684,10 @@ def background_task(param):
                 all_params = param['data']
                 c = CV(version=param['version'], files_info=all_params['files_info'])
                 c.start2(all_params)
+            elif param['step'] == '3':
+                all_params = param['data']
+                c = CV(version=param['version'], files_info=all_params['files_info'])
+                c.start3(all_params)
     elif param['module'].upper() == 'HDV':
         if param['step'] == '1':
             d = param['data']

@@ -27,7 +27,7 @@
         </div>
 
         <input type="hidden" id="version" name="version" value="{{data['version']}}">
-        <input type="hidden" id="step" name="version" value="{{data['step']}}">
+        <input type="hidden" id="func" name="version" value="{{data['func']}}">
 
 
         <div class="row g-5" id="progress_bar" style="display: {{ data['processing_display'] }}">
@@ -42,74 +42,30 @@
         </div>
 
         {% if data['status'] == 'done' %}
-        <!-- Results 2 -->
+        <!-- Results 4 -->
         <div class="row g-5" id="form3">
             <!--            <h4 class="mb-3">Results ({{ data['version'] }})</h4>-->
-            <h5>Function 2: Peak searching</h5>
+            <h5>Function 3: Rate constant calculation</h5>
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="form3_img1" src="{{ data['form2']['output']['img1'] }}"
+                        <img id="img1" src="{{ data['form3']['output']['img1'] }}"
                              class="card-img rounded float-end" alt="...">
-                        <div class="card-body">
-                            <p class="card-text card-p"></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card shadow-sm">
-                        <img id="form3_img2" src="{{ data['form2']['output']['img2'] }}"
-                             class="card-img rounded float-end" alt="...">
-                        <div class="card-body">
-                            <p class="card-text card-p"></p>
-                        </div>
+<!--                        <div class="card-body">-->
+<!--                            <p class="card-text card-p"></p>-->
+<!--                        </div>-->
                     </div>
                 </div>
             </div>
 
-
-            <div class="needs-validation" novalidate="">
-                <h5>Function 3: Randles–Ševčík Analysis</h5>
-                <div class="row col-6">
-                    <div class="col-12">
-                        <label for="form3_n" class="form-label">n, the number of electrons transferred in the redox
-                            event</label>
-                        <input type="text" class="form-control" id="form3_n" placeholder="0"
-                               required="" value="1">
-                        <div class="invalid-feedback">
-                            This field is required.
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <label for="form3_c" class="form-label">C, the concentration in mol/cm^3</label>
-                        <input type="text" class="form-control" id="form3_c" placeholder="0"
-                               required="" value="2e-6">
-                        <div class="invalid-feedback">
-                            This field is required.
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <label for="form3_t" class="form-label">T, the temperature in K</label>
-                        <input type="text" class="form-control" id="form3_t" placeholder="0"
-                               required="" value="298.15">
-                        <div class="invalid-feedback">
-                            This field is required.
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <br>
-
             <div class="col-md-7 col-lg-8">
                 <div class="form-group row">
-                    <div class="col-sm-10">
+                    <div class="col-sm-6">
                         <button type="button" class="btn btn-danger btn-md" ontouchstart="goBack()"
                                 onclick="goBack()" style="min-width: 90px">Go back
-                        </button>
-                        <button type="button" class="btn btn-primary btn-md" ontouchstart="submitFormCV2()"
-                                onclick="submitFormCV2()">Submit
                         </button>
                         <a class="btn btn-success btn-md" href="/cv" style="min-width: 90px">Start over</a>
                     </div>
@@ -155,8 +111,7 @@
         // 模拟调用 API
         setInterval(function () {
             var version = document.getElementById("version").value;
-            var step = document.getElementById("step").value;
-            var URL = '/check/cv/' + version + '?step=' + step
+            var URL = '/check/cv/' + version + '?func=4';
             // 发送请求到你的 API
             fetch(URL)
                 .then(response => response.json())
@@ -178,43 +133,6 @@
         checkAndCallAPI();
     };
 
-    function submitFormCV2() {
-        var formData = new FormData();
-
-        var version = document.getElementById("version").value;
-
-
-        formData.append('module', 'CV');
-        formData.append('step', '3');
-        formData.append('version', version);
-
-        // *** 主要参数 ***
-        formData.append('n', document.getElementById("form3_n").value);
-        formData.append('t', document.getElementById("form3_t").value);
-        formData.append('c', document.getElementById("form3_c").value);
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/upload', true);
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                console.log(response);
-
-                $('#loadingModal').modal('hide');
-
-                if (response.status === true) {
-                    var targetURL = "/cv/results/" + response.version + '?step=4&func=3';
-                    window.location.href = targetURL;
-                } else {
-                    alert(response.message);
-                }
-                // alert('Files uploaded successfully');
-            } else {
-                alert('Error uploading files');
-            }
-        };
-        xhr.send(formData);
-    }
 
 </script>
 
