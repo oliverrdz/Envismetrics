@@ -79,8 +79,8 @@
                     <div class="col-12">
                         <label for="input_n" class="form-label">n, the number of electrons transferred in
                             reaction</label>
-                        <input type="text" class="form-control" id="input_n" placeholder="0"
-                               required="" value="1">
+                        <input type="text" class="form-control" id="input_n" placeholder="[1, 1, 1]"
+                               required="" value="[1, 1, 1]">
                         <div class="invalid-feedback">
                             This field is required.
                         </div>
@@ -89,6 +89,22 @@
                         <label for="input_a" class="form-label">α, is charge transfer coefficient</label>
                         <input type="text" class="form-control" id="input_a" placeholder="0.5"
                                required="" value="0.5">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="input_a" class="form-label">α, is charge transfer coefficient</label>
+                        <input type="text" class="form-control" id="input_d" placeholder="[1.3942717733456817e-06, 3.8616343823150815e-05, 9.283534073717666e-05]"
+                               required="" value="[1.3942717733456817e-06, 3.8616343823150815e-05, 9.283534073717666e-05]">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="input_a" class="form-label">α, is charge transfer coefficient</label>
+                        <input type="text" class="form-control" id="input_t" placeholder="298.15"
+                               required="" value="298.15">
                         <div class="invalid-feedback">
                             This field is required.
                         </div>
@@ -169,7 +185,7 @@
 
         var version = document.getElementById("version").value;
 
-        var params = ['input_n', 'input_a'];
+        var params = ['input_n', 'input_a', 'input_d', 'input_t'];
         for (var i = 0; i < params.length; i++) {
             var value = document.getElementById(params[i]).value;
             formData.append(params[i], value);

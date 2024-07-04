@@ -419,19 +419,15 @@ def upload_file():
                 version = request.form.get('version')
                 save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
                 files_info = os.path.join(save_path, "fileinfo.json".format(version))
+                all_params = request.form.to_dict()
+                all_params['files_info'] = files_info
 
                 user_input = {
                     'version': version,
                     'module': module,
                     'step': step,
                     'func': func,
-                    'data': {
-                        'files_info': files_info,
-                        'n': int(request.form.get('input_n', 1)),
-                        'a': float(request.form.get('input_a', 1)),
-                        'v': float(request.form.get('input_v', 1)),
-                        'p': float(request.form.get('input_p', 1))
-                    }
+                    'data': all_params
                 }
                 # 创建子线程，并启动后台任务
                 background_thread = threading.Thread(target=background_task, args=(user_input,))
@@ -672,9 +668,9 @@ def background_task(param):
     if param['module'].upper() == 'CV':
         if 'func' in param.keys() and param['func'] > 0:
             if param['func'] == 4:
-                d = param['data']
-                c = CV(version=param['version'], files_info=d['files_info'])
-                c.start4(d['n'], d['a'])
+                all_params = param['data']
+                c = CV(version=all_params['version'], files_info=all_params['files_info'])
+                c.start4(all_params)
         else:
             if param['step'] == '1':
                 all_params = param['data']

@@ -990,72 +990,76 @@ class CV(BaseModule):
             'data': data
         }
 
-    def start4(self, n, a):
+    def start4(self, all_params):
         form2_res = self.pkl_load("form2_res.pkl")
+        peak_info = form2_res['peak_info']
 
-        F = 96485.3321  # Faraday's constant in C/mol
-        R = 8.3145  # Gas constant in J/(mol*K)
-
-        # input value
+        ## (Function 4)Rate constant module
+        # Input calculate parameter
         # a = 0.5
-        # n = 1
+        # n = [1, 1, 1]
+        # D = [1.3942717733456817e-06, 3.8616343823150815e-05, 9.283534073717666e-05]
+        # T = 298.15  # 25 degrees Celsius in Kelvin
+        a = float(all_params['input_a'])
+        n = ast.literal_eval(all_params['input_n'])
+        D = ast.literal_eval(all_params['input_d'])
+        T = float(ast.literal_eval(all_params['input_t']))
 
-        Ea_res = form2_res['Ea_res']
 
-        DD = [2.5e-6, 3.5e-5, 3e-4]
 
+        # Constant numbers that don't change
+        F = 96485.33212
+        R = 8.314462618
+
+        k_list = []
         res = []
-        for pp, (Ef1, DelE01, Ea1, Ec1, Ia1, Ic1, Ic1, Scan_Rate1) in enumerate(Ea_res):
+        for i in range(len(n)):
+            DelE = peak_info[f'DelE0{i}']
+            Scan_Rate = peak_info[f'Scan_Rate{i}']
+            Scan_Rate_V = np.array(Scan_Rate) / 1000
+            DelE_mV = np.array(DelE) * 1000
+            print(f"DelE_mV{i}: ", DelE_mV)
 
-            try:
-                D1 = DD[pp]
-            except Exception as e:
-                D1 = 2.5e-6
+            # Define the lambda function, passing the correct n value
+            print(f"a: {type(a)}, F: {type(F)}, R: {type(R)}, T: {type(T)}, n[i]: {type(n[0])}")
 
-            DelE01 = DelE01[:36]
-            Scan_Rate1 = Scan_Rate1[:36]
+            fai_lambda = lambda DelEi: 2.18 * ((a / math.pi) ** 0.5) * math.exp(-((a ** 2 * F) / (R * T)) * n[i] * DelEi)
 
-            DelE01_mV = np.array(DelE01) * 1000
-            print(DelE01_mV)
-            T = 298.15  # 25 degrees Celsius in Kelvin
-            fai = [2.18 * ((a / math.pi) ** 0.5) * math.exp(-((a ** 2 * F) / (R * T)) * n * DelE) for DelE in DelE01]
+            # Apply the lambda function to the list of DelE values
+            fai = list(map(fai_lambda, DelE))
 
-            plt.scatter(DelE01_mV, fai, s=5)
+            # Plotting the results
+            plt.figure()
+            plt.scatter(DelE_mV, fai, s=5)
             plt.xlabel('$\Delta E_p$ (mV)')
             plt.ylabel('$\Psi$')
-            img_path1 = os.path.join(self.datapath, "CV_form4_interval{}_p1.png".format(pp))
-            plt.savefig(img_path1)
-            # plt.grid()
             # plt.show()
+            img_path1 = os.path.join(self.datapath, "CV_step3_func3_p1.png")
+            plt.savefig(img_path1)
             plt.close()
 
-            # Calculate the term [πDnF/RT]-1/2
-            term = ((math.pi * D1 * n * F) / (R * T)) ** (-1 / 2)
-
+            # Calculate the term [πDnF/RT]^{-1/2}
+            term = ((math.pi * D[i] * n[i] * F) / (R * T)) ** (-1 / 2)
             # Calculate x-axis values
-            Scan_Rate_V = [rate / 1000 for rate in Scan_Rate1]
-            x_axis = [term * (vi ** (-1 / 2)) for vi in Scan_Rate_V]
+            x_value = term * (Scan_Rate_V ** (-1 / 2))
+            # Perform linear regression
+            slope, intercept = np.polyfit(x_value, fai, 1)
 
             # Plot fai against the term multiplied by v^(-1/2)
-            plt.scatter(x_axis, fai, s=1)
-            plt.xlabel('$[πDnνF/RT]^{-1/2}$' + str(term) + '$v^{-1/2}$')
-            plt.ylabel('$\Psi$')
-            # plt.grid()
-
-            # Perform linear regression
-            slope, intercept = np.polyfit(x_axis, fai, 1)
-
+            plt.figure()
+            plt.scatter(x_value, fai, s=1)
             # Add linear regression line to the plot
-            plt.plot(x_axis, slope * np.array(x_axis) + intercept, color='red')
+            plt.plot(x_value, slope * np.array(x_value) + intercept, color='red')
             # Display the equation of the linear regression line on the plot
             equation = f"$y = {slope:.4f}x + {intercept:.4f}$"
             plt.text(0.1, 0.9, equation, transform=plt.gca().transAxes)
-
+            plt.xlabel('$[πDnνF/RT]^{-1/2}$' + str(term) + '$v^{-1/2}$')
+            plt.ylabel('$\Psi$')
             # Display the slope
             print("Slope:", slope)
-
+            k_list.append(slope)
             # plt.show()
-            img_path2 = os.path.join(self.datapath, "CV_form4_interval{}_p2.png".format(pp))
+            img_path2 = os.path.join(self.datapath, "CV_step3_func3_p2.png")
             plt.savefig(img_path2)
             plt.close()
 
@@ -1072,10 +1076,7 @@ class CV(BaseModule):
 
         data['CV']['form4'] = {
             'status': 'done',
-            'input': {
-                'n': n,
-                'a': a,
-            },
+            'input': all_params,
             'output': {
                 'files': res
             }
