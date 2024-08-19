@@ -46,10 +46,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route("/demo")
+@app.route("/doc")
 def demo():
     notes = []
-    return render_template('demo.html', notes=notes)
+    return render_template('doc.html', notes=notes)
 
 @app.route("/")
 def index():
