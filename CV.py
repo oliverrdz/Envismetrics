@@ -423,7 +423,7 @@ class CV(BaseModule):
             E = upperE + lowerE
 
             #         print("length of E:",len(E))
-            plt.scatter(E, I, label=scan_rate + 'mV', s=1)
+            plt.scatter(E, I, label=scan_rate, s=1)
 
         plt.xlabel('Applied potential/V')
         plt.ylabel('Current/A')
@@ -446,7 +446,7 @@ class CV(BaseModule):
             df = df0
             E = df['WE(1).Potential (V)']
             I = df['WE(1).Current (A)']
-            plt.scatter(E, I, label=scan_rate + 'mV', s=1)
+            plt.scatter(E, I, label=scan_rate, s=1)
         plt.xlabel('Applied potential/V')
         plt.ylabel('Current/A')
         plt.legend()
@@ -648,7 +648,7 @@ class CV(BaseModule):
             E = upperE + lowerE
 
             #         print("length of E:",len(E))
-            plt.scatter(E, I, label=scan_rate + 'mV', s=1)
+            plt.scatter(E, I, label=scan_rate, s=1)
 
         for pp, (Ef1, DelE01, Ea1, Ec1, Ia1, Ic1, Ic1, Scan_Rate1) in enumerate(Ea_res):
             # print("===", pp, Ea1, Ia1, Ec1, Ic1)
