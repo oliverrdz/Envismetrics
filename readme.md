@@ -156,6 +156,14 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Conflict of interest
+
+I confirm that I have read the [JOSS conflict of interest policy](https://joss.readthedocs.io/en/latest/reviewer_guidelines.html#joss-conflict-of-interest-policy) and that: I have no COIs with reviewing this work or that any perceived COIs have been waived by JOSS for the purpose of this review.
+
+
+## Code of Conduct
+
+I confirm that I read and will adhere to the [JOSS code of conduct](https://joss.theoj.org/about#code_of_conduct).
 
 
 <!-- CONTACT -->
