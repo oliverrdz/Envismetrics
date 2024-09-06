@@ -105,8 +105,9 @@ class CA(BaseModule):
         }
 
 
-    def step2(self, interval, n, a, c, x_range=''):
+    def step2(self, inter, n, a, c, x_range=''):
         data = self.read_data()
+        interval = len(data)
 
         # n = 1
         F = 96485

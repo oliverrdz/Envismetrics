@@ -619,7 +619,7 @@ def upload_file():
                 'step': step,
                 'data': {
                     'files_info': files_info,
-                    'interval': int(request.form.get('input_interval', 5)),
+                    'interval': 5,
                     'n': int(request.form.get('input_n', 1)),
                     'a': float(request.form.get('input_a', 0.07068583470577035)),
                     'c': float(request.form.get('input_c', 0.000966e-3)),
