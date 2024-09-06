@@ -70,14 +70,6 @@
 
             <div class="needs-validation" novalidate="">
                 <div class="row g-3">
-                    <div class="col-6">
-                        <label for="input_interval" class="form-label">Interval</label>
-                        <input type="text" class="form-control" id="input_interval" placeholder="5"
-                               required="" value="5">
-                        <div class="invalid-feedback">
-                            This field is required.
-                        </div>
-                    </div>
 
                     <div class="col-6">
                         <label for="input_n" class="form-label">n</label>
@@ -204,7 +196,7 @@
         formData.append('step', '2');
         formData.append('version', version);
 
-        var params = ['input_interval', 'input_n', 'input_a', 'input_c', 'input_range'];
+        var params = ['input_n', 'input_a', 'input_c', 'input_range'];
         for (var i = 0; i < params.length; i++) {
             var value = document.getElementById(params[i]).value;
             formData.append(params[i], value);
