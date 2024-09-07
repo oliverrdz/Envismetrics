@@ -271,9 +271,7 @@ def check(module, version):
     step = int(request.args.get('step', '1'))
     module = module.upper()
 
-    print("version", version)
-    print("module", module)
-    print("step", step)
+    print("version: {}, module: {}, step: {}", version, module, step)
 
     data_file = os.path.join('outputs', version, 'data.json')
     if not os.path.exists(data_file):

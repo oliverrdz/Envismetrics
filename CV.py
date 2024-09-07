@@ -834,31 +834,32 @@ class CV(BaseModule):
         # Find all names containing "10mVs"
         matching_data = [name for name in data_list if search_key in name]
         print(matching_data)
-        df = globals()[matching_data[0]]
-        df = df[df['Scan'] == int(example_cycle)]
-        U = df['WE(1).Potential (V)']
-        I = df['WE(1).Current (A)']
-
         plt.figure()
+        if matching_data:
+            df = globals()[matching_data[0]]
+            df = df[df['Scan'] == int(example_cycle)]
+            U = df['WE(1).Potential (V)']
+            I = df['WE(1).Current (A)']
 
-        # Separate top and bottom
-        upperU, lowerU, upperI, lowerI = separater(U, I, min(U), max(U))
+            # Separate top and bottom
+            upperU, lowerU, upperI, lowerI = separater(U, I, min(U), max(U))
 
-        if apply_gaussian_filter:
-            smoothed_upperI = gaussian_filter(upperI, sigma=1)
-            smoothed_lowerI = gaussian_filter(lowerI, sigma=1)
-        else:
-            smoothed_upperI = upperI
-            smoothed_lowerI = lowerI
+            if apply_gaussian_filter:
+                smoothed_upperI = gaussian_filter(upperI, sigma=1)
+                smoothed_lowerI = gaussian_filter(lowerI, sigma=1)
+            else:
+                smoothed_upperI = upperI
+                smoothed_lowerI = lowerI
 
-        plt.scatter(upperU, smoothed_upperI, s=1, c='#1f77b4')
-        plt.scatter(lowerU, smoothed_lowerI, s=1, c='#ff7f0e')
+            plt.scatter(upperU, smoothed_upperI, s=1, c='#1f77b4')
+            plt.scatter(lowerU, smoothed_lowerI, s=1, c='#ff7f0e')
 
-        for z in range(len(peak_range_ox)):
-            top_x, top_y = find_max(upperU, smoothed_upperI, peak_range_ox[z][0], peak_range_ox[z][1])
-            bottom_x, bottom_y = find_min(lowerU, smoothed_lowerI, peak_range_re[z][0], peak_range_re[z][1])
-            plt.scatter(top_x, top_y, s=20, c='r')
-            plt.scatter(bottom_x, bottom_y, s=20, c='r')
+            for z in range(len(peak_range_ox)):
+                top_x, top_y = find_max(upperU, smoothed_upperI, peak_range_ox[z][0], peak_range_ox[z][1])
+                bottom_x, bottom_y = find_min(lowerU, smoothed_lowerI, peak_range_re[z][0], peak_range_re[z][1])
+                plt.scatter(top_x, top_y, s=20, c='r')
+                plt.scatter(bottom_x, bottom_y, s=20, c='r')
+
         plt.xlabel('Applied potential/V')
         plt.ylabel('Current/A')
         # plt.show()
