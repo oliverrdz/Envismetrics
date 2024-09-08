@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+
+{% include 'head.html' %}
+
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="check" viewBox="0 0 16 16">
+        <title>Check</title>
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+    </symbol>
+</svg>
+
+<div class="container py-3">
+
+    {% include 'navbar.html' %}
+
+    <main>
+
+        <div class="py-5">
+            <h2 class="text-primary">Envismetrics</h2>
+            <p class="lead">A comprehensive toolbox for the interpretation of results across various electrochemical
+                techniques.</p>
+            <hr>
+            <h4>Cyclic Voltammetry Module</h4>
+            <span class="badge custom-badge">CV-4.2</span>
+        </div>
+
+        <input type="hidden" id="version" name="version" value="{{data['version']}}">
+        <input type="hidden" id="func" name="version" value="{{data['func']}}">
+
+
+        <div class="row g-5" id="progress_bar" style="display: {{ data['processing_display'] }}">
+            <div class="col-md-5 col-lg-4 ">
+                <p>Please wait while we are processing...</p>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                         aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                    <br><br>
+                </div>
+            </div>
+        </div>
+
+        {% if data['status'] == 'done' %}
+        <!-- Results 4 -->
+        <div class="row g-5" id="form3">
+            <!--            <h4 class="mb-3">Results ({{ data['version'] }})</h4>-->
+            <h5>Function 5.1: Transfer Coefficient Calculate module(method 1)</h5>
+
+            {% for row in data['form5']['output']['m1_files'] %}
+            <h6 class="">Interval {{ loop.index - 1 }}: </h6>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img src="/{{ row }}"
+                             class="card-img rounded float-end" alt="...">
+                        <div class="card-body">
+                            <p class="card-text card-p"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <h5>Function 5.2: Transfer Coefficient Calculate module(method 2)</h5>
+
+            {% for row in data['form5']['output']['m1_files'] %}
+            <h6 class="">Interval {{ loop.index - 1 }}: </h6>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img src="/{{ row }}"
+                             class="card-img rounded float-end" alt="...">
+                        <div class="card-body">
+                            <p class="card-text card-p"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <br>
+            <div class="col-md-7 col-lg-8">
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <button type="button" class="btn btn-danger btn-md" ontouchstart="goBack()"
+                                onclick="goBack()" style="min-width: 90px">Go back
+                        </button>
+                        <a class="btn btn-success btn-md" href="/cv" style="min-width: 90px">Start over</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+
+    </main>
+
+    {% include 'footer.html' %}
+
+    <!-- Bootstrap Modal for Loading Message -->
+    <div class="modal" id="loadingModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Uploading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function checkAndCallAPI() {
+        // 获取 id 为 "processing_bar" 的元素
+        var processingBar = document.getElementById("progress_bar");
+
+
+        // 检查该元素的 display 属性是否为 "block"
+        if (processingBar.style.display === "block") {
+            // 如果是，则调用 API
+            callAPI();
+        }
+    }
+
+    function callAPI() {
+        // 模拟调用 API
+        setInterval(function () {
+            var version = document.getElementById("version").value;
+            var URL = '/check/cv/' + version + '?func=4';
+            // 发送请求到你的 API
+            fetch(URL)
+                .then(response => response.json())
+                .then(data => {
+                    // 检查 API 返回结果是否为 "done"
+                    if (data.result === "done") {
+                        // 如果是，则刷新当前页面
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }, 1000); // 每隔一秒调用一次 API
+    }
+
+    // 在页面加载完成后启动检查和调用 API 的函数
+    window.onload = function () {
+        checkAndCallAPI();
+    };
+
+
+</script>
+
+</body>
+</html>

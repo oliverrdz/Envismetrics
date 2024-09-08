@@ -211,7 +211,7 @@ def cv_res(version=None):
     elif func == 4:
         return render_template('m2_cv_step3_func4_res.html', data=data)
     elif func == 5:
-        abort(404)
+        return render_template('m2_cv_step3_func5_res.html', data=data)
     else:
         abort(404)
 
@@ -271,7 +271,7 @@ def check(module, version):
     step = int(request.args.get('step', '1'))
     module = module.upper()
 
-    print("version: {}, module: {}, step: {}", version, module, step)
+    print("version: {}, module: {}, step: {}".format(version, module, step) )
 
     data_file = os.path.join('outputs', version, 'data.json')
     if not os.path.exists(data_file):
@@ -293,9 +293,11 @@ def check(module, version):
 
         try:
             if data[module][f]['status'] == 'done':
+                print('11111')
                 data = {'result': 'done'}
                 return jsonify(data)
         except Exception as e:
+            print('22222')
             data = {'result': str(e)}
             return jsonify(data)
     elif module.upper() == 'HDV':
@@ -413,7 +415,7 @@ def upload_file():
         step = request.form.get('step', '0')
         func = int(request.form.get('func', '0'))
         if func > 0:
-            if func == 4:
+            if func == 4 or func == 5:
                 version = request.form.get('version')
                 save_path = os.path.join(app.config['UPLOAD_FOLDER'], version)
                 files_info = os.path.join(save_path, "fileinfo.json".format(version))
@@ -669,6 +671,10 @@ def background_task(param):
                 all_params = param['data']
                 c = CV(version=all_params['version'], files_info=all_params['files_info'])
                 c.start4(all_params)
+            elif param['func'] == 5:
+                all_params = param['data']
+                c = CV(version=all_params['version'], files_info=all_params['files_info'])
+                c.start5(all_params)
         else:
             if param['step'] == '1':
                 all_params = param['data']

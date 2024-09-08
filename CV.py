@@ -10,6 +10,7 @@ import json
 from config import *
 from BaseModule import BaseModule
 import ast
+from datetime import datetime
 
 colors = [
     '#1f77b4',  # tab:blue
@@ -276,6 +277,33 @@ def filter_files(files):
             res.append(f)
     return res
 
+
+def special_log(a_list):
+    a_list_special_log = np.zeros_like(a_list)  # Initialize log array with zeros
+
+    for idx, value in enumerate(a_list):
+        if value > 0:
+            a_list_special_log[idx] = np.log10(value)
+        elif value < 0:
+            a_list_special_log[idx] = np.log10(-value)
+        else:  # value == 0
+            a_list_special_log[idx] = 0
+
+    return a_list_special_log
+
+
+def special_ln(a_list):
+    a_list_special_ln = np.zeros_like(a_list)  # Initialize log array with zeros
+
+    for idx, value in enumerate(a_list):
+        if value > 0:
+            a_list_special_ln[idx] = np.log(value)
+        elif value < 0:
+            a_list_special_ln[idx] = np.log(-value)
+        else:  # value == 0
+            a_list_special_ln[idx] = 0
+
+    return a_list_special_ln
 
 class CV(BaseModule):
     def __init__(self, version, files_info):
@@ -706,11 +734,12 @@ class CV(BaseModule):
             print('device not found in library')
         file_template = os.path.splitext(create_file_template_CV(Filter_files[0]))[0]
         data_list = []
+        myglobals = {}
         for file in Filter_files:
             scan_rate = Search_scan_rate(file)
             df = read_auto_lab_file(real_file_path[file])
             var_name = file_template % scan_rate
-            globals()[var_name] = df
+            myglobals[var_name] = df
             data_list.append(var_name)
             print(var_name)
 
@@ -740,7 +769,7 @@ class CV(BaseModule):
 
             # Find peak position
             for var_name in selected_data_list:
-                df = globals()[var_name]
+                df = myglobals[var_name]
                 print(var_name)
                 scan_rate = Search_scan_rate(var_name)
                 name = str(scan_rate) + "mV"
@@ -805,7 +834,7 @@ class CV(BaseModule):
         plt.figure()
         # Plot the CV data
         for data_i in data_list:
-            df = globals()[data_i]  # Access the DataFrame using the variable name
+            df = myglobals[data_i]  # Access the DataFrame using the variable name
             print(data_i)
             U = df['WE(1).Potential (V)']
             I = df['WE(1).Current (A)']
@@ -836,7 +865,7 @@ class CV(BaseModule):
         print(matching_data)
         plt.figure()
         if matching_data:
-            df = globals()[matching_data[0]]
+            df = myglobals[matching_data[0]]
             df = df[df['Scan'] == int(example_cycle)]
             U = df['WE(1).Potential (V)']
             I = df['WE(1).Current (A)']
@@ -873,6 +902,8 @@ class CV(BaseModule):
         tmp_res = {
             'peak_range_ox': peak_range_ox,
             'peak_info': peak_info,
+            'data_list': data_list,
+            'globals': myglobals,
         }
         self.pkl_save(tmp_res, tmp_res_filename)
 
@@ -1090,6 +1121,184 @@ class CV(BaseModule):
             'message': 'Success',
             'data': data
         }
+
+    def start5(self, all_params):
+        form2_res = self.pkl_load("form2_res.pkl")
+        peak_info = form2_res['peak_info']
+        data_list = form2_res['data_list']
+        myglobals = form2_res['globals']
+
+
+        cycle = int(all_params['cycle'])
+        n = int(all_params['input_n'])
+        T = float(ast.literal_eval(all_params['input_t']))
+        electrode_dia = float(ast.literal_eval(all_params['electrode_dia']))
+        A_Real = np.pi * (electrode_dia/2)**2
+        Which_Current_Peak = int(all_params['current_peak'])
+        cycle_range = range(2, 15)
+
+        now = datetime.now()
+        formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
+        print("Start:", formatted_time)
+        # constant number don't change (not input value!!)
+        F = 96485.33212
+        R = 8.314462618
+
+        m1_files = []
+        for i, var_name in enumerate(data_list):
+            df = myglobals[var_name]
+            print(var_name)
+            scan_rate = Search_scan_rate(var_name)
+            name = str(scan_rate) + "mV"
+
+            print(peak_info[f'Ea0'][len(cycle_range) * i + (cycle - cycle_range[0])])
+            cycle_df = df[df['Scan'] == cycle]
+            Ui = cycle_df['WE(1).Potential (V)']
+            Ii = cycle_df['WE(1).Current (A)']
+            Ui = np.array(Ui)
+            Ii = np.array(Ii)
+            Ji = Ii / A_Real
+
+            # Separate top and bottom
+            upperU, lowerU, upperJ, lowerJ = separater(Ui, Ji, min(Ui), max(Ui))
+
+            # Apply Gaussian filter (optional)
+            apply_gaussian_filter = False  # Set to True to apply the filter, False to not apply the filter
+
+            if apply_gaussian_filter:
+                smoothed_upperJ = gaussian_filter(upperJ, sigma=1)
+                smoothed_lowerJ = gaussian_filter(lowerJ, sigma=1)
+            else:
+                smoothed_upperJ = upperJ
+                smoothed_lowerJ = lowerJ
+
+            logJ_upper = special_log(smoothed_upperJ)
+            dlogJ_dU = np.gradient(logJ_upper, upperU)
+            dU_dlogJ = np.gradient(upperU, logJ_upper)
+            Tafel_slope = 1 / dlogJ_dU
+            # Calculate the transfer coefficient (alpha)
+            alpha = (2.303 * R * T) / (Tafel_slope * n * F)
+
+
+            # Create a figure with dual y-axes
+            fig, ax1 = plt.subplots()
+            ax1.set_xlabel('Applied Potential [V]')
+            ax1.set_ylabel('Current density [A/cm^2]', color=colors[0])
+            ax1.scatter(upperU, smoothed_upperJ, s=1, color=colors[0])
+            ax1.tick_params(axis='y', labelcolor=colors[0])
+
+            ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
+            ax2.set_ylabel('\u0391', color=colors[1])  # we already handled the x-label with ax1
+            ax2.scatter(upperU, alpha, s=1, color=colors[1])
+            ax2.set_ylim([-1, 1])  # Limit y-axis for transfer coefficient between -1 and 1
+            ax2.tick_params(axis='y', labelcolor=colors[1])
+
+            fig.tight_layout()  # otherwise the right y-label is slightly clipped
+            plt.title(f'Tafel Plot and \u0391 for {name} (Cycle {cycle})')
+            plt.grid(True)
+            # plt.show()
+            img_path2 = os.path.join(self.datapath, "CV_step3_func5_m1_p{}.png".format(i))
+            plt.savefig(img_path2)
+            plt.close()
+            m1_files.append(img_path2)
+
+        # -------------------------------------
+        # Method 2
+        # -------------------------------------
+
+        now = datetime.now()
+        formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
+        print("Start:", formatted_time)
+
+        m2_files = []
+        for i, var_name in enumerate(data_list):
+            df = myglobals[var_name]
+            print(var_name)
+            scan_rate = Search_scan_rate(var_name)
+            name = str(scan_rate) + "mV"
+
+            #         print(peak_info[f'Ea0'][len(cycle_range)*i+(cycle-cycle_range[0])])
+            cycle_df = df[df['Scan'] == cycle]
+            Ui = cycle_df['WE(1).Potential (V)']
+            Ii = cycle_df['WE(1).Current (A)']
+            Ui = np.array(Ui)
+            Ii = np.array(Ii)
+            Ji = Ii / A_Real
+            Ji = Ii
+            # Separate top and bottom
+            upperU, lowerU, upperI, lowerI = separater(Ui, Ii, min(Ui), max(Ui))
+
+            # Apply Gaussian filter (optional)
+            apply_gaussian_filter = False  # Set to True to apply the filter, False to not apply the filter
+
+            if apply_gaussian_filter:
+                smoothed_upperI = gaussian_filter(upperI, sigma=1)
+                smoothed_lowerI = gaussian_filter(lowerI, sigma=1)
+            else:
+                smoothed_upperI = upperI
+                smoothed_lowerI = lowerI
+
+            smoothed_upperI = np.array(smoothed_upperI)
+            smoothed_lowerI = np.array(smoothed_upperI)
+
+            upperU = np.array(upperU)
+            lowerU = np.array(lowerU)
+
+            I_Peak = peak_info[f'Ia{Which_Current_Peak - 1}'][i * len(cycle_range) + (cycle - min(cycle_range))]
+            I_term = (I_Peak ** 2) / (I_Peak - smoothed_upperI)
+            lnI_term = special_ln(I_term)
+            upperO = (F / (R * T)) * upperU
+
+            dlnI_term_dU = np.gradient(lnI_term, upperU)
+            alpha = (1 / 2) * ((R * T) / F) * dlnI_term_dU
+
+            #         dlnI_term_dO = np.gradient(lnI_term, upperO)
+            #         alpha = (1/2)*dlnI_term_dO
+
+            # Create a figure with dual y-axes
+            fig, ax1 = plt.subplots()
+            ax1.set_xlabel('Applied Potential [V]')
+            ax1.set_ylabel('Current density [A/cm^2]', color=colors[0])
+            ax1.scatter(upperU, smoothed_upperI, s=1, color=colors[0])
+            ax1.tick_params(axis='y', labelcolor=colors[0])
+
+            ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
+            ax2.set_ylabel('Transfer coefficient \u03B1', color=colors[1])  # we already handled the x-label with ax1
+            ax2.scatter(upperU, alpha, s=1, color=colors[1])
+            ax2.set_ylim([-1, 1])  # Limit y-axis for transfer coefficient between -1 and 1
+            ax2.tick_params(axis='y', labelcolor=colors[1])
+
+            fig.tight_layout()  # otherwise the right y-label is slightly clipped
+            plt.title(f'Tafel Plot and Derivative for {name} (Cycle {cycle})')
+            plt.grid(True)
+            # plt.show()
+            img_path2 = os.path.join(self.datapath, "CV_step3_func5_m2_p{}.png".format(i))
+            plt.savefig(img_path2)
+            plt.close()
+            m2_files.append(img_path2)
+
+        data = self.res_data
+
+        if 'CV' not in data.keys():
+            data['CV'] = {}
+
+        data['CV']['form5'] = {
+            'status': 'done',
+            'input': all_params,
+            'output': {
+                'm1_files': m1_files,
+                'm2_files': m2_files,
+            }
+        }
+        self.save_result_data(data)
+
+        return {
+            'status': True,
+            'version': self.version,
+            'message': 'Success',
+            'data': data
+        }
+
 
 
 if __name__ == '__main__':

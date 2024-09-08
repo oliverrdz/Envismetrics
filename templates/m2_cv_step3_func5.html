@@ -76,6 +76,47 @@
 
             <div class="needs-validation" novalidate="">
                 <h5>Function 5: Tafel analysis module</h5>
+                <div class="row col-6">
+                    <div class="col-12">
+                        <label for="input_n" class="form-label">n, the number of electrons transferred in reaction <a href="/doc#section7" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <input type="text" class="form-control" id="input_n" required="" value="1">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="input_n" class="form-label">Cycle <a href="/doc#section_cycle" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <input type="text" class="form-control" id="cycle" required="" value="6">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="input_n" class="form-label">Temperature (K) <a href="#" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <input type="text" class="form-control" id="input_t" required="" value="298.15">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="input_n" class="form-label">Electrode_dia <a href="/doc#section9" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <input type="text" class="form-control" id="electrode_dia" required="" value="0.30">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="input_n" class="form-label">Current Peak <a href="/doc#section12" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <input type="text" class="form-control" id="current_peak" required="" value="1">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <button type="button" class="btn btn-primary btn-md" ontouchstart="submitFormCV5()"
+                        onclick="submitFormCV5()">Submit
+                </button>
 
             </div>
 
@@ -153,6 +194,45 @@
     window.onload = function () {
         checkAndCallAPI();
     };
+
+    function submitFormCV5() {
+        var formData = new FormData();
+
+        var version = document.getElementById("version").value;
+
+        var params = ['input_n', 'cycle', 'input_t', 'electrode_dia', 'current_peak'];
+        for (var i = 0; i < params.length; i++) {
+            var value = document.getElementById(params[i]).value;
+            formData.append(params[i], value);
+        }
+
+        formData.append('module', 'CV');
+        formData.append('func', '5');
+        formData.append('version', version);
+
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload', true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                console.log(response);
+
+                $('#loadingModal').modal('hide');
+
+                if (response.status === true) {
+                    var targetURL = "/cv/results/" + response.version + '?func=5';
+                    window.location.href = targetURL;
+                } else {
+                    alert(response.message);
+                }
+                // alert('Files uploaded successfully');
+            } else {
+                alert('Error uploading files');
+            }
+        };
+        xhr.send(formData);
+    }
 
 </script>
 
