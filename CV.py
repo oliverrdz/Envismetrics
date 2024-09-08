@@ -25,7 +25,6 @@ colors = [
     '#17becf'   # tab:cyan
 ]
 
-
 def find_max(x, y, start, end):
     ma = -1
     xx = -1
@@ -37,7 +36,6 @@ def find_max(x, y, start, end):
                 xx = x[i]
                 yy = y[i]
     return xx, yy
-
 
 def find_min(x, y, start, end):
     mi = 10000
@@ -51,13 +49,11 @@ def find_min(x, y, start, end):
                 yy = y[i]
     return xx, yy
 
-
-def find_y(x, y, xi):
+def find_y(x,y,xi):
     for i in range(len(x)):
         if x[i] == xi:
             return y[i]
     return -1
-
 
 def separater(x, y, left, right):
     upperx = []
@@ -72,15 +68,15 @@ def separater(x, y, left, right):
     boundary_r = x.index(right)
 
     if boundary_r < boundary_l:
-        upperx = x[boundary_l:] + x[:boundary_r + 1]
-        uppery = y[boundary_l:] + y[:boundary_r + 1]
-        lowerx = x[boundary_r:boundary_l + 1]
-        lowery = y[boundary_r:boundary_l + 1]
+        upperx = x[boundary_l:] + x[:boundary_r+1]
+        uppery = y[boundary_l:] + y[:boundary_r+1]
+        lowerx = x[boundary_r:boundary_l+1]
+        lowery = y[boundary_r:boundary_l+1]
     else:
-        upperx = x[boundary_l:boundary_r + 1]
-        uppery = y[boundary_l:boundary_r + 1]
-        lowerx = x[boundary_r:] + x[:boundary_l + 1]
-        lowery = y[boundary_r:] + y[:boundary_l + 1]
+        upperx = x[boundary_l:boundary_r+1]
+        uppery = y[boundary_l:boundary_r+1]
+        lowerx = x[boundary_r:] + x[:boundary_l+1]
+        lowery = y[boundary_r:] + y[:boundary_l+1]
 
     return upperx, lowerx, uppery, lowery
 
@@ -92,7 +88,6 @@ def Search_scan_rate(filename):
     else:
         # Handle files without RPM values
         return -1  # You can use any default value or treatment
-
 
 def Milad(filename):
     match = re.search(r'PFOS_(\d+)', filename)
@@ -402,7 +397,7 @@ class CV(BaseModule):
                 continue
 
             print(f)
-            rpm = extract_mvs(f)
+            rpm = Search_scan_rate(f)
             if rpm is None:
                 continue
             print(rpm)
@@ -704,9 +699,15 @@ class CV(BaseModule):
         peak_info = {}
         peak_range_ox = ast.literal_eval(all_params['peak_range_top']) # [(-1, -0.70), (0, 0.2), (0.25, 0.5)]
         peak_range_re = ast.literal_eval(all_params['peak_range_bottom'])  #[(-0.925, -0.75), (0.0, 0.125), (0.125, 0.25)]
-        discard_scan = [0, 0, 2]
-        example_scan_rate = all_params['scan_rate'] # default 20
-        example_cycle  = all_params['cycle'] # default 9
+
+        discard_scan_start = ast.literal_eval(all_params['scan_rate_from'])
+        discard_scan_end = ast.literal_eval(all_params['scan_rate_after'])
+
+        cycle_range_input = ast.literal_eval(all_params['cycle_range'])
+        cycle_range = range(cycle_range_input[0], cycle_range_input[1])
+
+        example_scan_rate = all_params['example_scan'] # default 20
+        example_cycle  = all_params['example_cycle'] # default 9
 
         sigma = float(self.res_data['CV']['form1']['input']['sigma'])
 
@@ -743,10 +744,6 @@ class CV(BaseModule):
             data_list.append(var_name)
             print(var_name)
 
-
-
-        cycle_range = range(2, 15)
-
         for z in range(len(peak_range_ox)):
             peak_info[f'Ef{z}'] = []
             peak_info[f'DelE0{z}'] = []
@@ -761,11 +758,11 @@ class CV(BaseModule):
             plt.figure()
 
             # Determine the slice based on the variable
-            if discard_scan[z] == 0:
-                selected_data_list = data_list
-            else:
-                selected_data_list = data_list[:-discard_scan[z]]
-                print(f'Last {discard_scan[z]} scans were discarded for Peak {z + 1}')
+            selected_data_list = data_list[discard_scan_start[z]:len(data_list) - discard_scan_end[z]]
+            print("\033[1mGoing to process the following files:\033[0m")
+            for file in selected_data_list:
+                print(file)
+            print("\n")
 
             # Find peak position
             for var_name in selected_data_list:
@@ -791,7 +788,6 @@ class CV(BaseModule):
 
                     # Separate top and bottom
                     upperU, lowerU, upperI, lowerI = separater(Ui, Ii, min(Ui), max(Ui))
-
 
                     # Apply Gaussian filter (optional)
                     apply_gaussian_filter = False  # Set to True to apply the filter, False to not apply the filter
@@ -823,12 +819,34 @@ class CV(BaseModule):
 
                     peak_info[f'Scan_Rate{z}'].append(scan_rate)
 
+
+
+        # ==============================
+        now = datetime.now()
+        formatted_time = now.strftime("%Y-%m-%d %H:%M:%S")
+        print("Done:", formatted_time)
+
+        def show_info(peak_info, n=5):
+            for key, values in peak_info.items():
+                # Check if the list is shorter than n, if so, adjust n to the length of the list
+                display_length = min(len(values), n)
+                print(f'{key}: {[len(values)]} {values[:display_length]}')
+
+        # Call the function to print the head of peak_info
+        show_info(peak_info)
+
+
         # Dictionary to store the mean values of Ef
         mean_Ef = {}
 
-        for i in range(len(discard_scan)):
+        for i in range(len(peak_range_ox)):
             Ef = np.mean(peak_info[f'Ef{i}'])
             mean_Ef[f'Ef{i + 1}'] = Ef
+
+        # Print the results
+        for key, value in mean_Ef.items():
+            print(f"{key}: {value}")
+
 
         ## show all searched peaks on the CV plot figure
         plt.figure()
@@ -1143,6 +1161,8 @@ class CV(BaseModule):
         # constant number don't change (not input value!!)
         F = 96485.33212
         R = 8.314462618
+
+        print("peak_info[Ea0]:", peak_info['Ea0'])
 
         m1_files = []
         for i, var_name in enumerate(data_list):

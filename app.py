@@ -293,11 +293,11 @@ def check(module, version):
 
         try:
             if data[module][f]['status'] == 'done':
-                print('11111')
+                # print('11111')
                 data = {'result': 'done'}
                 return jsonify(data)
         except Exception as e:
-            print('22222')
+            # print('22222')
             data = {'result': str(e)}
             return jsonify(data)
     elif module.upper() == 'HDV':

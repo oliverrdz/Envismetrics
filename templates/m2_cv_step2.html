@@ -87,32 +87,56 @@
                 <h5>Function 2: Peak searching.</h5>
                 <div class="row col-6">
                     <div class="col-12">
-                        <label for="form2_range1" class="form-label">Peak range (top): <a href="/doc#section12" target="_blank"><i class="bi bi-question-circle"></i></a></label>
-                        <input type="text" class="form-control" id="form2_range1" name="form2_range1" placeholder="0"
+                        <label for="peak_range_top" class="form-label">Peak range (top): <a href="/doc#section12" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <input type="text" class="form-control" id="peak_range_top" name="peak_range_top" placeholder="0"
                                required="" value="[(-1, -0.70),(0, 0.2),(0.25, 0.5)]">
                         <div class="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="form2_range2" class="form-label">Peak range (bottom): <a href="/doc#section12" target="_blank"><i class="bi bi-question-circle"></i></a></label>
-                        <input type="text" class="form-control" id="form2_range2" name="form2_range2" placeholder="0"
+                        <label for="peak_range_bottom" class="form-label">Peak range (bottom): <a href="/doc#section12" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <input type="text" class="form-control" id="peak_range_bottom" name="peak_range_bottom" placeholder="0"
                                required="" value="[(-0.925,-0.75),(0.0, 0.125),(0.125, 0.25)]">
                         <div class="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="form2_scan_rate" class="form-label">Discard scan rate: <a href="/doc#section_discard" target="_blank"><i class="bi bi-question-circle"></i></a></label>
-                        <input type="text" class="form-control" id="form2_scan_rate" placeholder="0"
-                               required="" value="10">
+                        <label for="scan_rate_from" class="form-label">Discard scan rate from: <a href="/doc#section_discard" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <input type="text" class="form-control" id="scan_rate_from"
+                               required="" value="[0, 0, 0]">
                         <div class="invalid-feedback">
                             This field is required.
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="form2_cycle" class="form-label">Cycle range (2,100): <a href="/doc#section_cycle" target="_blank"><i class="bi bi-question-circle"></i></a></label>
-                        <input type="text" class="form-control" id="form2_cycle" placeholder="0"
+                        <label for="scan_rate_after" class="form-label">Discard scan rate after: <a href="/doc#section_discard" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <input type="text" class="form-control" id="scan_rate_after"
+                               required="" value="[0, 0, 2]">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="cycle_range" class="form-label">Cycle range: <a href="/doc#section_cycle" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <input type="text" class="form-control" id="cycle_range"
+                               required="" value="(2,100)">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="example_scan" class="form-label">Scan rate to display (mV/s): <a href="/doc#section_cycle" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <input type="text" class="form-control" id="example_scan"
+                               required="" value="20">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="example_cycle" class="form-label">Cycle number to display: <a href="/doc#section_cycle" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <input type="text" class="form-control" id="example_cycle"
                                required="" value="9">
                         <div class="invalid-feedback">
                             This field is required.
@@ -224,10 +248,14 @@
         var methodIndex = methodElement.selectedIndex;
         var method = methodElement.options[methodIndex].value;
         formData.append('method', method);
-        formData.append('peak_range_top', document.getElementById("form2_range1").value);
-        formData.append('peak_range_bottom', document.getElementById("form2_range2").value);
-        formData.append('scan_rate', document.getElementById("form2_scan_rate").value);
-        formData.append('cycle', document.getElementById("form2_cycle").value);
+
+        formData.append('peak_range_top', document.getElementById("peak_range_top").value);
+        formData.append('peak_range_bottom', document.getElementById("peak_range_bottom").value);
+        formData.append('scan_rate_from', document.getElementById("scan_rate_from").value);
+        formData.append('scan_rate_after', document.getElementById("scan_rate_after").value);
+        formData.append('cycle_range', document.getElementById("cycle_range").value);
+        formData.append('example_scan', document.getElementById("example_scan").value);
+        formData.append('example_cycle', document.getElementById("example_cycle").value);
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/upload', true);
