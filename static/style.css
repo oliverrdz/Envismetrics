@@ -120,3 +120,8 @@ h2 {
     line-height: 1.4; /* 设置行高为1.4倍字体大小 */
     min-height: 2.8em; /* 两行文本的高度（假设字体大小为1em） */
 }
+
+.custom-badge {
+    background-color: gray; /* 你想要的颜色 */
+    color: white; /* 根据背景色，调整字体颜色 */
+}
