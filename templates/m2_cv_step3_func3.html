@@ -74,8 +74,7 @@
                 <h5>Function 3: Randles–Ševčík Analysis<a href="/doc#section4" target="_blank"><i class="bi bi-question-circle"></i></a></h5>
                 <div class="row col-6">
                     <div class="col-12">
-                        <label for="form3_n" class="form-label">n, the number of electrons transferred in the redox
-                            event</label>
+                        <label for="form3_n" class="form-label">Number of electron transfer (n) </label>
                         <input type="text" class="form-control" id="form3_n" placeholder="0"
                                required="" value="1">
                         <div class="invalid-feedback">
@@ -83,7 +82,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="form3_c" class="form-label">C, the concentration in mol/cm^3</label>
+                        <label for="form3_c" class="form-label">Concentration of the material in the solution (C - mol/cm<sup>3</sup>) </label>
                         <input type="text" class="form-control" id="form3_c" placeholder="0"
                                required="" value="2e-6">
                         <div class="invalid-feedback">
@@ -91,7 +90,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="form3_t" class="form-label">T, the temperature in K</label>
+                        <label for="form3_t" class="form-label">Temperature (T - K) </label>
                         <input type="text" class="form-control" id="form3_t" placeholder="0"
                                required="" value="298.15">
                         <div class="invalid-feedback">
@@ -99,6 +98,10 @@
                         </div>
                     </div>
                 </div>
+                <br>
+                <button type="button" class="btn btn-primary btn-md" ontouchstart="submitFormCV2()"
+                                onclick="submitFormCV2()">Submit
+                </button>
             </div>
 
             <br>
@@ -108,9 +111,6 @@
                     <div class="col-sm-10">
                         <button type="button" class="btn btn-danger btn-md" ontouchstart="goBack()"
                                 onclick="goBack()" style="min-width: 90px">Go back
-                        </button>
-                        <button type="button" class="btn btn-primary btn-md" ontouchstart="submitFormCV2()"
-                                onclick="submitFormCV2()">Submit
                         </button>
                         <a class="btn btn-success btn-md" href="/cv" style="min-width: 90px">Start over</a>
                     </div>

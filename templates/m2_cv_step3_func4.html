@@ -78,8 +78,7 @@
                 <h5>Function 4: Rate constant calculation<a href="/doc#section10" target="_blank"><i class="bi bi-question-circle"></i></a></h5>
                 <div class="row col-6">
                     <div class="col-12">
-                        <label for="input_n" class="form-label">n, the number of electrons transferred in
-                            reaction<a href="/doc#section7" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <label for="input_n" class="form-label">Number of electron transfer (n) <a href="/doc#section7" target="_blank"><i class="bi bi-question-circle"></i></a></label>
                         <input type="text" class="form-control" id="input_n" placeholder="[1, 1, 1]"
                                required="" value="[1, 1, 1]">
                         <div class="invalid-feedback">
@@ -87,7 +86,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="input_a" class="form-label">α, is charge transfer coefficient</label>
+                        <label for="input_a" class="form-label">Transfer Coefficient (α) </label>
                         <input type="text" class="form-control" id="input_a" placeholder="0.5"
                                required="" value="0.5">
                         <div class="invalid-feedback">
@@ -95,7 +94,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <label for="input_a" class="form-label">Diffusion Coeffcient<a href="/doc#section11" target="_blank"><i class="bi bi-question-circle"></i></a></label>
+                        <label for="input_a" class="form-label">Diffusion Coefficient (D - cm<sup>2</sup>/s) <a href="/doc#section11" target="_blank"><i class="bi bi-question-circle"></i></a></label>
                         <input type="text" class="form-control" id="input_d" placeholder="[1.3942717733456817e-06, 3.8616343823150815e-05, 9.283534073717666e-05]"
                                required="" value="[1.3942717733456817e-06, 3.8616343823150815e-05, 9.283534073717666e-05]">
                         <div class="invalid-feedback">
@@ -115,6 +114,18 @@
                 <button type="button" class="btn btn-primary btn-md" ontouchstart="submitFormCV4()"
                         onclick="submitFormCV4()">Submit
                 </button>
+            </div>
+
+            <br>
+            <div class="col-md-7 col-lg-8">
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <button type="button" class="btn btn-danger btn-md" ontouchstart="goBack()"
+                                onclick="goBack()" style="min-width: 90px">Go back
+                        </button>
+                        <a class="btn btn-success btn-md" href="/cv" style="min-width: 90px">Start over</a>
+                    </div>
+                </div>
             </div>
 
 
