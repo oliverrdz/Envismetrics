@@ -128,6 +128,13 @@
     <li><strong>Electrodeposition</strong>: To control the thickness and uniformity of electroplated films.</li>
 </ul>
 
+    <h1>Cycle number to display:</h1>
+    <p>This setting allows you to choose which cycle number to display in the output.</p>
+
+    <h2>How it works:</h2>
+    <p>Electrochemical experiments often involve multiple cycles of data collection, especially in cyclic voltammetry. The <strong>cycle number</strong> refers to which of these data collection cycles is displayed. For instance, if you select <strong>cycle 9</strong>, the system will show the data from the 9th cycle.</p>
+
+
 <h1 id="section_cycle">Cycle Range Parameter</h1>
 
 <h2>What is it?</h2>
@@ -672,15 +679,46 @@
 <h2>Usage</h2>
 <p>The rate constant (\(k\)) is used in various contexts, including:</p>
 <ul>
-    <li><strong>Determining Reaction Rates:</strong> To calculate the speed of a reaction based on reactant
-        concentrations.
-    </li>
-    <li><strong>Comparing Reactions:</strong> To compare the reactivity of different reactions under similar conditions.
-    </li>
-    <li><strong>Kinetic Studies:</strong> To analyze the effect of different parameters, such as temperature and
-        catalysts, on the reaction rate.
-    </li>
+    <li><strong>Determining Reaction Rates:</strong> To calculate the speed of a reaction based on reactant concentrations.</li>
+    <li><strong>Comparing Reactions:</strong> To compare the reactivity of different reactions under similar conditions.</li>
+    <li><strong>Kinetic Studies:</strong> To analyze the effect of different parameters, such as temperature and catalysts, on the reaction rate.</li>
 </ul>
+
+    <h1>Regression Time Range</h1>
+
+    <h2>What is it?</h2>
+    <p>The <strong>Regression Time Range</strong> in the chronoamperometry module specifies the portion of the experimental data that will be used for linear regression analysis. In electrochemical experiments, the current response changes over time, and the <strong>Regression Time Range</strong> allows users to focus on a specific period where the current behavior is most suitable for extracting kinetic parameters like the diffusion coefficient.</p>
+
+    <p>By selecting an appropriate range of the term
+    <span class="equation">\(\frac{nFAC_0}{\sqrt{\pi} t^{1/2}}\)</span>, you ensure that only the relevant part of the data is considered, improving the accuracy of the regression analysis.</p>
+
+    <h2>How to Use It</h2>
+    <ul>
+        <li><strong>Input Format:</strong>
+            <p>The <strong>Regression Time Range</strong> is typically input as a two-element array or tuple, such as \([start, end]\), where both <em>start</em> and <em>end</em> refer to the values of the term
+            <span class="equation">\(\frac{nFAC_0}{\sqrt{\pi} t^{1/2}}\)</span>.</p>
+            <ul>
+                <li>Example: <span class="equation">\([0, 1]\)</span> would select the range of
+                <span class="equation">\(\frac{nFAC_0}{\sqrt{\pi} t^{1/2}}\)</span> from 0 to 1 for the regression analysis.</li>
+            </ul>
+        </li>
+        <li><strong>Choosing an Appropriate Range:</strong>
+            <ul>
+                <li><strong>Initial transient:</strong> The initial period (right after applying the potential step) often shows rapid changes in current due to charging of the double layer and other non-steady-state processes. For kinetic analysis, the range corresponding to this initial transient might not be ideal. You can choose a starting value of
+                <span class="equation">\(\frac{nFAC_0}{\sqrt{\pi} t^{1/2}}\)</span> that excludes this initial transient.</li>
+                <li><strong>Steady-state:</strong> Selecting a range that corresponds to the steady-state behavior (i.e., after the initial transient has passed) will give more accurate results, as it reflects the diffusion-controlled processes where the current decays predictably.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <p><strong>Note:</strong> The <em>start</em> and <em>end</em> values are not time intervals, but refer to the term
+    <span class="equation">\(\frac{nFAC_0}{\sqrt{\pi} t^{1/2}}\)</span>, which includes time as a factor. You are selecting the range of this term for the regression analysis.</p>
+
+    <h1>Scan rate to display (mV/s):</h1>
+    <p>This option allows you to select the scan rate of interest for display in millivolts per second (mV/s). The scan rate determines how quickly the potential is swept during the experiment, which influences the current response in cyclic voltammetry or other electrochemical techniques.</p>
+
+    <h2>How it works:</h2>
+    <p>Selecting a specific scan rate will display the current-potential curve corresponding to that scan rate. For example, if you choose <strong>50 mV/s</strong>, the curve corresponding to a scan rate of 50 mV/s will be shown.</p>
 
 <h1 id="section2">Smoothed/Smoothing Level (σ)</h1>
 
@@ -771,8 +809,103 @@
     <li>\(j = 100\) mA/cm² at \(\eta = 0.3\) V</li>
 </ul>
 
-<p>Plotting \(\eta\) versus \(\log j\) yields a straight line. The Tafel slope (\(b\)) can be determined from the slope
-    of this line, and the intercept (\(a\)) can be found from the y-intercept.</p>
+<p>Plotting \(\eta\) versus \(\log j\) yields a straight line. The Tafel slope (\(b\)) can be determined from the slope of this line, and the intercept (\(a\)) can be found from the y-intercept.</p>
+
+    <h1>Tafel Analysis: Transfer Coefficient Calculation</h1>
+
+    <h2>What is Tafel Analysis?</h2>
+    <p>Tafel analysis is an electrochemical method used to determine the kinetics of electrochemical reactions by analyzing the relationship between overpotential and current density. It provides insights into how fast electron transfer occurs at the electrode surface, which is particularly useful for studying both anodic (oxidation) and cathodic (reduction) reactions.</p>
+
+    <p>The Tafel equation is expressed as:</p>
+    <div class="equation">
+        \[\eta = a + b \log(i)\]
+    </div>
+    <p>where:</p>
+    <ul>
+        <li>\(\eta\) is the overpotential, the difference between the actual electrode potential and the equilibrium potential.</li>
+        <li>\(a\) is a constant that depends on the electrode material and reaction conditions.</li>
+        <li>\(b\) is the Tafel slope, which can be used to calculate the transfer coefficient.</li>
+        <li>\(i\) is the current density.</li>
+    </ul>
+
+    <p>Tafel analysis enables the calculation of key parameters, such as the transfer coefficient (\(\alpha\)) and the exchange current density, which are essential for understanding the mechanisms of electrochemical reactions.</p>
+
+    <h2>Calculation Method in This Software</h2>
+    <p>In this software, Tafel analysis is employed to calculate the anodic and cathodic transfer coefficients based on experimental data. This can be done using both non-mass-transport corrected and mass-transport corrected methods, depending on the specific conditions of the electrochemical system.</p>
+
+    <ol>
+        <li><strong>Non-Mass-Transport Corrected Method:</strong>
+            <p>This method applies the classical Tafel analysis directly to the experimental data without accounting for the limitations caused by mass transport. The anodic (\(\alpha_a\)) and cathodic (\(\alpha_c\)) transfer coefficients are calculated using the following equations as defined by IUPAC:</p>
+            <div class="equation">
+                \[\alpha_a = \frac{RT}{F} \left( \frac{d \ln j_{a, \text{corr}}}{dE} \right)\]
+            </div>
+            <div class="equation">
+                \[\alpha_c = -\frac{RT}{F} \left( \frac{d \ln |j_{c, \text{corr}}|}{dE} \right)\]
+            </div>
+            <p>where \( j_{a, \text{corr}} \) and \( j_{c, \text{corr}} \) are the anodic and cathodic current densities, respectively, corrected for experimental conditions.</p>
+        </li>
+
+        <li><strong>Mass-Transport Corrected Method:</strong>
+            <p>This method accounts for the influence of mass transport on the electrochemical reaction, following the approach suggested by Danlei Li et al. (2018). The transfer coefficient is determined by:</p>
+            <div class="equation">
+                \[-\frac{d\ln \left( \frac{1}{I_a} - \frac{1}{I_{\text{peak}}} \right)}{d\theta} = \alpha_a'\]
+            </div>
+            <p>This method has also been employed in research, such as Bacil et al.'s study on dopamine oxidation at gold electrodes, demonstrating its wide applicability.</p>
+        </li>
+    </ol>
+
+    <p>The software allows users to select between these two methods based on the experimental setup, providing flexibility and accurate analysis depending on whether or not mass transport effects need to be considered. By analyzing the Tafel slopes, users can gain valuable insights into the electron transfer kinetics of their system.</p>
+
+    <h1>Temperature (T)</h1>
+    <p>Temperature is just temperature, nothing to explain.</p>
+
+    <h2>Conversions</h2>
+    <p>If you need to convert between different temperature units, here are the relevant formulas:</p>
+    <ul>
+        <li>To convert Celsius (&#8451;) to Kelvin (K):
+            <div class="equation">
+                \[
+                T(K) = T(^\circ C) + 273.15
+                \]
+            </div>
+        </li>
+        <li>To convert Fahrenheit (&#8457;) to Celsius (&#8451;):
+            <div class="equation">
+                \[
+                T(^\circ C) = \frac{T(^\circ F) - 32}{1.8}
+                \]
+            </div>
+        </li>
+        <li>To convert Celsius (&#8451;) to Fahrenheit (&#8457;):
+            <div class="equation">
+                \[
+                T(^\circ F) = T(^\circ C) \times 1.8 + 32
+                \]
+            </div>
+        </li>
+    </ul>
+
+
+    <h1>Transfer Coefficient (&#945;):</h1>
+    <p>The transfer coefficient, denoted by &#945; (alpha), is a fundamental parameter in electrochemistry that describes the fraction of the electrical energy that contributes to the rate of an electrochemical reaction. It plays a key role in understanding the kinetics of electron transfer at the electrode surface.</p>
+
+    <h2>What it represents:</h2>
+    <p>&#945; quantifies the symmetry of the energy barrier for the forward and reverse reactions in an electrochemical system. It typically ranges between 0 and 1, where:</p>
+    <ul>
+        <li>&#945; = 0.5 indicates a symmetrical energy barrier, meaning the forward and reverse reactions are equally favored.</li>
+        <li>&#945; &lt; 0.5 means that the reverse reaction is favored.</li>
+        <li>&#945; &gt; 0.5 indicates that the forward reaction is favored.</li>
+    </ul>
+
+    <h2>How it's used:</h2>
+    <p>The transfer coefficient is commonly used in the Butler-Volmer equation to describe the kinetics of electrochemical reactions. It helps determine the current-voltage relationship in the system, particularly under non-equilibrium conditions. A higher transfer coefficient can lead to faster reaction rates under an applied potential.</p>
+
+    <h2>Tafel Analysis:</h2>
+    <p>The transfer coefficient &#945; can also be obtained from Tafel analysis, which involves plotting the overpotential against the logarithm of the current density. The slope of the Tafel plot is directly related to the transfer coefficient and provides insights into the kinetics of the electrochemical reaction.</p>
+
+<h1>This Feature is coming soon</h1>
+<p>Details about these options are coming soon. Please keep default setting and check back later for updated explanations and instructions.</p>
+
 
 <script>
     // 获取 URL 中的 hash 和 search 部分
