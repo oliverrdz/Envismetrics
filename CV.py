@@ -961,10 +961,11 @@ class CV(BaseModule):
         n = int(all_params['n'])
         C = float(all_params['c'])
         T = float(all_params['t'])
-        print(all_params)
+        electrode_dia = float(all_params['d'])
+        # print(all_params)
 
         # Diameter in cm
-        electrode_dia = 0.30  # electorde diameter in cm
+        # electrode_dia = 0.30  # electorde diameter in cm
         A_Real = np.pi * (electrode_dia / 2) ** 2
         print('Electrode Surface Area:', A_Real)
 

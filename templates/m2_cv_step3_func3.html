@@ -97,6 +97,14 @@
                             This field is required.
                         </div>
                     </div>
+                    <div class="col-12">
+                        <label for="form3_t" class="form-label">Electorde diameter (cm) </label>
+                        <input type="text" class="form-control" id="form3_d" placeholder="0"
+                               required="" value="0.30">
+                        <div class="invalid-feedback">
+                            This field is required.
+                        </div>
+                    </div>
                 </div>
                 <br>
                 <button type="button" class="btn btn-primary btn-md" ontouchstart="submitFormCV2()"
@@ -193,6 +201,7 @@
         formData.append('n', document.getElementById("form3_n").value);
         formData.append('t', document.getElementById("form3_t").value);
         formData.append('c', document.getElementById("form3_c").value);
+        formData.append('d', document.getElementById("form3_d").value);
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/upload', true);
