@@ -46,10 +46,10 @@
         <!-- Results 4 -->
         <div class="row g-5" id="form3">
             <!--            <h4 class="mb-3">Results ({{ data['version'] }})</h4>-->
-            <h5>Function 5.1: Transfer Coefficient Calculate module(method 1)</h5>
+            <h5>Function 5.1: Transfer Coefficient Calculate module (Non-Mass-Transport Corrected) <a href="/doc#section_tafel" target="_blank"><i class="bi bi-question-circle"></i></a></h5>
 
             {% for row in data['form5']['output']['m1_files'] %}
-            <h6 class="">Interval {{ loop.index - 1 }}: </h6>
+            <h6 class="">Scan rate {{ loop.index }}: </h6>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
                     <div class="card shadow-sm">
@@ -63,10 +63,10 @@
             </div>
             {% endfor %}
 
-            <h5>Function 5.2: Transfer Coefficient Calculate module(method 2)</h5>
+            <h5>Function 5.2: Transfer Coefficient Calculate module (Mass-Transport Corrected) <a href="/doc#section_tafel" target="_blank"><i class="bi bi-question-circle"></i></a></h5>
 
             {% for row in data['form5']['output']['m1_files'] %}
-            <h6 class="">Interval {{ loop.index - 1 }}: </h6>
+            <h6 class="">Interval {{ loop.index }}: </h6>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
                     <div class="card shadow-sm">
