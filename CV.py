@@ -1016,6 +1016,13 @@ class CV(BaseModule):
             plt.ylabel('Current Peak/A')
             plt.legend()
 
+            plt.scatter(scan_rate_05, peak_info[f'Ic{i}'], label=f'Exp-Re{i + 1}', s=2, color=colors[i])
+            #     plt.scatter(scan_rate_05,Ic_sim,label=f'Sim-Re{i+1}',s=10, marker='^', color = darker_color)
+            plt.plot(sim_x, sim_yc, color='red')
+            plt.xlabel('Scanning Rate ν^1/2')
+            plt.ylabel('Current Peak/A')
+            plt.legend()
+
         to_file1 = os.path.join(self.datapath, "CV_step3_p1.png")
         plt.savefig(to_file1)
         plt.close()
