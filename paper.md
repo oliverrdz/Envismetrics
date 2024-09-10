@@ -15,20 +15,26 @@ authors:
     orcid: 0000-0002-0784-7509
     affiliation: "2"
   - name: Xinxin Zhou
+    orcid: 0009-0001-0960-6688
+    affiliation: "3"
+  - name: Fuqin Zhou
+    orcid: 0009-0000-0342-0033
     affiliation: "4"
   - name: Omowunmi Sadik
     orcid: 0000-0000-0000-0000
     corresponding: true
-    affiliation: "3"
+    affiliation: "5"
 affiliations:
  - name: New Jersey Institute of Technology, Department of Physics
    index: 1
  - name: New Jersey Institute of Technology, Department of Informatics
    index: 2
- - name: New Jersey Institute of Technology, Chemistry and Environmental Science
-   index: 3
  - name: Independent Researcher
+   index: 3
+ - name: New Jersey Institute of Technology, Chemistry and Environmental Science
    index: 4
+ - name: New Jersey Institute of Technology, Chemistry and Environmental Science
+   index: 5
 date: "2024-08-30"
 bibliography: bibliography.bib
 ---
@@ -83,7 +89,7 @@ Envismetrics is dedicated to continuous improvement and innovation. Future plans
 
 Envismetrics supports a wide range of data formats from various potentiostats, including EC-Lab, Autolab, Metrohm, and more. The software can handle document types such as XLSX, TXT, and CSV. Users simply need to export their data and drag the files into the software, making data import and processing straightforward and user-friendly. We are continuously adding support for more commonly used commercial potentiostats. If you do not find support for your specific potentiostat, rest assured that updates will be released shortly to include additional data formats.
 
-![Data Import Window: Users can easily drag and drop or select their experimental data for quick and straightforward import.](Image_Set/1.png)
+![Data Import Window: Users can easily drag and drop or select their experimental data for quick and straightforward import.](Image_Set/1.png){ width=80% }
 
 ## Hydrodynamic Voltammetry (HDV) Module
 
