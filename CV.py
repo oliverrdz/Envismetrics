@@ -1008,15 +1008,15 @@ class CV(BaseModule):
             D_re.append(D_calc)
 
             darker_color = make_color_darker(colors[i], 0.5)
-            plt.scatter(scan_rate_05, peak_info[f'Ia{i}'], label=f'Exp-Ox{i + 1}', s=2, color=colors[i])
+            plt.scatter(scan_rate_05, peak_info[f'Ia{i}'], label=f'Exp-Ox{i + 1}', s=10, color=colors[i])
             #     plt.scatter(scan_rate_05,Ia_sim,label=f'Sim-Ox{i+1}',s=10, marker='^', color = darker_color)
 
-            plt.plot(sim_x, sim_yc, color='red')
+            plt.plot(sim_x, sim_ya, color='red')
             plt.xlabel('Scanning Rate ν^1/2')
             plt.ylabel('Current Peak/A')
             plt.legend()
 
-            plt.scatter(scan_rate_05, peak_info[f'Ic{i}'], label=f'Exp-Re{i + 1}', s=2, color=colors[i])
+            plt.scatter(scan_rate_05, peak_info[f'Ic{i}'], label=f'Exp-Re{i + 1}', s=10, color=colors[i])
             #     plt.scatter(scan_rate_05,Ic_sim,label=f'Sim-Re{i+1}',s=10, marker='^', color = darker_color)
             plt.plot(sim_x, sim_yc, color='red')
             plt.xlabel('Scanning Rate ν^1/2')
