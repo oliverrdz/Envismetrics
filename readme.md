@@ -10,6 +10,8 @@
     <img src="static/imgs/logo.png" alt="Logo"  height="80">
   </a>
   <h3 align="center">Envismetrics</h3>
+  <h6 align="center">http://34.74.47.99:8080<a href="http://34.74.47.99:8080"></a></h6>
+
 
   <p align="center">
     A comprehensive toolbox for the interpretation of results across various electrochemical techniques.
@@ -59,6 +61,10 @@ pip install flask gunicorn pandas numpy scikit-learn scipy openpyxl matplotlib
    gunicorn -w 4 -b 0.0.0.0:8080 app:app
    ```
 
+### Test data
+
+The test data is available at [Test_Set](https://github.com/Woffee/Envismetrics/tree/main/Test_Set) folder.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -93,7 +99,7 @@ Envismetrics is an online tool ([click here](http://34.74.47.99:8080/)) that req
 7. Analyze New Data
 	- If you want to analyze a new set of data, press the "Try Again" button to restart the process.
 
-By following these simple steps, you can efficiently utilize Envismetrics for your electrochemical kinetic analysis, ensuring accurate and reproducible results. The test data is available at [Test_Set](https://github.com/Woffee/Envismetrics/tree/main/Test_Set) folder.
+By following these simple steps, you can efficiently utilize Envismetrics for your electrochemical kinetic analysis, ensuring accurate and reproducible results. 
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -184,6 +190,7 @@ Project Link: [https://github.com/Woffee/Envismetrics](https://github.com/Woffee
 * [Grant Xue](#)
 * [Wenbo Wang](#)
 * [Omowunmi Sadik](#)
+* [Fuqin Zhou](#)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
