@@ -76,7 +76,7 @@ Envismetrics is dedicated to continuous improvement and innovation. Future plans
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Envismetrics is an online tool that requires no download or installation. The software updates automatically whenever new modules are released, ensuring you always have access to the latest features.
+Envismetrics is an online tool ([click here](http://34.74.47.99:8080/)) that requires no download or installation. The software updates automatically whenever new modules are released, ensuring you always have access to the latest features.
 
 1. Access the Software
 	- Visit Envismetrics Online.
@@ -93,7 +93,7 @@ Envismetrics is an online tool that requires no download or installation. The so
 7. Analyze New Data
 	- If you want to analyze a new set of data, press the "Try Again" button to restart the process.
 
-By following these simple steps, you can efficiently utilize Envismetrics for your electrochemical kinetic analysis, ensuring accurate and reproducible results.
+By following these simple steps, you can efficiently utilize Envismetrics for your electrochemical kinetic analysis, ensuring accurate and reproducible results. The test data is available at [Test_Set](https://github.com/Woffee/Envismetrics/tree/main/Test_Set) folder.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
