@@ -63,7 +63,7 @@ pip install flask gunicorn pandas numpy scikit-learn scipy openpyxl matplotlib
 
 ### Test data
 
-The test data is available at [Test_Set](https://github.com/Woffee/Envismetrics/tree/main/Test_Set) folder.
+The test data is available in the [Test_Set](https://github.com/Woffee/Envismetrics/tree/main/Test_Set) folder.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
