@@ -67,6 +67,21 @@ The test data is available in the [Test_Set](https://github.com/Woffee/Envismetr
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Data Privacy and Retention
+
+When using the online version of Envismetrics, uploaded data is stored temporarily to allow users to revisit their analysis via a unique session link. For example:
+
+`http://34.162.1.1:8080/step_methods/version_0627_040023?step=2`
+
+This link is automatically generated after uploading data and can be bookmarked for future access.
+
+To protect user privacy:
+- Uploaded files are **not publicly listed**, and links are sufficiently unique to prevent accidental discovery.
+- **All stored data is automatically deleted on the 1st of each month**.
+- Currently, there is **no login or authentication system**, as this is an early-stage prototype intended for demonstration and testing purposes.
+
+**Please do not upload sensitive or confidential data at this time.** We plan to introduce access control and permanent storage options in future releases.
+
 
 ## Statement of Need
 
