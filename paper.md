@@ -86,6 +86,7 @@ Ongoing development of Envismetrics focuses on expanding support for additional 
 | **Platform Support**    | Windows only                      | Cross-platform                                                                             | Cross-platform                                     |
 | **Hardware Support**    | Metrohm Autolab-specific          | Versatile (multiple devices)                                                               | Versatile (multiple devices)                       |
 | **Special Features**    | Device integration, extensive tools | Cross-platform versatility, cutting-edge methods, educational resources, advanced analysis modules | Basic GUI, limited to programmatic use for advanced features |
+
 [Comparison of Electrochemical Data Analysis Software]\label{table:1}
 
 # Current Functions of Envismetrics Toolbox
