@@ -45,27 +45,32 @@ Envismetrics is an innovative, open-source, and cross-platform Python-based soft
 
 # Summary
 
-Accurate determination of kinetic electrochemical parameters and thermodynamic constants is vital for predicting and optimizing the performance of redox reactions in various applications [@SANECKI2003109, @wang2020redox, @XU20106366]. These kinetic parameters can also be used in simulations to understand the mechanisms of the reactions [@C9CP05527D]. However, many of these parameters are not widely available in existing literature or online databases and often vary depending on experimental conditions.
+Accurate determination of kinetic electrochemical parameters and thermodynamic constants is fundamental for predicting and optimizing the performance of redox reactions in various applications [@SANECKI2003109, @wang2020redox, @XU20106366]. These kinetic parameters can also be used in simulations to understand the mechanisms of the reactions [@C9CP05527D]. However, many of these parameters are not readily available in existing literature or online databases and often vary depending on experimental conditions.
 
-Cyclic voltammetry (CV), hydrodynamic voltammetry (HDV), and step methods such as chronoamperometry (CA) are widely used experimental techniques to obtain kinetic parameters [@bard2022electrochemical]. These experiments enable the determination of key kinetic parameters through various analyses:
+Cyclic voltammetry (CV), hydrodynamic voltammetry (HDV), and step techniques such as chronoamperometry (CA) are widely used experimental methods for obtaining kinetic parameters [@bard2022electrochemical]. These experiments support the determination of key electrochemical parameters through well-established analyses, as demonstrated in numerous studies:
 
-- **Hydrodynamic Voltammetry (HDV)**: Levich and Koutecky-Levich analysis.
-- **Cyclic Voltammetry (CV)**: Randles-Sevcik analysis, rate constant calculation, transfer coefficient calculation.
-- **Chronoamperometry (CA)**: Cottrell equation analysis.
+- **Hydrodynamic Voltammetry (HDV)**: Levich and Koutecký–Levich analysis [@doi:10.1021/ar50110a004; @doi:10.1002/1521-4109(200202)14:3<165::AID-ELAN165>3.0.CO;2-6].
+- **Cyclic Voltammetry (CV)**: Randles–Ševčík analysis, rate constant calculation, and transfer coefficient estimation [@doi:10.1002/adts.202500346; @doi:10.1021/ar50110a004; @LEFTHERIOTIS2007259].
+- **Chronoamperometry (CA)**: Cottrell equation-based analysis [@HERATH20084324; @GOMEZ2023143400; @RODRIGUEZLUCAS2025145648].
+
+These analyses provide quantitative estimates of diffusion coefficients, rate constants, and electron transfer characteristics, forming the basis for further modeling and simulation of electrochemical systems.
 
 These analyses help calculate essential kinetic parameters, including formal potential, diffusion coefficient, transfer coefficient, and rate constant. Once collected, these parameters are widely used to perform simulations based on the Butler-Volmer theory, providing further insights into the electrochemical system.
 
 # Statement of Need
 
-In terms of data handling, typical electrochemical kinetic analysis solutions have relied on instrument-specific proprietary software provided with potentiostats, homemade scripts for specific data, or manual processing in Excel. Compared with the proprietary tools available from potentiostat manufacturers, these often lack the flexibility, cross-platform support, and comprehensive functionality that Envismetrics offers. Compared with homegrown solutions and packages [@Garg2021, @Murbach2020], Envismetrics provides a more general function that saves time and eliminates the need to re-edit code when changing potentiostats or experimental methods in kinetic analysis. Users can rely on Envismetrics to streamline their workflow and enhance efficiency. 
+In terms of data handling, typical electrochemical kinetic analysis workflows have relied on instrument-specific proprietary software provided with potentiostats, custom scripts developed for narrow use cases, or manual processing in Excel. Proprietary tools often lack flexibility, cross-platform compatibility, and transparency. Meanwhile, homegrown solutions [@Garg2021, @Murbach2020] can be difficult to adapt across instruments or experiments, requiring repeated modifications and offering limited reproducibility.
+
+Envismetrics addresses these gaps by offering a general-purpose, modular platform that simplifies kinetic analysis and reduces the need to modify code when switching potentiostats or experimental setups. By streamlining workflows and improving consistency, Envismetrics supports more efficient and reproducible research.
 
 Table 1 provides a general comparison between Envismetrics, proprietary tools (using Metrohm NOVA 2.1.7 as an example), and self-developed software (using FuelCell as an example).
 
-Envismetrics provides an open-source, cross-platform (Windows, MacOS, and Linux) online software focused on electrochemical kinetic analysis. No installation or updates are required, making it convenient and always up-to-date. Envismetrics offers a full toolbox for processing raw voltammogram data, extracting parameters, and generating publication-ready figures. The analysis can be applied to any scan, cycle, or range of voltammogram data. At any stage of the analysis, users can export the results for further use or to create new figures. Whether users are professional researchers seeking to save time or individuals lacking basic knowledge of the relevant equations, Envismetrics encourages reproducible, easy-to-use, and transparent analysis.
+Envismetrics is an open-source, cross-platform (Windows, macOS, and Linux) web-based tool for electrochemical kinetic analysis. No installation or updates are required, making the platform convenient to access and maintain. It provides a complete toolkit for processing raw voltammogram data, extracting key kinetic parameters, and generating publication-ready figures. The analysis applies across scan types, voltage ranges, and cycles. At each step, users can export results for further processing or visualization.
 
-Envismetrics not only facilitates data collection and analysis from electrochemical experiments but also provides educational resources to help users understand the terminology and concepts they encounter. This dual approach ensures that both seasoned researchers and newcomers can effectively utilize the software.
+The software is designed to benefit both experienced researchers and early-stage users. For researchers, it reduces time spent on data formatting and model fitting. For learners, it incorporates guided interfaces and instructional content to lower the barrier to entry. This combined approach fosters transparency, accessibility, and reproducibility in electrochemical data analysis.
 
-Envismetrics is dedicated to continuous improvement and innovation. Future plans include incorporating widely used kinetic electrochemical analysis methods and expanding support for additional data formats from various potentiostat brands. The software's modular design enables the seamless integration of new features and methods, ensuring Envismetrics remains a leading tool in electrochemical analysis.
+Ongoing development of Envismetrics focuses on expanding support for additional kinetic models and potentiostat formats. Its modular structure allows seamless integration of new methods, ensuring continued improvement and broader applicability within the electrochemistry research community.
+
 
 
 | **Aspect**             | **NOVA**                           | **Envismetrics**                                                                          | **Fuelcell**                                       |
