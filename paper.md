@@ -162,10 +162,10 @@ This function generates plots of applied potential vs. time and corresponding cu
 
 This function utilizes the Cottrell equation to calculate the diffusion coefficient. The Cottrell equation describes the current response of an electrochemical cell as a function of time, providing a means to determine the diffusion coefficient from chronoamperometric data. The software plots the Cottrell equation, allowing users to input parameters such as interval, \( n \), \( A \), and \( C_0 \), and calculates the diffusion coefficient. The outputs include a figure of the Cottrell equation plot and a table of diffusion coefficients.
 
-![(a) Levich plot module](Image_Set/2.png){ width=45% }
-![(b) Levich analysis module](Image_Set/3.png){ width=45% }
-![(c) Peak Searching module](Image_Set/4.png){ width=45% }
-![(d) Randles–Ševčík Analysis Module](Image_Set/RS_analysis.png){ width=45% }
+![(a) Levich plot module](Image_Set/L_DMAB.png){ width=45% }
+![(b) Levich analysis module](Image_Set/LA_D.png){ width=45% }
+![(c) Peak Searching module](Image_Set/CVPS_D.png){ width=45% }
+![(d) Randles–Ševčík Analysis Module](Image_Set/RC_DMAB.png){ width=45% }
 
 ![Example of figures in Envismetrics: (a) Levich plot module, (b) Levich analysis module, (c) Peak Searching module, (d) Randles–Ševčík Analysis Module.]
 
