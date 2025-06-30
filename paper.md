@@ -90,6 +90,35 @@ Ongoing development of Envismetrics focuses on expanding support for additional 
 
 # Current Functions of Envismetrics Toolbox
 
+To aid in interpreting the equations below, Table 2 summarizes commonly used electrochemical parameters along with their meanings and corresponding units.
+
+> **Note**:  
+> • The symbol $\nu$ appears twice in the table with different meanings:  
+> &nbsp;&nbsp;&nbsp;&nbsp;– In **CV**, it denotes the *scan rate*, with units of $\mathrm{V/s}$.  
+> &nbsp;&nbsp;&nbsp;&nbsp;– In **HDV (RDE)**, it denotes the *kinematic viscosity*, with units of $\mathrm{cm^2/s}$.  
+> • Both the *diffusion coefficient* $D$ and *kinematic viscosity* $\nu$ share the unit $\mathrm{cm^2/s}$, but represent distinct physical phenomena—molecular diffusion and fluid flow, respectively.
+
+| **Symbol**          | **Meaning**                                       | **Unit**               | **Context**       |
+| ------------------- | ------------------------------------------------- | ---------------------- | ----------------- |
+| $n$                 | Number of electrons transferred in redox reaction | —                      | All methods       |
+| $n'$                | Number of electrons in preceding equilibrium      | —                      | CV (irreversible) |
+| $F$                 | Faraday constant                                  | $\text{C/mol}$         | All methods       |
+| $R$                 | Ideal gas constant                                | $\text{J/mol·K}$       | All methods       |
+| $T$                 | Temperature                                       | $\text{K}$             | All methods       |
+| $\nu$               | Scan rate (CV)                                    | $\text{V/s}$           | CV                |
+| $\nu$               | Kinematic viscosity (HDV)                         | $\text{cm}^2/\text{s}$ | HDV (RDE)         |
+| $D$                 | Diffusion coefficient                             | $\text{cm}^2/\text{s}$ | All methods       |
+| $A$                 | Electrode area                                    | $\text{cm}^2$          | All methods       |
+| $C$, $C_0$          | Concentration of electroactive species            | $\text{mol/cm}^3$      | All methods       |
+| $I_{\text{peak}}$   | Peak current                                      | $\text{A}$             | CV                |
+| $j$                 | Current density                                   | $\text{A/cm}^2$        | CV                |
+| $\theta$            | Dimensionless overpotential                       | —                      | CV                |
+| $\alpha$, $\alpha'$ | (Apparent) transfer coefficient                   | —                      | CV                |
+| $k_0$               | Standard rate constant                            | $\text{cm/s}$          | CV                |
+| $\Psi$              | Dimensionless kinetic parameter                   | —                      | CV                |
+
+[Summary of parameters used in electrochemical equations]\label{table:2}
+
 ## Data Processing
 
 Envismetrics supports a wide range of data formats from various potentiostats, including EC-Lab, Autolab, Metrohm, and more. The software can handle document types such as XLSX, TXT, and CSV. Users simply need to export their data and drag the files into the software, making data import and processing straightforward and user-friendly. We are continuously adding support for more commonly used commercial potentiostats. If you do not find support for your specific potentiostat, rest assured that updates will be released shortly to include additional data formats.
