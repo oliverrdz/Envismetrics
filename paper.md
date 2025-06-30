@@ -162,7 +162,7 @@ $$
 
 ### Function 4: Rate Constant Calculation
 
-The rate constant is calculated using a dimensionless kinetic parameter, \(\Psi\). This parameter is a normalized value that represents the rate constant (\(k_0\)) in relation to various factors such as the diffusion coefficient and the number of electrons transferred. The method is suggested by Nicholson (1965) and Lavagnini et al. (2004) [@nicholson1965theory, @lavagnini2004extended].
+The rate constant is calculated using a dimensionless kinetic parameter, \(\Psi\). This parameter is a normalized value that represents the rate constant (\(k_0\)) in relation to various factors such as the diffusion coefficient and the number of electrons transferred. This method was originally proposed by Nicholson [@nicholson1965theory] and later extended by Lavagnini et al. [@lavagnini2004extended].
 
 ### Function 5: Tafel Analysis Module
 
@@ -176,7 +176,7 @@ $$
 \alpha_c = -\frac{RT}{F} \left( \frac{d \ln |j_{c, \text{corr}}|}{dE} \right)
 $$
 
-Additionally, the mass-transport corrected version suggested by Danlei Li et al. (2018) is used in this module [@LI2018117]. This method has also been applied in other research, such as the study of dopamine oxidation at gold electrodes by Bacil et al. (2019) [@zanello2019inorganic]. The transfer coefficient is calculated by:
+Additionally, the mass-transport corrected version proposed by Danlei Li et al. [@LI2018117] is implemented in this module. This method has also been applied in other research, including the study of dopamine oxidation at gold electrodes conducted by Bacil and co-workers [@zanello2019inorganic]. The transfer coefficient is calculated by:
 
 $$
 -\frac{d\ln \left( \frac{1}{I_a} - \frac{1}{I_{\text{peak}}} \right)}{d\theta} = \alpha_a'
