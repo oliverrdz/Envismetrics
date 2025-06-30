@@ -123,11 +123,11 @@ Peak searching is essential for calculating formal potential, peak separation, a
 The Randles–Ševčík analysis utilizes equations that incorporate the transfer coefficient and calculate the diffusion coefficient from the peak current and scan rate. This function supports both reversible and irreversible versions of the Randles–Ševčík equation [@zanello2019inorganic]. The peak information data used in this analysis is obtained from Function 2 (Peak Searching):
 
 $$
-I_{\text{peak}} = 0.4463 \, n \, F \, C \, A \sqrt{\frac{n F \nu D}{R T}}
+I_{\text{peak}} = 0.4463 \ n \ F \ C \ A \sqrt{\frac{n F \nu D}{R T}}
 $$
 
 $$
-I_{\text{peak}} = 0.4463 \sqrt{n^{\prime} + \beta} \, n \, F \, C \, A \sqrt{\frac{n F \nu D}{R T}}
+I_{\text{peak}} = 0.4463 \sqrt{n^{\prime} + \beta} \ n \ F \ C \ A \sqrt{\frac{n F \nu D}{R T}}
 $$
 
 ### Function 4: Rate Constant Calculation
