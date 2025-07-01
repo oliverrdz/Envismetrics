@@ -10,7 +10,7 @@
     <img src="static/imgs/logo.png" alt="Logo"  height="80">
   </a>
   <h3 align="center">Envismetrics</h3>
-  <h6 align="center">http://34.74.47.99:8080<a href="http://34.74.47.99:8080"></a></h6>
+  <h6 align="center">http://34.162.1.1:8080<a href="http://34.162.1.1:8080"></a></h6>
 
 
   <p align="center">
@@ -30,36 +30,86 @@
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+## System Requirements
+
+To run Envismetrics locally, you will need:
+
+- Python 3.8 or higher: [Check here](https://www.python.org/downloads/)
+- Git: [Install Git](https://git-scm.com/)
+- (Optional) Anaconda: [Install Anaconda](https://www.anaconda.com/download)
+
+To check if Git and Python are installed:
+```sh
+git --version
+python --version
+```
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
 
-### Prerequisites
+You can use Envismetrics **online** without installation:  
+➡️ [Click here to use the online version](http://34.162.1.1:8080)  
 
-  ```sh
+Or, for local use (recommended for developers or offline analysis), follow the steps below.
+
+### 1. Clone the Repository
+
+```sh
+git clone https://github.com/Woffee/Envismetrics.git
+cd Envismetrics
+```
+
+### 2. Create a Virtual Environment and Install Required Packages
+
+💻 Linux / macOS
+
+```sh
 python3 -m venv myenv
 source myenv/bin/activate
+```
 
+🖥 Windows (Command Prompt)
+
+```sh
+python -m venv myenv
+myenv\Scripts\activate
+```
+
+🔰 We recommend keeping the virtual environment inside the local repository for simplicity, especially for beginners. Advanced users may choose a centralized folder for their environments.
+
+Install Required Packages
+
+```sh
 pip install flask gunicorn pandas numpy scikit-learn scipy openpyxl matplotlib
-  ```
+```
 
-### Installation
+### Alternatively, Anaconda users can create a new environment:
 
-1. Clone the repo
-   ```sh
-   git clone https://github.com/Woffee/Envismetrics.git
-   ```
-2. Change the workspace to the root path
-   ```sh
-   cd Envismetrics
-   ```
-3. Start the service
-   ```sh
-   gunicorn -w 4 -b 0.0.0.0:8080 app:app
-   ```
+```sh
+conda create -n envismetrics python=3.9
+conda activate envismetrics
+pip install flask gunicorn pandas numpy scikit-learn scipy openpyxl matplotlib
+```
+
+### 4. Run the Application
+
+💻 Linux / macOS
+
+```sh
+gunicorn -w 4 -b 0.0.0.0:8080 app:app
+```
+
+
+🖥 Windows (Command Prompt)
+
+Gunicorn is not compatible with Windows. Use the following instead:
+
+```sh
+python app.py
+```
+
+Then visit http://localhost:8080/ in your browser.
 
 ### Test data
 
