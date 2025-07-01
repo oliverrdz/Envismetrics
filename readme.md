@@ -1,5 +1,21 @@
 <a name="readme-top"></a>
 
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/Woffee/Envismetrics">
+    <img src="static/imgs/logo.png" alt="Logo"  height="80">
+  </a>
+  <h3 align="center">Envismetrics</h3>
+  <h6 align="center">http://34.162.1.1:8080<a href="http://34.162.1.1:8080"></a></h6>
+
+
+  <p align="center">
+    A comprehensive toolbox for the interpretation of results across various electrochemical techniques.
+  </p>
+</div>
+
+
 ## About The Project
 
 ### Built With
