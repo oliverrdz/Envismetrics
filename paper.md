@@ -45,27 +45,32 @@ Envismetrics is an innovative, open-source, and cross-platform Python-based soft
 
 # Summary
 
-Accurate determination of kinetic electrochemical parameters and thermodynamic constants is vital for predicting and optimizing the performance of redox reactions in various applications [@SANECKI2003109, @wang2020redox, @XU20106366]. These kinetic parameters can also be used in simulations to understand the mechanisms of the reactions [@C9CP05527D]. However, many of these parameters are not widely available in existing literature or online databases and often vary depending on experimental conditions.
+Accurate determination of kinetic electrochemical parameters and thermodynamic constants is fundamental for predicting and optimizing the performance of redox reactions in various applications [@SANECKI2003109, @wang2020redox, @XU20106366]. These kinetic parameters can also be used in simulations to understand the mechanisms of the reactions [@C9CP05527D]. However, many of these parameters are not readily available in existing literature or online databases and often vary depending on experimental conditions.
 
-Cyclic voltammetry (CV), hydrodynamic voltammetry (HDV), and step methods such as chronoamperometry (CA) are widely used experimental techniques to obtain kinetic parameters [@bard2022electrochemical]. These experiments enable the determination of key kinetic parameters through various analyses:
+Cyclic voltammetry (CV), hydrodynamic voltammetry (HDV), and step techniques such as chronoamperometry (CA) are widely used experimental methods for obtaining kinetic parameters [@bard2022electrochemical]. These experiments support the determination of key electrochemical parameters through well-established analyses, as demonstrated in numerous studies:
 
-- **Hydrodynamic Voltammetry (HDV)**: Levich and Koutecky-Levich analysis.
-- **Cyclic Voltammetry (CV)**: Randles-Sevcik analysis, rate constant calculation, transfer coefficient calculation.
-- **Chronoamperometry (CA)**: Cottrell equation analysis.
+- **Hydrodynamic Voltammetry (HDV)**: Levich and Koutecký–Levich analysis [@doi:10.1021/ar50110a004; @doi:10.1002/1521-4109(200202)14:3<165::AID-ELAN165>3.0.CO;2-6].
+- **Cyclic Voltammetry (CV)**: Randles–Ševčík analysis, rate constant calculation, and transfer coefficient estimation [@doi:10.1002/adts.202500346; @doi:10.1021/ar50110a004; @LEFTHERIOTIS2007259].
+- **Chronoamperometry (CA)**: Cottrell equation-based analysis [@HERATH20084324; @GOMEZ2023143400; @RODRIGUEZLUCAS2025145648].
+
+These analyses provide quantitative estimates of diffusion coefficients, rate constants, and electron transfer characteristics, forming the basis for further modeling and simulation of electrochemical systems.
 
 These analyses help calculate essential kinetic parameters, including formal potential, diffusion coefficient, transfer coefficient, and rate constant. Once collected, these parameters are widely used to perform simulations based on the Butler-Volmer theory, providing further insights into the electrochemical system.
 
 # Statement of Need
 
-In terms of data handling, typical electrochemical kinetic analysis solutions have relied on instrument-specific proprietary software provided with potentiostats, homemade scripts for specific data, or manual processing in Excel. Compared with the proprietary tools available from potentiostat manufacturers, these often lack the flexibility, cross-platform support, and comprehensive functionality that Envismetrics offers. Compared with homegrown solutions and packages [@Garg2021, @Murbach2020], Envismetrics provides a more general function that saves time and eliminates the need to re-edit code when changing potentiostats or experimental methods in kinetic analysis. Users can rely on Envismetrics to streamline their workflow and enhance efficiency. 
+In terms of data handling, typical electrochemical kinetic analysis workflows have relied on instrument-specific proprietary software provided with potentiostats, custom scripts developed for narrow use cases, or manual processing in Excel. Proprietary tools often lack flexibility, cross-platform compatibility, and transparency. Meanwhile, homegrown solutions [@Garg2021, @Murbach2020] can be difficult to adapt across instruments or experiments, requiring repeated modifications and offering limited reproducibility.
+
+Envismetrics addresses these gaps by offering a general-purpose, modular platform that simplifies kinetic analysis and reduces the need to modify code when switching potentiostats or experimental setups. By streamlining workflows and improving consistency, Envismetrics supports more efficient and reproducible research.
 
 Table 1 provides a general comparison between Envismetrics, proprietary tools (using Metrohm NOVA 2.1.7 as an example), and self-developed software (using FuelCell as an example).
 
-Envismetrics provides an open-source, cross-platform (Windows, MacOS, and Linux) online software focused on electrochemical kinetic analysis. No installation or updates are required, making it convenient and always up-to-date. Envismetrics offers a full toolbox for processing raw voltammogram data, extracting parameters, and generating publication-ready figures. The analysis can be applied to any scan, cycle, or range of voltammogram data. At any stage of the analysis, users can export the results for further use or to create new figures. Whether users are professional researchers seeking to save time or individuals lacking basic knowledge of the relevant equations, Envismetrics encourages reproducible, easy-to-use, and transparent analysis.
+Envismetrics is an open-source, cross-platform (Windows, macOS, and Linux) web-based tool for electrochemical kinetic analysis. No installation or updates are required, making the platform convenient to access and maintain. It provides a complete toolkit for processing raw voltammogram data, extracting key kinetic parameters, and generating publication-ready figures. The analysis applies across scan types, voltage ranges, and cycles. At each step, users can export results for further processing or visualization.
 
-Envismetrics not only facilitates data collection and analysis from electrochemical experiments but also provides educational resources to help users understand the terminology and concepts they encounter. This dual approach ensures that both seasoned researchers and newcomers can effectively utilize the software.
+The software is designed to benefit both experienced researchers and early-stage users. For researchers, it reduces time spent on data formatting and model fitting. For learners, it incorporates guided interfaces and instructional content to lower the barrier to entry. This combined approach fosters transparency, accessibility, and reproducibility in electrochemical data analysis.
 
-Envismetrics is dedicated to continuous improvement and innovation. Future plans include incorporating widely used kinetic electrochemical analysis methods and expanding support for additional data formats from various potentiostat brands. The software's modular design enables the seamless integration of new features and methods, ensuring Envismetrics remains a leading tool in electrochemical analysis.
+Ongoing development of Envismetrics focuses on expanding support for additional kinetic models and potentiostat formats. Its modular structure allows seamless integration of new methods, ensuring continued improvement and broader applicability within the electrochemistry research community.
+
 
 
 | **Aspect**             | **NOVA**                           | **Envismetrics**                                                                          | **Fuelcell**                                       |
@@ -81,9 +86,39 @@ Envismetrics is dedicated to continuous improvement and innovation. Future plans
 | **Platform Support**    | Windows only                      | Cross-platform                                                                             | Cross-platform                                     |
 | **Hardware Support**    | Metrohm Autolab-specific          | Versatile (multiple devices)                                                               | Versatile (multiple devices)                       |
 | **Special Features**    | Device integration, extensive tools | Cross-platform versatility, cutting-edge methods, educational resources, advanced analysis modules | Basic GUI, limited to programmatic use for advanced features |
+
 [Comparison of Electrochemical Data Analysis Software]\label{table:1}
 
 # Current Functions of Envismetrics Toolbox
+
+To aid in interpreting the equations below, Table 2 summarizes commonly used electrochemical parameters along with their meanings and corresponding units.
+
+> **Note**:  
+> • The symbol $\nu$ appears twice in the table with different meanings:  
+> &nbsp;&nbsp;&nbsp;&nbsp;– In **CV**, it denotes the *scan rate*, with units of $\mathrm{V/s}$.  
+> &nbsp;&nbsp;&nbsp;&nbsp;– In **HDV (RDE)**, it denotes the *kinematic viscosity*, with units of $\mathrm{cm^2/s}$.  
+> • Both the *diffusion coefficient* $D$ and *kinematic viscosity* $\nu$ share the unit $\mathrm{cm^2/s}$, but represent distinct physical phenomena—molecular diffusion and fluid flow, respectively.
+
+| **Symbol**          | **Meaning**                                       | **Unit**               | **Context**       |
+| ------------------- | ------------------------------------------------- | ---------------------- | ----------------- |
+| $n$                 | Number of electrons transferred in redox reaction | —                      | All methods       |
+| $n'$                | Number of electrons in preceding equilibrium      | —                      | CV (irreversible) |
+| $F$                 | Faraday constant                                  | $\text{C/mol}$         | All methods       |
+| $R$                 | Ideal gas constant                                | $\text{J/mol·K}$       | All methods       |
+| $T$                 | Temperature                                       | $\text{K}$             | All methods       |
+| $\nu$               | Scan rate (CV)                                    | $\text{V/s}$           | CV                |
+| $\nu$               | Kinematic viscosity (HDV)                         | $\text{cm}^2/\text{s}$ | HDV (RDE)         |
+| $D$                 | Diffusion coefficient                             | $\text{cm}^2/\text{s}$ | All methods       |
+| $A$                 | Electrode area                                    | $\text{cm}^2$          | All methods       |
+| $C$, $C_0$          | Concentration of electroactive species            | $\text{mol/cm}^3$      | All methods       |
+| $I_{\text{peak}}$   | Peak current                                      | $\text{A}$             | CV                |
+| $j$                 | Current density                                   | $\text{A/cm}^2$        | CV                |
+| $\theta$            | Dimensionless overpotential                       | —                      | CV                |
+| $\alpha$, $\alpha'$ | (Apparent) transfer coefficient                   | —                      | CV                |
+| $k_0$               | Standard rate constant                            | $\text{cm/s}$          | CV                |
+| $\Psi$              | Dimensionless kinetic parameter                   | —                      | CV                |
+
+[Summary of parameters used in electrochemical equations]\label{table:2}
 
 ## Data Processing
 
@@ -118,16 +153,16 @@ Peak searching is essential for calculating formal potential, peak separation, a
 The Randles–Ševčík analysis utilizes equations that incorporate the transfer coefficient and calculate the diffusion coefficient from the peak current and scan rate. This function supports both reversible and irreversible versions of the Randles–Ševčík equation [@zanello2019inorganic]. The peak information data used in this analysis is obtained from Function 2 (Peak Searching):
 
 $$
-I_{\text{peak}} = 0.4463 \, n \, F \, C \, A \sqrt{\frac{n F \nu D}{R T}}
+I_{\text{peak}} = 0.4463 \ n \ F \ C \ A \sqrt{\frac{n F \nu D}{R T}}
 $$
 
 $$
-I_{\text{peak}} = 0.4463 \sqrt{n^{\prime} + \beta} \, n \, F \, C \, A \sqrt{\frac{n F \nu D}{R T}}
+I_{\text{peak}} = 0.4463 \sqrt{n^{\prime} + \beta} \ n \ F \ C \ A \sqrt{\frac{n F \nu D}{R T}}
 $$
 
 ### Function 4: Rate Constant Calculation
 
-The rate constant is calculated using a dimensionless kinetic parameter, \(\Psi\). This parameter is a normalized value that represents the rate constant (\(k_0\)) in relation to various factors such as the diffusion coefficient and the number of electrons transferred. The method is suggested by Nicholson (1965) and Lavagnini et al. (2004) [@nicholson1965theory, @lavagnini2004extended].
+The rate constant is calculated using a dimensionless kinetic parameter, \(\Psi\). This parameter is a normalized value that represents the rate constant (\(k_0\)) in relation to various factors such as the diffusion coefficient and the number of electrons transferred. This method was originally proposed by Nicholson [@nicholson1965theory] and later extended by Lavagnini et al. [@lavagnini2004extended].
 
 ### Function 5: Tafel Analysis Module
 
@@ -141,7 +176,7 @@ $$
 \alpha_c = -\frac{RT}{F} \left( \frac{d \ln |j_{c, \text{corr}}|}{dE} \right)
 $$
 
-Additionally, the mass-transport corrected version suggested by Danlei Li et al. (2018) is used in this module [@LI2018117]. This method has also been applied in other research, such as the study of dopamine oxidation at gold electrodes by Bacil et al. (2019) [@zanello2019inorganic]. The transfer coefficient is calculated by:
+Additionally, the mass-transport corrected version proposed by Danlei Li et al. [@LI2018117] is implemented in this module. This method has also been applied in other research, including the study of dopamine oxidation at gold electrodes conducted by Bacil and co-workers [@zanello2019inorganic]. The transfer coefficient is calculated by:
 
 $$
 -\frac{d\ln \left( \frac{1}{I_a} - \frac{1}{I_{\text{peak}}} \right)}{d\theta} = \alpha_a'
@@ -157,16 +192,16 @@ This function generates plots of applied potential vs. time and corresponding cu
 
 This function utilizes the Cottrell equation to calculate the diffusion coefficient. The Cottrell equation describes the current response of an electrochemical cell as a function of time, providing a means to determine the diffusion coefficient from chronoamperometric data. The software plots the Cottrell equation, allowing users to input parameters such as interval, \( n \), \( A \), and \( C_0 \), and calculates the diffusion coefficient. The outputs include a figure of the Cottrell equation plot and a table of diffusion coefficients.
 
-![(a) Levich plot module](Image_Set/2.png){ width=45% }
-![(b) Levich analysis module](Image_Set/3.png){ width=45% }
-![(c) Peak Searching module](Image_Set/4.png){ width=45% }
-![(d) Randles–Ševčík Analysis Module](Image_Set/RS_analysis.png){ width=45% }
+![(a) Levich plot module](Image_Set/L_DMAB.png){ width=45% }
+![(b) Levich analysis module](Image_Set/LA_D.png){ width=45% }
+![(c) Peak Searching module](Image_Set/CVPS_D.png){ width=45% }
+![(d) Randles–Ševčík Analysis Module](Image_Set/RC_DMAB.png){ width=45% }
 
 ![Example of figures in Envismetrics: (a) Levich plot module, (b) Levich analysis module, (c) Peak Searching module, (d) Randles–Ševčík Analysis Module.]
 
 ## Applications in Research
 
-Envismetrics has been employed in various research projects, demonstrating its versatility in the analysis of electrochemical systems. For instance, the software was utilized in the investigation of photocatalytic degradation of perfluorooctanoic acid (PFOA), published in *Chemosphere* [@OSONGA2024143057], where it facilitated the precise analysis of kinetic parameters essential to understanding the degradation mechanisms. Additionally, Envismetrics played a key role in mechanistic studies on the electrochemical oxidation of dimethylamine borane (DMAB), as documented in recent works [@sadik2024dimethylamine, Xue_2023]. In these studies, Envismetrics enabled the accurate processing of electrochemical data, which was crucial for validating the proposed mechanisms and deriving key kinetic parameters.
+Envismetrics has been employed in various research projects, demonstrating its versatility in the analysis of electrochemical systems. For instance, the software was utilized in the investigation of photocatalytic degradation of perfluorooctanoic acid (PFOA), published in *Chemosphere* [@OSONGA2024143057], where it facilitated the precise analysis of kinetic parameters essential to understanding the degradation mechanisms. Additionally, Envismetrics played a key role in mechanistic studies on the electrochemical oxidation of dimethylamine borane (DMAB), as documented in recent works [@sadik2024dimethylamine,@Xue_2023,@TORABFAM2025107950]. In these studies, Envismetrics enabled the accurate processing of electrochemical data, which was crucial for validating the proposed mechanisms and deriving key kinetic parameters.
 
 
 # Technology Stack
