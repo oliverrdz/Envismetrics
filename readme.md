@@ -252,6 +252,7 @@ Project Link: [https://github.com/Woffee/Envismetrics](https://github.com/Woffee
 * [Grant Xue](#)
 * [Wenbo Wang](#)
 * [Omowunmi Sadik](#)
+* [Xinxin Zhou](#)
 * [Fuqin Zhou](#)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
