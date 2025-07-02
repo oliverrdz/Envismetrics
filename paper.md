@@ -46,7 +46,7 @@ Accurate determination of kinetic electrochemical parameters and thermodynamic c
 
 Cyclic voltammetry (CV), hydrodynamic voltammetry (HDV), and step techniques such as chronoamperometry (CA) are widely used experimental methods for obtaining kinetic parameters [@bard2022electrochemical]. These experiments support the determination of key electrochemical parameters through well-established analyses, as demonstrated in numerous studies:
 
-- **Hydrodynamic Voltammetry (HDV)**: Levich and Koutecký–Levich analysis [@doi:10.1021/ar50110a004; @doi:10.1002/1521-4109(200202)14:3<165::AID-ELAN165>3.0.CO;2-6].
+- **Hydrodynamic Voltammetry (HDV)**: Levich and Koutecký–Levich analysis [@doi:10.1021/ar50110a004; @treimer2002koutecky].
 - **Cyclic Voltammetry (CV)**: Randles–Ševčík analysis, rate constant calculation, and transfer coefficient estimation [@doi:10.1002/adts.202500346; @doi:10.1021/ar50110a004; @LEFTHERIOTIS2007259].
 - **Chronoamperometry (CA)**: Cottrell equation-based analysis [@HERATH20084324; @GOMEZ2023143400; @RODRIGUEZLUCAS2025145648].
 
