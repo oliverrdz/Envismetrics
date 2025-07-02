@@ -203,6 +203,18 @@ This function utilizes the Cottrell equation to calculate the diffusion coeffici
 
 Envismetrics has been employed in various research projects, demonstrating its versatility in the analysis of electrochemical systems. For instance, the software was utilized in the investigation of photocatalytic degradation of perfluorooctanoic acid (PFOA), published in *Chemosphere* [@OSONGA2024143057], where it facilitated the precise analysis of kinetic parameters essential to understanding the degradation mechanisms. Additionally, Envismetrics played a key role in mechanistic studies on the electrochemical oxidation of dimethylamine borane (DMAB), as documented in recent works [@sadik2024dimethylamine,@Xue_2023,@TORABFAM2025107950]. In these studies, Envismetrics enabled the accurate processing of electrochemical data, which was crucial for validating the proposed mechanisms and deriving key kinetic parameters.
 
+## Author Contributions (CRediT Taxonomy)
+
+- **Huize Xue**: Conceptualization, Methodology, Software, Formal Analysis, Visualization, Data Curation, Writing – Original Draft.  
+  Led the design and development of the electrochemical analysis pipeline, including Python-based processing tools and experimental method validation. Also responsible for manuscript writing and figure preparation.
+- **Wenbo Wang**: Software, Writing – Review & Editing, Data Curation, Project Administration.  
+  Contributed to the front-end interface, online platform development, and GitHub repository maintenance. Assisted in server deployment and manuscript refinement.
+- **Xinxin Zhou**: Validation, Testing, Documentation.  
+  Performed internal testing of the software and contributed to documentation and usability feedback.
+- **Fuqin Zhou**: Investigation, Data Curation.  
+  Supported data formatting and assisted with exploratory testing of selected modules.
+- **Omowunmi Sadik**: Supervision, Project Administration, Funding Acquisition.  
+  Provided scientific oversight and strategic guidance throughout the project. Contributed to the refinement of analysis direction and manuscript review.
 
 # Technology Stack
 
