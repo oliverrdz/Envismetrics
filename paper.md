@@ -10,7 +10,6 @@ authors:
   - name: Huize Xue
     orcid: 0000-0001-7537-2173
     affiliation: "1"
-    equal-contrib: true
   - name: Wenbo Wang
     orcid: 0000-0002-0784-7509
     affiliation: "2"
