@@ -19,11 +19,11 @@ authors:
     affiliation: "3"
   - name: Fuqin Zhou
     orcid: 0009-0000-0342-0033
-    affiliation: "4"
+    affiliation: "2"
   - name: Omowunmi Sadik
     orcid: 0000-0001-8514-0608
     corresponding: true
-    affiliation: "5"
+    affiliation: "4"
 affiliations:
  - name: New Jersey Institute of Technology, Department of Physics
    index: 1
@@ -33,8 +33,6 @@ affiliations:
    index: 3
  - name: New Jersey Institute of Technology, Chemistry and Environmental Science
    index: 4
- - name: New Jersey Institute of Technology, Chemistry and Environmental Science
-   index: 5
 date: "2024-08-30"
 bibliography: bibliography.bib
 ---
