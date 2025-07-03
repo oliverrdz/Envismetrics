@@ -138,7 +138,7 @@ Envismetrics/
 
 ### Test data
 
-The test data is available in the [Test_Set](https://github.com/Woffee/Envismetrics/tree/main/Test_Set) folder.
+The test data is now available in the [`data/test_data`](https://github.com/Woffee/Envismetrics/tree/main/data/test_data) folder.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
