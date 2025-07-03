@@ -118,7 +118,7 @@ Envismetrics/
 ├── data/
 │   ├── example_files/      # Example .xlsx files showing required data formats for CV, CA, HDV
 │   └── test_data/          # Full experimental datasets used for testing
-├── modules/                # Core electrochemical analysis modules (CV.py, CA.py, HDV.py, etc.)
+├── src/                # Core electrochemical analysis modules (CV.py, CA.py, HDV.py, etc.)
 ├── tests/                  # Unit tests for validating module functions
 ├── static/                 # Static web resources (CSS, JS, images)
 ├── templates/              # HTML templates for web UI
