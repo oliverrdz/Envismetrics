@@ -108,6 +108,34 @@ python app.py
 
 Then visit http://localhost:8080/ in your browser.
 
+### 📁 Project Directory Overview
+
+The Envismetrics repository is organized as follows:
+
+```plaintext
+Envismetrics/
+├── app/                    # Web app interface (Flask-based backend logic)
+├── data/
+│   ├── example_files/      # Example .xlsx files showing required data formats for CV, CA, HDV
+│   └── test_data/          # Full experimental datasets used for testing
+├── modules/                # Core electrochemical analysis modules (CV.py, CA.py, HDV.py, etc.)
+├── tests/                  # Unit tests for validating module functions
+├── static/                 # Static web resources (CSS, JS, images)
+├── templates/              # HTML templates for web UI
+├── paper/
+│   ├── paper.md            # JOSS manuscript source
+│   ├── bibliography.bib    # BibTeX-formatted references
+│   └── Image_Set/          # Figures used in the manuscript
+├── LICENSE
+├── README.md
+├── requirements.txt        # Python dependencies
+└── config.py               # Global configuration file
+```
+
+- **`data/example_files/`**: Provides sample `.xlsx` templates to help users format input files correctly (e.g., column headers for potential and current).
+- **`data/test_data/`**: Contains real experimental datasets to test and validate the software functionality.
+
+
 ### Test data
 
 The test data is available in the [Test_Set](https://github.com/Woffee/Envismetrics/tree/main/Test_Set) folder.
