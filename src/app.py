@@ -26,22 +26,16 @@ from CV import CV
 import hashlib
 import shutil
 from config import *
+from utils import init_logging, check_folders
 import threading
 import traceback
 from CA import CA
 
 app = Flask(__name__)
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-today = time.strftime("%Y-%m-%d", time.localtime())
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s %(levelname)s %(filename)s line: %(lineno)s - %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S',
-                    filename=BASE_DIR + '/logs/tnote-' + today + '.log')
-
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+check_folders()
+init_logging()
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
