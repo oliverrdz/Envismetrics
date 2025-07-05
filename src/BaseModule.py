@@ -3,6 +3,7 @@ import json
 import re
 import pandas as pd
 import pickle
+from config import *
 
 def reorder(filename):
     match = re.search(r'(\d+)rpm', filename)

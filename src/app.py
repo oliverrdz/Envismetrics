@@ -30,6 +30,12 @@ from utils import init_logging, check_folders
 import threading
 import traceback
 from CA import CA
+import sys
+import os
+
+sys.path.append(os.path.dirname(__file__))
+from config import *
+from utils import init_logging, check_folders
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -644,16 +650,16 @@ def upload_file():
 
 @app.route('/outputs/<filename>')
 def uploaded_file(filename):
-    return send_from_directory('outputs', filename)
+    return send_from_directory(os.path.join(BASE_DIR, '../outputs'), filename)
 
 @app.route('/outputs/<version>/<filename>')
-def uploaded_file2(filename, version):
-    return send_from_directory('outputs/{}'.format(version), filename)
+def uploaded_file2(version, filename):
+    return send_from_directory(os.path.join(BASE_DIR, '../outputs/{}'.format(version)), filename)
 
 @app.route('/files/<filename>')
 def files(filename):
     # return send_from_directory('data/example_files', filename)
-    return send_file('data/example_files/{}'.format(filename) , as_attachment=True)
+    return send_file(os.path.join( BASE_DIR, '../data/example_files/{}'.format(filename) )  , as_attachment=True)
 
 
 def background_task(param):
