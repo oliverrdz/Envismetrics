@@ -54,26 +54,11 @@ Each technique supports specific analyses:
 
 While these methods are widely accepted, manual analysis can be labor-intensive and prone to inconsistency. To address this, **Envismetrics** is introduced as an open-source, browser-based Python application that automates data processing and analysis workflows for CV, LSV (RDE), and CA. It provides modules for filtering, peak detection, Levich regression, Randles–Ševčík analysis, and chronoamperometric fitting—offering visual outputs and tabulated results. By focusing on automation and reproducibility, Envismetrics lowers the barrier for electrochemical researchers—especially those dealing with large datasets or requiring rapid feedback—while preserving methodological rigor and transparency.
 
-
-# Statement of Need
-
-In terms of data handling, typical electrochemical kinetic analysis workflows have relied on instrument-specific proprietary software provided with potentiostats, custom scripts developed for narrow use cases, or manual processing in Excel. Proprietary tools often lack flexibility, cross-platform compatibility, and transparency. Meanwhile, homegrown solutions [@Garg2021, @Murbach2020] can be difficult to adapt across instruments or experiments, requiring repeated modifications and offering limited reproducibility.
-
-Envismetrics addresses these gaps by offering a general-purpose, modular platform that simplifies kinetic analysis and reduces the need to modify code when switching potentiostats or experimental setups. By streamlining workflows and improving consistency, Envismetrics supports more efficient and reproducible research.
-
-Table 1 provides a general comparison between Envismetrics, proprietary tools (using Metrohm NOVA 2.1.7 as an example), and self-developed software (using FuelCell as an example).
-
-Envismetrics is an open-source, cross-platform (Windows, macOS, and Linux) web-based tool for electrochemical kinetic analysis. No installation or updates are required, making the platform convenient to access and maintain. It provides a complete toolkit for processing raw voltammogram data, extracting key kinetic parameters, and generating publication-ready figures. The analysis applies across scan types, voltage ranges, and cycles. At each step, users can export results for further processing or visualization.
-
-The software is designed to benefit both experienced researchers and early-stage users. For researchers, it reduces time spent on data formatting and model fitting. For learners, it incorporates guided interfaces and instructional content to lower the barrier to entry. This combined approach fosters transparency, accessibility, and reproducibility in electrochemical data analysis.
-
-Ongoing development of Envismetrics focuses on expanding support for additional kinetic models and potentiostat formats. Its modular structure allows seamless integration of new methods, ensuring continued improvement and broader applicability within the electrochemistry research community.
-
 # Statement of Need
 
 Electrochemical researchers commonly analyze data using a combination of proprietary instrument software (e.g., NOVA for Autolab), manual spreadsheet tools (e.g., Excel), and general-purpose plotting software (e.g., Origin, SigmaPlot). While proprietary software facilitates data collection and basic visualization, it is often platform-specific, instrument-dependent, and limited in automation and cross-experiment reproducibility. Tools like Origin provide flexible plotting, but require manual preprocessing, repeated formatting, and domain expertise for kinetic modeling.
 
-Envismetrics fills this gap by offering a modular, web-based platform focused on automated analysis of electrochemical data, particularly from cyclic voltammetry (CV), linear sweep voltammetry at rotating disk electrodes (LSV at RDE), and chronoamperometry (CA). By supporting common data formats like .xlsx, .csv, and .txt, Envismetrics works independently of instrument brands—allowing researchers to export plaintext data from proprietary systems and continue their analysis seamlessly.
+Envismetrics fills this gap by offering a powerful modular, web-based platform focused on automated analysis of electrochemical data, particularly from cyclic voltammetry (CV), linear sweep voltammetry at rotating disk electrodes (LSV at RDE), and chronoamperometry (CA). By supporting common data formats like .xlsx, .csv, and .txt, Envismetrics works independently of instrument brands—allowing researchers to export plaintext data from proprietary systems and continue their analysis seamlessly.
 
 Unlike tools that prioritize device control, Envismetrics emphasizes data processing, reproducibility, and accessibility. It features automated peak detection, Levich and Randles–Ševčík analysis, rate constant fitting, and stepwise modules, making it ideal for both routine analysis and instructional purposes. It also runs on Windows, macOS, and Linux with no installation needed.
 
