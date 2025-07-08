@@ -1,6 +1,6 @@
 # Reproducing Manuscript Figure 2
 
-This guide explains how to reproduce all four subplots in **Figure 2** of the *Envismetrics* manuscript using the [online tool](https://envismetrics.streamlit.app/).
+This guide explains how to reproduce all four subplots in **Figure 2** of the *Envismetrics* manuscript using the online tool(http://34.162.1.1:8080/).
 
 All required input files are included in this GitHub folder:  
 🔗 [`/data/test_data/`](https://github.com/Woffee/Envismetrics/tree/main/data/test_data)
