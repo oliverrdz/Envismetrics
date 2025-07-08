@@ -49,8 +49,7 @@ Each file contains a linear sweep voltammetry (LSV) curve measured under a speci
 6. Click **Next** to enter **HDV-3.1**  
 7. The results generated correspond to:
    - **Subplot 1 (Figure 2a):** Levich plot – limiting current vs. √ω  
-   - **Subplot 2 (Figure 2b):** Diffusion coefficient fit and residuals
-
+   - **Subplot 2 (Figure 2b):** Calculated **slope** and **diffusion coefficient** at selected potentials (based on limiting current fitting)
 ---
 
 ## 📌 Notes
