@@ -69,22 +69,28 @@ The software is designed to benefit both experienced researchers and early-stage
 
 Ongoing development of Envismetrics focuses on expanding support for additional kinetic models and potentiostat formats. Its modular structure allows seamless integration of new methods, ensuring continued improvement and broader applicability within the electrochemistry research community.
 
+# Statement of Need
 
+Electrochemical researchers commonly analyze data using a combination of proprietary instrument software (e.g., NOVA for Autolab), manual spreadsheet tools (e.g., Excel), and general-purpose plotting software (e.g., Origin, SigmaPlot). While proprietary software facilitates data collection and basic visualization, it is often platform-specific, instrument-dependent, and limited in automation and cross-experiment reproducibility. Tools like Origin provide flexible plotting, but require manual preprocessing, repeated formatting, and domain expertise for kinetic modeling.
 
-| **Aspect**             | **NOVA**                           | **Envismetrics**                                                                          | **Fuelcell**                                       |
-|------------------------|------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------|
-| **Installation**        | Windows (7 to 11)                 | Online (no installation, always up-to-date)                                                | Standalone executable                              |
-| **Compatibility**       | Autolab instruments               | Cross-platform (Windows, macOS, Linux, no hardware dependence)                             | Cross-platform (Windows, macOS, Linux)             |
-| **Data Formats Supported** | Autolab-specific formats        | XLSX, TXT, CSV, versatile for many devices                                                 | Multiple data formats                              |
-| **Analysis Tools**      | Smoothing, fitting, peak search   | Dynamic HDV slope, peak search, Randles-Ševčík analysis, rate constant calculation          | Tafel slope, HFR extraction                        |
-| **User Interface**      | Complex, detailed                 | User-friendly, drag-and-drop, suitable for all users                                       | Interactive GUI                                    |
-| **Learning Curve**      | Steep                             | Intuitive and user-friendly, minimal training required                                     | Simple but limited in advanced functionality        |
-| **Customization**       | Requires expertise                | Modular, easy updates, customizable for advanced research                                  | Custom visualizations                              |
-| **Updates**             | Periodic, requires installation   | Seamless, online updates, community-supported                                              | Expandable via community                           |
-| **Platform Support**    | Windows only                      | Cross-platform                                                                             | Cross-platform                                     |
-| **Hardware Support**    | Metrohm Autolab-specific          | Versatile (multiple devices)                                                               | Versatile (multiple devices)                       |
-| **Special Features**    | Device integration, extensive tools | Cross-platform versatility, cutting-edge methods, educational resources, advanced analysis modules | Basic GUI, limited to programmatic use for advanced features |
+Envismetrics fills this gap by offering a modular, web-based platform focused on automated analysis of electrochemical data, particularly from cyclic voltammetry (CV), linear sweep voltammetry at rotating disk electrodes (LSV at RDE), and chronoamperometry (CA). By supporting common data formats like .xlsx, .csv, and .txt, Envismetrics works independently of instrument brands—allowing researchers to export plaintext data from proprietary systems and continue their analysis seamlessly.
 
+Unlike tools that prioritize device control, Envismetrics emphasizes data processing, reproducibility, and accessibility. It features automated peak detection, Levich and Randles–Ševčík analysis, rate constant fitting, and stepwise modules, making it ideal for both routine analysis and instructional purposes. It also runs on Windows, macOS, and Linux with no installation needed.
+
+Table 1. Comparison of Electrochemical Data Processing Tools
+
+| **Aspect**             | **Proprietary (NOVA)**              | **Envismetrics**                                                            | **Homegrown (FuelCell)**               |
+|------------------------|-------------------------------------|-----------------------------------------------------------------------------|----------------------------------------|
+| **Installation**       | Windows-only installation           | Web-based, no installation needed                                           | Standalone executable                  |
+| **Platform Support**   | Windows only                        | Windows, macOS, Linux                                                       | Windows, macOS, Linux                  |
+| **Data Collection**    | built-in                            | requires exported files from instruments                                  | requires exported files from instruments |
+| **Data Format Support**| Autolab-specific, requires export   | `.xlsx`, `.csv`, `.txt` (plaintext from any system)                         | Multiple formats                       |
+| **Analysis Features**  | Basic plotting, smoothing, baseline | Automated Levich/Randles–Ševčík, peak search, rate fitting                  | Tafel slope, HFR extraction            |
+| **Customization**      | Limited                             | Modular architecture, easily extensible                                     | Requires code edits                    |
+| **Learning Curve**     | Steep, documentation-heavy          | Intuitive GUI with helper prompts                                           | Depends on script complexity           |
+| **Publication Output** | Basic figures                       | Clean plots with export                                                     | Requires post-processing               |
+| **Educational Use**    | Limited                             | Interface guides + interactive outputs                                      | Not beginner-friendly                  |
+| **Hardware Dependency**| Metrohm Autolab only                | Hardware-agnostic                                                           | Hardware-agnostic                      |
 [Comparison of Electrochemical Data Analysis Software]\label{table:1}
 
 # Current Functions of Envismetrics Toolbox
