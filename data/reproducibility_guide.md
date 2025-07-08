@@ -86,35 +86,36 @@ Each file contains a cyclic voltammetry (CV) curve of DMAB oxidation recorded at
 2. Upload **all 7 files** listed above  
 3. Keep default settings:  
    - **Gaussian filter sigma**: `10`  
-   - **Cycle of representative**: `6` (can be any number between 3–12)  
+   - **Cycle of representative**: `6` (can be any number base on experiment setting in here is 1-12)  
 4. Click **Submit** to proceed to the **CV-2.1** page  
 5. In **Function 2: Peak searching**, use the following settings:
 
-| Parameter                      | Value                                                                 |
-|-------------------------------|-----------------------------------------------------------------------|
-| **Peak range (top)**          | `(-1, -0.70), (0, 0.2), (0.25, 0.5)`                                  |
-| **Peak range (bottom)**       | `(-0.925, -0.75), (0.0, 0.125), (0.125, 0.25)`                         |
-| **Discard scan rate from**    | `0, 0, 0`                                                             |
-| **Discard scan rate after**   | `0, 0, 2`                                                             |
-| **Cycle range**               | `(2, 100)`                                                            |
-| **Scan rate to display**      | `20` mV/s                                                             |
-| **Cycle number to display**   | `9`                                                                   |
-| **Which method to use**       | `Max`                                                                 |
-
+| Parameter                    | Value                                               | Explanation                                                                 |
+|-----------------------------|-----------------------------------------------------|-----------------------------------------------------------------------------|
+| **Peak range (top)**        | `(-1, -0.70), (0, 0.2), (0.25, 0.5)`                | Voltage ranges where oxidation peaks are expected                           |
+| **Peak range (bottom)**     | `(-0.925, -0.75), (0.0, 0.125), (0.125, 0.25)`      | Voltage ranges where reduction peaks are expected                           |
+| **Discard scan rate from**  | `0, 0, 0`                                           | Discards scan rates at the beginning of the sequence — here, none discarded |
+| **Discard scan rate after** | `0, 0, 2`                                           | Discards scan rates at the end — only for the 3rd peak (last 2 scan rates)  |
+| **Cycle range**             | `(2, 100)`                                          | Only cycles within this range are used in the peak analysis                  |
+| **Scan rate to display**    | `20` mV/s                                           | Highlights the curve at 20 mV/s in the display                               |
+| **Cycle number to display** | `9`                                                 | The 9th cycle will be shown in the figure                                    |
+| **Which method to use**     | `Max`                                               | Peak current is determined by the maximum value                              |
 6. Click **Submit** to proceed to the **CV-2.2** page  
 7. The results generated correspond to:
    - **Subplot 3 (Figure 2c):** Peak overlay plot with scan rate info
+
 ---
 
 8. Then, click **Function 3: Randles–Ševčík Analysis** to enter the **CV-3.1** page  
 9. Use the following parameter settings:
 
-| Parameter                                          | Value                        |
-|---------------------------------------------------|------------------------------|
-| **Number of electron transfer (n)**               | `1`                          |
-| **Concentration of material (C)**                 | `0.000000894454 mol/cm³`     |
-| **Temperature (T)**                               | `298.15 K`                   |
-| **Electrode diameter**                            | `0.30 cm`                    |
+| Parameter                                | Value                         | Explanation                                                                 |
+|------------------------------------------|-------------------------------|-----------------------------------------------------------------------------|
+| **Number of electron transfer (n)**      | `1`                           | Number of electrons involved in redox reaction                             |
+| **Concentration of material (C)**        | `0.000000894454 mol/cm³`      | Bulk concentration of DMAB used in the CV test                             |
+| **Temperature (T)**                      | `298.15 K`                    | Standard room temperature in Kelvin                                         |
+| **Electrode diameter**                   | `0.30 cm`                     | Diameter of the glassy carbon disk electrode used in this setup            |
+
 
 10. Click **Submit** to see the results  
 
@@ -130,5 +131,8 @@ Each file contains a cyclic voltammetry (CV) curve of DMAB oxidation recorded at
 ### ❗ Notes
 
 - If using your own CV dataset, ensure it contains **at least 3 scan rates** for Randles–Ševčík to function.
-- Hover over the **"?"** icons in the tool for helpful parameter tips.
+- Click the **"?"** icons in the tool for helpful parameter tips.
 - The default settings were chosen to exactly reproduce the manuscript results using this dataset.
+- **Subplot 4 (Figure 2d)** includes a new feature in the core code — simulated peak currents based on a given diffusion coefficient (shown as triangles ▲ in the plot).  
+  ⚠️ **Note:** This simulation functionality is not yet available in the online tool. To reproduce this feature, use the core Python script in the source code instead. The online version currently only supports diffusion coefficient fitting from experimental data.
+
