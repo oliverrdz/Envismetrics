@@ -76,6 +76,7 @@ Table 1. Comparison of Electrochemical Data Processing Tools
 | **Publication Output** | Basic figures                       | Clean plots with export                                                     | Requires post-processing               |
 | **Educational Use**    | Limited                             | Interface guides + interactive outputs                                      | Not beginner-friendly                  |
 | **Hardware Dependency**| Metrohm Autolab only                | Hardware-agnostic                                                           | Hardware-agnostic                      |
+
 [Comparison of Electrochemical Data Analysis Software]\label{table:1}
 
 # Current Functions of Envismetrics Toolbox
