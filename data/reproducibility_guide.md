@@ -80,53 +80,55 @@ Each file contains a cyclic voltammetry (CV) curve of DMAB oxidation recorded at
 
 ---
 
+### 🔧 Steps to Reproduce
 
-**Steps to reproduce:**
+1. Go to the [CV module](http://34.162.1.1:8080/cv) to open the **CV-1** page  
+2. Upload **all 7 files** listed above  
+3. Keep default settings:  
+   - **Gaussian filter sigma**: `10`  
+   - **Cycle of representative**: `6` (can be any number between 3–12)  
+4. Click **Submit** to proceed to the **CV-2.1** page  
+5. In **Function 2: Peak searching**, use the following settings:
 
-1. Go to the [CV module](http://34.162.1.1:8080/cv)) to open the **CV-1** page  
-2. Upload **all files** from `CV/` folder
-3. Keep all **default parameter settings** Gaussian filter sigma 10, Cycle of representative: could be any number 3-12 default setting is 6
-4. Click **Submit** proceed to the **CV-2.1** page  
-5. input in the Function 2: Peak searching.
-   here make a table
-Peak range (top): 
-[(-1, -0.70),(0, 0.2),(0.25, 0.5)]
-Peak range (bottom): 
-[(-0.925,-0.75),(0.0, 0.125),(0.125, 0.25)]
-Discard scan rate from: 
-[0, 0, 0]
-Discard scan rate after: 
-[0, 0, 2]
-Cycle range: 
-(2,100)
-Scan rate to display (mV/s): 
-20
-Cycle number to display: 
-9
-Which method you want to use: 
-Max
+| Parameter                      | Value                                                                 |
+|-------------------------------|-----------------------------------------------------------------------|
+| **Peak range (top)**          | `(-1, -0.70), (0, 0.2), (0.25, 0.5)`                                  |
+| **Peak range (bottom)**       | `(-0.925, -0.75), (0.0, 0.125), (0.125, 0.25)`                         |
+| **Discard scan rate from**    | `0, 0, 0`                                                             |
+| **Discard scan rate after**   | `0, 0, 2`                                                             |
+| **Cycle range**               | `(2, 100)`                                                            |
+| **Scan rate to display**      | `20` mV/s                                                             |
+| **Cycle number to display**   | `9`                                                                   |
+| **Which method to use**       | `Max`                                                                 |
 
-7. and proceed through steps:
-   - Step 1: Data preview
-   - Step 2: Current-Voltage assignment
-   - Step 3: **Peak Detection**
-   - Step 4: **Randles–Ševčík Analysis**
-   - Step 5: **Standard Rate Constant Analysis**
-8. If some steps are blocked, try refreshing after step 2 (common workaround)
+6. Click **Submit** to proceed to the **CV-2.2** page  
+7. The results generated correspond to:
+   - **Subplot 3 (Figure 2c):** Peak overlay plot with scan rate info
+---
 
-**Output:**
-- **Figure 2c**: CV overlay plot with multiple scan rates
-- **Figure 2d**: RS analysis — peak current vs. v^½ plot with regression
+8. Then, click **Function 3: Randles–Ševčík Analysis** to enter the **CV-3.1** page  
+9. Use the following parameter settings:
+
+| Parameter                                          | Value                        |
+|---------------------------------------------------|------------------------------|
+| **Number of electron transfer (n)**               | `1`                          |
+| **Concentration of material (C)**                 | `0.000000894454 mol/cm³`     |
+| **Temperature (T)**                               | `298.15 K`                   |
+| **Electrode diameter**                            | `0.30 cm`                    |
+
+10. Click **Submit** to see the results  
 
 ---
 
-## ❗ Notes
+### 📈 Output
 
-- If using your own data: hover over the **"?"** icons to understand how to choose parameters
-- The default values are optimized for the example datasets
-- Files here are intended for **validation, testing, and reproducibility checks**
+- **Subplot 3 (Figure 2c)**: Peak current vs. scan rate from Function 2  
+- **Subplot 4 (Figure 2d)**: Randles–Ševčík plot (Ip vs. √v) and regression line
 
 ---
 
-## 📁 File Structure
+### ❗ Notes
 
+- If using your own CV dataset, ensure it contains **at least 3 scan rates** for Randles–Ševčík to function.
+- Hover over the **"?"** icons in the tool for helpful parameter tips.
+- The default settings were chosen to exactly reproduce the manuscript results using this dataset.
