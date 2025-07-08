@@ -42,17 +42,18 @@ By focusing on automation and reproducibility, Envismetrics reduces the manual w
 
 # Summary
 
-Accurate determination of kinetic electrochemical parameters and thermodynamic constants is fundamental for predicting and optimizing the performance of redox reactions in various applications [@SANECKI2003109, @wang2020redox, @XU20106366]. These kinetic parameters can also be used in simulations to understand the mechanisms of the reactions [@C9CP05527D]. However, many of these parameters are not readily available in existing literature or online databases and often vary depending on experimental conditions.
+Accurate determination of kinetic parameters and thermodynamic properties from electrochemical data is fundamental for understanding redox reactions used in diverse applications [@SANECKI2003109, @wang2020redox, @XU20106366]. These values — including diffusion coefficients, standard rate constants, transfer coefficients, and formal potentials — provide mechanistic insight and are commonly used to validate reaction pathways and simulate electrochemical behavior under various conditions [@C9CP05527D].
 
-Cyclic voltammetry (CV), hydrodynamic voltammetry (HDV), and step techniques such as chronoamperometry (CA) are widely used experimental methods for obtaining kinetic parameters [@bard2022electrochemical]. These experiments support the determination of key electrochemical parameters through well-established analyses, as demonstrated in numerous studies:
+Although literature values exist for some well-studied redox systems, the evaluation of new analytes or experimental conditions typically requires experimental determination. Techniques such as cyclic voltammetry (CV), linear sweep voltammetry using a rotating disk electrode (LSV at RDE, under laminar flow and planar diffusion conditions), and step methods like chronoamperometry (CA) offer quantitative frameworks for extracting these parameters [@bard2022electrochemical].
 
-- **Hydrodynamic Voltammetry (HDV)**: Levich and Koutecký–Levich analysis [@doi:10.1021/ar50110a004; @treimer2002koutecky].
-- **Cyclic Voltammetry (CV)**: Randles–Ševčík analysis, rate constant calculation, and transfer coefficient estimation [@doi:10.1002/adts.202500346; @doi:10.1021/ar50110a004; @LEFTHERIOTIS2007259].
-- **Chronoamperometry (CA)**: Cottrell equation-based analysis [@HERATH20084324; @GOMEZ2023143400; @RODRIGUEZLUCAS2025145648].
+Each technique supports specific analyses:
 
-These analyses provide quantitative estimates of diffusion coefficients, rate constants, and electron transfer characteristics, forming the basis for further modeling and simulation of electrochemical systems.
+- **LSV at RDE**: Levich and Koutecký–Levich analysis [@doi:10.1021/ar50110a004; @treimer2002koutecky],
+- **CV**: Randles–Ševčík plots, rate constant estimation, and transfer coefficient analysis [@doi:10.1002/adts.202500346; @LEFTHERIOTIS2007259],
+- **CA**: Cottrell-based diffusion coefficient estimation [@HERATH20084324; @GOMEZ2023143400; @RODRIGUEZLUCAS2025145648].
 
-These analyses help calculate essential kinetic parameters, including formal potential, diffusion coefficient, transfer coefficient, and rate constant. Once collected, these parameters are widely used to perform simulations based on the Butler-Volmer theory, providing further insights into the electrochemical system.
+While these methods are widely accepted, manual analysis can be labor-intensive and prone to inconsistency. To address this, **Envismetrics** is introduced as an open-source, browser-based Python application that automates data processing and analysis workflows for CV, LSV (RDE), and CA. It provides modules for filtering, peak detection, Levich regression, Randles–Ševčík analysis, and chronoamperometric fitting—offering visual outputs and tabulated results. By focusing on automation and reproducibility, Envismetrics lowers the barrier for electrochemical researchers—especially those dealing with large datasets or requiring rapid feedback—while preserving methodological rigor and transparency.
+
 
 # Statement of Need
 
