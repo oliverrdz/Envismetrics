@@ -37,8 +37,8 @@ bibliography: bibliography.bib
 ---
 
 # Abstract
-
-Envismetrics is an innovative, open-source, and cross-platform Python-based software designed to streamline the electrochemical kinetic analysis process. This software suite offers a comprehensive toolbox for researchers, enabling efficient processing and analysis of electrochemical data from various potentiostats. Key features include data import and processing, advanced peak searching, Randles-Ševčík analysis, rate constant calculation, and Tafel analysis. Envismetrics also provides educational resources to aid users in understanding complex electrochemical concepts and terminologies. By simplifying and automating data analysis, Envismetrics aims to promote reproducibility, transparency, and ease of use in electrochemical research. The code is available at [https://github.com/Woffee/Envismetrics](https://github.com/Woffee/Envismetrics).
+Envismetrics is an open-source, cross-platform Python application designed to assist researchers in the automated analysis of electrochemical data. It provides a modular toolbox that enables the processing, visualization, and parameter extraction of data from techniques such as cyclic voltammetry, chronoamperometry, and hydrodynamic voltammetry. The software supports data input from a variety of potentiostat platforms and automates routine analytical steps, including peak identification, Randles–Ševčík plots, diffusion coefficient estimation, rate constant calculations, and Tafel analysis. Envismetrics features a graphical web interface that minimizes the need for coding and enhances accessibility for researchers across disciplines.
+By focusing on automation and reproducibility, Envismetrics reduces the manual workload associated with electrochemical data interpretation and promotes transparent research workflows. The source code is openly available at [https://github.com/Woffee/Envismetrics](https://github.com/Woffee/Envismetrics).
 
 # Summary
 
