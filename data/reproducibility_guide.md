@@ -61,26 +61,58 @@ Each file contains a linear sweep voltammetry (LSV) curve measured under a speci
 - If the page gets stuck or you navigate back:
   - Refresh the browser and **re-enter settings**
 
-Next: [CV Module for Figure 2 subplots 3 & 4 ➡️](#)
-
+---
 ## 🧪 Subplots 3 and 4: Cyclic Voltammetry (CV Module)
 
-**Files used:**  
-`data/figure2_repro/CV/CV_10mV.xlsx`, `CV_20mV.xlsx`, ..., `CV_100mV.xlsx`  
-Each file contains a CV curve at a specific scan rate.
+**Folder used:**  
+[data/test_data/06102024_CV_D_AF](https://github.com/Woffee/Envismetrics/tree/main/data/test_data/06102024_CV_D_AF)
+
+**Files:**  
+- GP_0.05gLDMAB_40gLKOH_-1.1to0.7_10mVs_CV.xlsx  
+- GP_0.05gLDMAB_40gLKOH_-1.1to0.7_20mVs_CV.xlsx  
+- GP_0.05gLDMAB_40gLKOH_-1.1to0.7_30mVs_CV.xlsx  
+- GP_0.05gLDMAB_40gLKOH_-1.1to0.7_40mVs_CV.xlsx  
+- GP_0.05gLDMAB_40gLKOH_-1.1to0.7_50mVs_CV.xlsx  
+- GP_0.05gLDMAB_40gLKOH_-1.1to0.7_60mVs_CV.xlsx  
+- GP_0.05gLDMAB_40gLKOH_-1.1to0.7_70mVs_CV.xlsx
+
+Each file contains a cyclic voltammetry (CV) curve of DMAB oxidation recorded at a different scan rate. These are required for **Randles–Ševčík analysis** and **standard rate constant estimation**.
+
+---
+
 
 **Steps to reproduce:**
 
-1. Go to the [CV module](https://envismetrics.streamlit.app/)
+1. Go to the [CV module](http://34.162.1.1:8080/cv)) to open the **CV-1** page  
 2. Upload **all files** from `CV/` folder
-3. Keep all **default parameter settings**
-4. Click **Submit** and proceed through steps:
+3. Keep all **default parameter settings** Gaussian filter sigma 10, Cycle of representative: could be any number 3-12 default setting is 6
+4. Click **Submit** proceed to the **CV-2.1** page  
+5. input in the Function 2: Peak searching.
+   here make a table
+Peak range (top): 
+[(-1, -0.70),(0, 0.2),(0.25, 0.5)]
+Peak range (bottom): 
+[(-0.925,-0.75),(0.0, 0.125),(0.125, 0.25)]
+Discard scan rate from: 
+[0, 0, 0]
+Discard scan rate after: 
+[0, 0, 2]
+Cycle range: 
+(2,100)
+Scan rate to display (mV/s): 
+20
+Cycle number to display: 
+9
+Which method you want to use: 
+Max
+
+7. and proceed through steps:
    - Step 1: Data preview
    - Step 2: Current-Voltage assignment
    - Step 3: **Peak Detection**
    - Step 4: **Randles–Ševčík Analysis**
    - Step 5: **Standard Rate Constant Analysis**
-5. If some steps are blocked, try refreshing after step 2 (common workaround)
+8. If some steps are blocked, try refreshing after step 2 (common workaround)
 
 **Output:**
 - **Figure 2c**: CV overlay plot with multiple scan rates
