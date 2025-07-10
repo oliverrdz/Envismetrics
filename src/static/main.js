@@ -1,14 +1,56 @@
-$(document).on('change', '.file-input', function () {
-    var filesCount = $(this)[0].files.length;
+let filesArray = [];
 
-    var textbox = $(this).prev();
+function updateFileList() {
+    const fileListDisplay = document.getElementById('file-list');
+    const fileCountDisplay = document.getElementById('file-message');
 
-    if (filesCount === 1) {
-        var fileName = $(this).val().split('\\').pop();
-        textbox.text(fileName);
-    } else {
-        textbox.text(filesCount + ' files selected');
+    fileListDisplay.innerHTML = '';
+    filesArray.forEach((file, index) => {
+        const div = document.createElement('div');
+        div.className = 'file-item';
+        div.innerHTML = `
+        <button onclick="removeFile(${index})"> ❌ </button>
+        <span>${file.name}</span>
+      `;
+        fileListDisplay.appendChild(div);
+    });
+    fileCountDisplay.textContent = filesArray.length + ' file(s) selected';
+}
+
+function removeFile(index) {
+    filesArray.splice(index, 1);
+    updateFileList();
+}
+
+function handleFiles(files) {
+    for (let file of files) {
+        const alreadyAdded = filesArray.some(f => f.name === file.name && f.size === file.size);
+        if (!alreadyAdded) {
+            filesArray.push(file);
+        }
     }
+    updateFileList();
+}
+
+$(document).on('change', '.file-input', function (e) {
+    // handleFiles($(this)[0].files);
+    handleFiles(e.target.files);
+});
+
+$(document).on('dragover', '.file-input', function () {
+    const dropArea = document.getElementById('file-drop-area');
+    dropArea.classList.add('highlight');
+});
+
+$(document).on('dragleave', '.file-input', function () {
+    const dropArea = document.getElementById('file-drop-area');
+    dropArea.classList.remove('highlight');
+});
+
+$(document).on('drop', '.file-input', function () {
+    const dropArea = document.getElementById('file-drop-area');
+    dropArea.classList.remove('highlight');
+    handleFiles($(this)[0].files)
 });
 
 
@@ -134,8 +176,6 @@ function submitFormCV1() {
         xhr.send(formData);
     }
 }
-
-
 
 
 function tryAgain() {

@@ -30,15 +30,7 @@
         <!-- Inputs -->
         <div class="row g-5" id="form_input">
             <div class="col-md-5 col-lg-4 ">
-                <h4 class="d-flex justify-content-between align-items-center mb-3">
-                    <span>Upload data files</span>
-                </h4>
-                <div class="file-drop-area">
-                    <span class="choose-file-button">Choose files</span>
-                    <span class="file-message">or drag and drop files here</span>
-                    <input class="file-input" type="file" id="fileInput" multiple>
-                </div>
-                <div id="upload-message" style="color: red"></div>
+                {% include 'file_drop.html' %}
 
                 <br>
                 <p style="color: gray">The file names should be like: <code>(?)...?s_CA.xlsx</code>

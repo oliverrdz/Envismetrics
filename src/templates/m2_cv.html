@@ -32,15 +32,7 @@
             <h5>Function 1: Plot the figure and apply the Gaussian filter to have a smoothed figure.</h5>
             <div class="col-md-5 col-lg-4 ">
 
-                <h6 class="d-flex justify-content-between align-items-center mb-3">
-                    <span>Upload data files</span>
-                </h6>
-                <div class="file-drop-area">
-                    <span class="choose-file-button">Choose files</span>
-                    <span class="file-message">or drag and drop files here</span>
-                    <input class="file-input" type="file" id="fileInput" multiple>
-                </div>
-                <div id="upload-message" style="color: red"></div>
+                {% include 'file_drop.html' %}
 
                 <br>
                 <p style="color: gray">The file names should be like: <code>?mVs_CV.csv</code> or <code>?mVs_CV.xlsx</code><br><br>
