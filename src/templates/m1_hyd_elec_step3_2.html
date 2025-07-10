@@ -3,7 +3,7 @@
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <div class="col">
             <div class="card shadow-sm">
-                <img id="img1" src="{{ data['form2_2']['output']['file1'] }}"
+                <img id="img1" src="/outputs/{{ data['version'] }}/{{ data['form2_2']['output']['file1'] }}"
                      class="card-img rounded float-end" alt="...">
                 <div class="card-body">
                     <p class="card-text card-p">Koutecky-Levich plot</p>
@@ -13,7 +13,7 @@
 
         <div class="col">
             <div class="card shadow-sm">
-                <img id="img2" src="{{ data['form2_2']['output']['file2'] }}"
+                <img id="img2" src="/outputs/{{ data['version'] }}/{{ data['form2_2']['output']['file2'] }}"
                      class="card-img rounded float-end" alt="...">
                 <div class="card-body">
                     <p class="card-text card-p">All Applied Potential Koutecky-Levich analysis plot</p>
@@ -24,7 +24,7 @@
 
     <div class="needs-validation" novalidate="">
         <div class="row col-6">
-            <a id="form3_link" href="{{ data['form2_2']['output']['excel_file'] }}">Click here to download the result
+            <a id="form3_link" href="/outputs/{{ data['version'] }}/{{ data['form2_2']['output']['excel_file'] }}">Click here to download the result
                 file.</a>
         </div>
     </div>

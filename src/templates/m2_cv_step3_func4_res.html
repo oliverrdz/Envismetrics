@@ -53,7 +53,7 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="img1" src="{{ row['img1'] }}"
+                        <img id="img1" src="/outputs/{{ data['version'] }}/{{ row['img1'] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
                             <p class="card-text card-p"></p>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="img2" src="{{ row['img2'] }}"
+                        <img id="img2" src="/outputs/{{ data['version'] }}/{{ row['img2'] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
                             <p class="card-text card-p">Slope: {{ row['slope'] }}</p>

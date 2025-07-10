@@ -89,8 +89,8 @@ class CA(BaseModule):
                 # 'sigma': self.sigma
             },
             'output': {
-                'file1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
-                'file2': to_file2 if to_file1.startswith("/") else '/' + to_file2,
+                'file1': to_file1.split("/")[-1],
+                'file2': to_file2.split("/")[-1],
             }
         }
         with open(data_file, 'w') as f:
@@ -195,8 +195,8 @@ class CA(BaseModule):
             print(j, "R-squared:", r_squared)
             print(j, "D:", D)
             to_files.append( [
-                to_file1 if to_file1.startswith("/") else '/' + to_file1,
-                to_file2 if to_file2.startswith("/") else '/' + to_file2,
+                to_file1.split("/")[-1],
+                to_file2.split("/")[-1],
             ])
 
         table = pd.DataFrame([slope_set, D_set, R2_set], index=['slope', 'D', 'R2'])
@@ -222,7 +222,7 @@ class CA(BaseModule):
             },
             'output': {
                 'files': to_files,
-                'csv_file': to_file_csv if to_file_csv.startswith("/") else '/' + to_file_csv,
+                'csv_file': to_file_csv.split("/")[-1],
             }
         }
         self.save_result_data(data)

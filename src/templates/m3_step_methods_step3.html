@@ -52,7 +52,7 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="img1" src="{{ row[0] }}"
+                        <img id="img1" src="/outputs/{{ data['version'] }}/{{ row[0] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
                             <p class="card-text card-p"></p>
@@ -62,7 +62,7 @@
 
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="img2" src="{{ row[1] }}"
+                        <img id="img2" src="/outputs/{{ data['version'] }}/{{ row[1] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
                             <p class="card-text card-p"></p>
@@ -76,7 +76,7 @@
 
             <div class="needs-validation" novalidate="">
                 <div class="row col-6">
-                    <a id="form3_link" href="{{ data['form2']['output']['csv_file'] }}">Click here to download the
+                    <a id="form3_link" href="/outputs/{{ data['version'] }}/{{ data['form2']['output']['csv_file'] }}">Click here to download the
                         result
                         file.</a>
                 </div>

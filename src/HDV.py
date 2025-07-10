@@ -158,8 +158,8 @@ class HDV(BaseModule):
                 'sigma': sigma,
             },
             'output': {
-                'file1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
-                'file2': to_file2 if to_file2.startswith("/") else '/' + to_file2,
+                'file1': to_file1.split("/")[-1],
+                'file2': to_file2.split("/")[-1],
                 # 'img1': '/outputs/version_test_CV/form2.jpg',
             }
         }
@@ -422,9 +422,9 @@ class HDV(BaseModule):
             'status': 'done',
             'input': all_params,
             'output': {
-                'file1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
-                'file2': to_file2 if to_file2.startswith("/") else '/' + to_file2,
-                'excel_file': excel_file if excel_file.startswith("/") else '/' + excel_file,
+                'file1': to_file1.split("/")[-1],
+                'file2': to_file2.split("/")[-1],
+                'excel_file': excel_file.split("/")[-1],
                 # 'img1': '/outputs/version_test_CV/form2.jpg',
             }
         }
@@ -697,8 +697,8 @@ class HDV(BaseModule):
             'status': 'done',
             'input': all_params,
             'output': {
-                'file1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
-                'file2': to_file2 if to_file2.startswith("/") else '/' + to_file2,
+                'file1': to_file1.split("/")[-1],
+                'file2': to_file2.split("/")[-1],
                 'excel_file': excel_file if excel_file.startswith("/") else '/' + excel_file,
                 # 'img1': '/outputs/version_test_CV/form2.jpg',
             }

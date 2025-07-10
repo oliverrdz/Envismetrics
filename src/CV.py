@@ -509,9 +509,9 @@ class CV(BaseModule):
             'status': 'done',
             'input': all_params,
             'output': {
-                'file1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
-                'file2': to_file2 if to_file2.startswith("/") else '/' + to_file2,
-                'file3': to_file3 if to_file3.startswith("/") else '/' + to_file3,
+                'file1': to_file1.split("/")[-1],
+                'file2': to_file2.split("/")[-1],
+                'file3': to_file3.split("/")[-1],
             }
         }
         with open(data_file, 'w') as f:
@@ -936,8 +936,8 @@ class CV(BaseModule):
             'input': all_params,
             'output': {
                 # 'file1': to_file if to_file.startswith("/") else '/' + to_file,
-                'img1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
-                'img2': to_file2 if to_file2.startswith("/") else '/' + to_file2,
+                'img1': to_file1.split('/')[-1],
+                'img2': to_file2.split('/')[-1],
             }
         }
         self.save_result_data(data)
@@ -1036,7 +1036,7 @@ class CV(BaseModule):
             'status': 'done',
             'input': all_params,
             'output': {
-                'img1': to_file1 if to_file1.startswith("/") else '/' + to_file1,
+                'img1': to_file1.split('/')[-1],
             }
         }
         self.save_result_data(data)
@@ -1122,8 +1122,8 @@ class CV(BaseModule):
             plt.close()
 
             res.append({
-                'img1': img_path1 if img_path1.startswith("/") else '/' + img_path1,
-                'img2': img_path2 if img_path2.startswith("/") else '/' + img_path2,
+                'img1': img_path1.split('/')[-1],
+                'img2': img_path2.split('/')[-1],
                 'slope': slope,
             })
 
@@ -1228,7 +1228,7 @@ class CV(BaseModule):
             img_path2 = os.path.join(self.datapath, "CV_step3_func5_m1_p{}.png".format(i))
             plt.savefig(img_path2)
             plt.close()
-            m1_files.append(img_path2)
+            m1_files.append(img_path2.split("/")[-1])
 
         # -------------------------------------
         # Method 2
@@ -1303,7 +1303,7 @@ class CV(BaseModule):
             img_path2 = os.path.join(self.datapath, "CV_step3_func5_m2_p{}.png".format(i))
             plt.savefig(img_path2)
             plt.close()
-            m2_files.append(img_path2)
+            m2_files.append(img_path2.split("/")[-1])
 
         data = self.res_data
 

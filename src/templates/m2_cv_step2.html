@@ -51,7 +51,7 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="form2_img3" src="{{ data['form1']['output']['file3'] }}"
+                        <img id="form2_img3" src="/outputs/{{ data['version'] }}/{{ data['form1']['output']['file3'] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
                             <p class="card-text card-p">Cyclic Voltammograms (original)</p>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="form2_img1" src="{{ data['form1']['output']['file1'] }}"
+                        <img id="form2_img1" src="/outputs/{{ data['version'] }}/{{ data['form1']['output']['file1'] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
                             <p class="card-text card-p">Cyclic Voltammograms (cycle = <code>{{data['form1']['input']['cycle']}}</code>)
@@ -71,7 +71,7 @@
 
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img id="form2_img2" src="{{ data['form1']['output']['file2'] }}"
+                        <img id="form2_img2" src="/outputs/{{ data['version'] }}/{{ data['form1']['output']['file2'] }}"
                              class="card-img rounded float-end" alt="...">
                         <div class="card-body">
                             <p class="card-text card-p">Cyclic Voltammograms (cycle = <code>{{data['form1']['input']['cycle']}}</code>,
