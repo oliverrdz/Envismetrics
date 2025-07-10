@@ -91,19 +91,10 @@ pip install flask gunicorn pandas numpy scikit-learn scipy openpyxl matplotlib
 
 ### 4. Run the Application
 
-💻 Linux / macOS
+💻 Linux / macOS / Windows (Command Prompt)
 
 ```sh
-gunicorn -w 4 -b 0.0.0.0:8080 app:app
-```
-
-
-🖥 Windows (Command Prompt)
-
-Gunicorn is not compatible with Windows. Use the following instead:
-
-```sh
-python app.py
+python src/app.py
 ```
 
 Then visit http://localhost:8080/ in your browser.
