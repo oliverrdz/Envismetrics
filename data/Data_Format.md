@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/e89b7103-564d-492b-b92f-b24d945b93dc)![image](https://github.com/user-attachments/assets/99f873c2-032b-4698-b46f-8cf5c767cebc)# 📁 Data Format Instructions for Envismetrics
+# 📁 Data Format Instructions for Envismetrics
 
 This document describes the required data format and structure for each electrochemical module used in Envismetrics. Please ensure your input files follow the specifications below to avoid upload or parsing issues.
 
