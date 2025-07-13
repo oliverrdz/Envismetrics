@@ -78,7 +78,7 @@ myenv\Scripts\activate
 Install Required Packages
 
 ```sh
-pip install flask gunicorn pandas numpy scikit-learn scipy openpyxl matplotlib
+pip install -r requirements.txt
 ```
 
 ### Alternatively, Anaconda users can create a new environment:
@@ -86,15 +86,21 @@ pip install flask gunicorn pandas numpy scikit-learn scipy openpyxl matplotlib
 ```sh
 conda create -n envismetrics python=3.9
 conda activate envismetrics
-pip install flask gunicorn pandas numpy scikit-learn scipy openpyxl matplotlib
+pip install -r requirements.txt
 ```
 
 ### 4. Run the Application
 
-💻 Linux / macOS / Windows (Command Prompt)
+💻 Linux / macOS
 
 ```sh
 python src/app.py
+```
+
+🖥 Windows (Command Prompt)
+
+```sh
+python src\app.py
 ```
 
 Then visit http://localhost:8080/ in your browser.
@@ -109,7 +115,7 @@ Envismetrics/
 ├── data/
 │   ├── example_files/      # Example .xlsx files showing required data formats for CV, CA, HDV
 │   └── test_data/          # Full experimental datasets used for testing
-├── src/                # Core electrochemical analysis modules (CV.py, CA.py, HDV.py, etc.)
+├── src/                    # Core electrochemical analysis modules (CV.py, CA.py, HDV.py, etc.)
 ├── tests/                  # Unit tests for validating module functions
 ├── static/                 # Static web resources (CSS, JS, images)
 ├── templates/              # HTML templates for web UI
@@ -119,8 +125,7 @@ Envismetrics/
 │   └── Image_Set/          # Figures used in the manuscript
 ├── LICENSE
 ├── README.md
-├── requirements.txt        # Python dependencies
-└── config.py               # Global configuration file
+└── requirements.txt        # Python dependencies
 ```
 
 - **`data/example_files/`**: Provides sample `.xlsx` templates to help users format input files correctly (e.g., column headers for potential and current).
