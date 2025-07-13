@@ -135,7 +135,7 @@
 
     function callAPI() {
         // 模拟调用 API
-        setInterval(function () {
+        const intervalId = setInterval(function () {
             var version = document.getElementById("version").value;
             var step = document.getElementById("step").value;
             var URL = '/check/cv/' + version + '?step=' + step
@@ -147,10 +147,26 @@
                     if (data.result === "done") {
                         // 如果是，则刷新当前页面
                         location.reload();
+                    } else if (data.result !== "processing") {
+                        // 如果是 error，显示服务器错误。
+                        clearInterval(intervalId);
+                        const progressBarDiv = document.getElementById("progress_bar");
+                        progressBarDiv.innerHTML = `
+                            <div class="alert alert-danger" role="alert">
+                                An error occurred on the server.
+                            </div>
+                        `;
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
+                    clearInterval(intervalId);
+                    const progressBarDiv = document.getElementById("progress_bar");
+                    progressBarDiv.innerHTML = `
+                        <div class="alert alert-danger" role="alert">
+                            Failed to contact the server. Please try again later.
+                        </div>
+                    `;
                 });
         }, 1000); // 每隔一秒调用一次 API
     }

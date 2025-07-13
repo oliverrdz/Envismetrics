@@ -57,7 +57,7 @@ $(document).on('drop', '.file-input', function () {
 function submitForm() {
     // var fileInput = document.querySelector('.file-input');
     // var files = fileInput.files;
-    var files = document.getElementById('fileInput').files;
+    var files = document.getElementById('file-input').files;
     if (files.length === 0) {
         document.getElementById('upload-message').innerText = 'Please upload files';
     } else {
@@ -114,7 +114,7 @@ function submitForm() {
 function submitFormCV1() {
     // var fileInput = document.querySelector('.file-input');
     // var files = fileInput.files;
-    var files = document.getElementById('fileInput').files;
+    var files = document.getElementById('file-input').files;
     if (files.length === 0) {
         document.getElementById('upload-message').innerText = 'Please upload files';
     } else {
