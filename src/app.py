@@ -1,3 +1,5 @@
+### OR: What are these notes?
+
 """
 运行逻辑：
 
@@ -18,7 +20,7 @@ import time
 import datetime
 import logging
 import os
-import json
+import json ### OR: where and for what are you using json files?
 import configparser
 from datetime import datetime
 from HDV import HDV
@@ -43,6 +45,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 check_folders()
 init_logging()
 
+## OR: code is not sufficiently commented
+## OR: functions lack docstrings
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -82,9 +86,9 @@ def hyd_elec2(version=None):
             data = data[module]
             print('---')
             print(data)
-            # 检查状态
+            # 检查状态  ## OR: what is this comment?
             if step == 2:
-                f = 'form1'
+                f = 'form1' ## OR: form1 is very generic, not very helpful for contributors
             elif step == 3:
                 f = 'form2_{}'.format(method)
             else:
@@ -112,6 +116,9 @@ def hyd_elec2(version=None):
         return render_template('m1_hyd_elec_step3.html', data=data)
     else:
         return render_template('m1_hyd_elec_step2.html', data=data)
+
+## OR: what is the difference between cv() and cv2()?
+## OR: why are there two menus?
 
 # Menu 2
 @app.route("/cv")
@@ -216,6 +223,7 @@ def cv_res(version=None):
         abort(404)
 
 
+## OR: another menu? Why?
 # Menu 3
 @app.route("/step_methods")
 def step_methods():
@@ -453,6 +461,7 @@ def upload_file():
                 data_path = os.path.join('outputs', version)
                 if not os.path.exists(data_path):
                     os.makedirs(data_path, exist_ok=True)
+                ## OR: please remove commented code
                 # data_file = os.path.join(data_path, 'data.json')
                 # if not os.path.exists(data_file):
                 #     data = CV.demo_data()
