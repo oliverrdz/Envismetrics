@@ -28,7 +28,7 @@ The following comments apply for all py and js files.
 3. For hyd_elec, can the webapp upload several files? This would be required to construct the koutecky and koutecky-levich plots. Also, how does the webapp know the rotation speed? Does the file need to have a specific name?
 4. What happens if I add a file that is not a voltammogram, doesn't follow the naming convention or the specific columns shown in the example data file?
 5. What experiment was performed to get the test data file for hyd_elec? Please provide details
-6. Why is the folder almost 300 MB? It seems excesive to me for a webapp.
+6. Why is the folder around 400 MB? It seems excesive to me for a webapp. The data folder is about 250 MB and the .git folder is about 150 MB, this should be cleaned.
 
 ## Comments
 1. The code lacks comments. The few there seem to be in chinese. It is very difficult to understand what the developers did without any comments to help contributors.
